@@ -42,6 +42,8 @@ a {
   font-size: 14px;
   text-decoration: none !important;
   margin: 15px 0;
+  transition: color 0.3s ease;
+  cursor: pointer;
 }
 
 button {
@@ -208,6 +210,44 @@ input {
   width: 50%;
   transform: translateX(0);
   transition: transform 0.6s ease-in-out;
+}
+
+/* Responsive Styles for Small Screens */
+@media (max-width: 675px) {
+  .container {
+    width: 100%;
+    min-width: unset;
+    min-height: unset;
+    box-shadow: none;
+    border-radius: 0;
+  }
+  .form-container,
+  .sign-in-container,
+  .sign-up-container {
+    position: static;
+    width: 100%;
+    height: auto;
+    left: unset;
+    top: unset;
+    z-index: unset;
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  .overlay-container,
+  .overlay {
+    display: none !important;
+  }
+  .form-container {
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0 10px;
+  }
+  form {
+    padding: 0 10px;
+    min-width: 0;
+    width: 100%;
+  }
 }
 
 .overlay-left {

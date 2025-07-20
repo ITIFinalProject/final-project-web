@@ -2,7 +2,7 @@ const LoginForm = () => {
   return (
     <div className="form-container sign-in-container">
       <form>
-        <h1>Sign in</h1>
+        <h1>Log in</h1>
         <div className="social-container">
           <a href="#" className="social">
             <i className="fab fa-facebook-f"></i>
@@ -18,7 +18,7 @@ const LoginForm = () => {
         <input type="email" placeholder="Email" />
         <input type="password" placeholder="Password" />
         <a href="#">Forgot your password?</a>
-        <button>Sign In</button>
+        <button>Log In</button>
       </form>
     </div>
   );

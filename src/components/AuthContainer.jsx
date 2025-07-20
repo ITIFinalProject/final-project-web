@@ -1,53 +1,109 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm";
 import "../styles/auth.css";
 
+const SMALL_SCREEN_BREAKPOINT = 675;
+
 const AuthContainer = ({ initialView = "signin" }) => {
-  const [isRightPanelActive, setIsRightPanelActive] = useState(
+  const [isMobileView, setIsMobileView] = useState(
+    window.innerWidth <= SMALL_SCREEN_BREAKPOINT
+  );
+  const [isSignUpActive, setIsSignUpActive] = useState(
     initialView === "signup"
   );
+
+  const handleResize = useCallback(() => {
+    setIsMobileView(window.innerWidth <= SMALL_SCREEN_BREAKPOINT);
+  }, []);
+
   useEffect(() => {
-    setIsRightPanelActive(initialView === "signup");
+    setIsMobileView(window.innerWidth <= SMALL_SCREEN_BREAKPOINT);
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, [handleResize]);
+
+  useEffect(() => {
+    setIsSignUpActive(initialView === "signup");
   }, [initialView]);
 
   const handleSignUpClick = () => {
-    setIsRightPanelActive(true);
+    setIsSignUpActive(true);
   };
 
   const handleSignInClick = () => {
-    setIsRightPanelActive(false);
+    setIsSignUpActive(false);
   };
 
   return (
     <div
-      className={`container ${isRightPanelActive ? "right-panel-active" : ""}`}
+      className={`container ${
+        !isMobileView && isSignUpActive ? "right-panel-active" : ""
+      }`}
       id="container"
     >
-      <SignUpForm />
-      <LoginForm />
-
-      {/* Overlay */}
-      <div className="overlay-container">
-        <div className="overlay">
-          <div className="overlay-panel overlay-left">
-            <h1>Welcome Back!</h1>
-            <p>
-              To keep connected with us please login with your personal info
-            </p>
-            <button className="ghost" id="signIn" onClick={handleSignInClick}>
-              Sign In
-            </button>
+      {isMobileView ? (
+        <>
+          {isSignUpActive ? <SignUpForm /> : <LoginForm />}
+          <div
+            style={{
+              textAlign: "center",
+              marginTop: 20,
+              width: "100%",
+              padding: "0 20px",
+              fontSize: "14px",
+            }}
+          >
+            {isSignUpActive ? (
+              <>
+                <span>Already have an account?</span>
+                <a onClick={handleSignInClick}>Log In</a>
+              </>
+            ) : (
+              <>
+                <span>Don't have an account?</span>
+                <a onClick={handleSignUpClick}>Sign Up</a>
+              </>
+            )}
           </div>
-          <div className="overlay-panel overlay-right">
-            <h1>Hello, Friend!</h1>
-            <p>Enter your personal details and start journey with us</p>
-            <button className="ghost" id="signUp" onClick={handleSignUpClick}>
-              Sign Up
-            </button>
+        </>
+      ) : (
+        // Desktop view: Show both forms with overlay logic
+        <>
+          <SignUpForm />
+          <LoginForm />
+          {/* Overlay */}
+          <div className="overlay-container">
+            <div className="overlay">
+              <div className="overlay-panel overlay-left">
+                <h1>Welcome Back!</h1>
+                <p>
+                  To keep connected with us please login with your personal info
+                </p>
+                <button
+                  className="ghost"
+                  id="signIn"
+                  onClick={handleSignInClick}
+                >
+                  Log In
+                </button>
+              </div>
+              <div className="overlay-panel overlay-right">
+                <h1>Hello, Friend!</h1>
+                <p>Enter your personal details and start journey with us</p>
+                <button
+                  className="ghost"
+                  id="signUp"
+                  onClick={handleSignUpClick}
+                >
+                  Sign Up
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 };
