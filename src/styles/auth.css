@@ -11,6 +11,9 @@
     var(--primary-color),
     var(--secondary-color)
   );
+  --white: #fff;
+  --grey: #eee;
+  --black: #222;
 }
 
 /* General Element Styling */
@@ -50,7 +53,7 @@ button {
   border-radius: 30px !important;
   border: 2px solid var(--button-border);
   background-color: var(--button-bg);
-  color: #fff;
+  color: var(--white);
   font-size: 14px;
   font-weight: bold;
   padding: 14px 50px;
@@ -70,11 +73,11 @@ button:focus {
 
 button.ghost {
   background-color: transparent;
-  border-color: #fff;
+  border-color: var(--white);
 }
 
 form {
-  background-color: #ffffff;
+  background-color: var(--white);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -85,7 +88,7 @@ form {
 }
 
 input {
-  background-color: #eee;
+  background-color: var(--grey);
   border: none;
   padding: 14px 18px;
   margin: 12px 0 !important;
@@ -98,7 +101,7 @@ input {
 }
 
 .social-container a {
-  border: 1px solid #dddddd;
+  border: 1px solid var(--grey);
   border-radius: 50%;
   display: inline-flex;
   justify-content: center;
@@ -110,7 +113,7 @@ input {
 
 /* Container Styles */
 .container {
-  background-color: #fff;
+  background-color: var(--white);
   border-radius: 10px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   position: relative;
@@ -184,7 +187,7 @@ input {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 0 0;
-  color: #fff;
+  color: var(--white);
   position: relative;
   left: -100%;
   height: 100%;
