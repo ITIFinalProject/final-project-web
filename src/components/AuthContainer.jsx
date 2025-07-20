@@ -46,15 +46,7 @@ const AuthContainer = ({ initialView = "signin" }) => {
       {isMobileView ? (
         <>
           {isSignUpActive ? <SignUpForm /> : <LoginForm />}
-          <div
-            style={{
-              textAlign: "center",
-              marginTop: 20,
-              width: "100%",
-              padding: "0 20px",
-              fontSize: "14px",
-            }}
-          >
+          <div className="container">
             {isSignUpActive ? (
               <>
                 <span>Already have an account?</span>

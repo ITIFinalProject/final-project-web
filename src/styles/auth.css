@@ -221,6 +221,13 @@ input {
     box-shadow: none;
     border-radius: 0;
   }
+  .container {
+    text-align: center;
+    margin-top: 20px;
+    width: 100%;
+    padding: 0 20px;
+    font-size: 14px;
+  }
   .form-container,
   .sign-in-container,
   .sign-up-container {
