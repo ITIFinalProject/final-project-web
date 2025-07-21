@@ -1,3 +1,5 @@
+import { IoLogoFacebook, IoLogoGoogle, IoLogoLinkedin } from "react-icons/io5";
+
 const LoginForm = () => {
   return (
     <div className="form-container sign-in-container">
@@ -5,13 +7,13 @@ const LoginForm = () => {
         <h1>Log in</h1>
         <div className="social-container">
           <a href="#" className="social">
-            <i className="fab fa-facebook-f"></i>
+            <IoLogoFacebook />
           </a>
           <a href="#" className="social">
-            <i className="fab fa-google-plus-g"></i>
+            <IoLogoGoogle />
           </a>
           <a href="#" className="social">
-            <i className="fab fa-linkedin-in"></i>
+            <IoLogoLinkedin />
           </a>
         </div>
         <span>or use your account</span>

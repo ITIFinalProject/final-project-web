@@ -1,20 +1,4 @@
-/* Import Google Fonts if desired, e.g.: */
-@import url("https://fonts.googleapis.com/css?family=Montserrat:400,800");
-
-:root {
-  --primary-color: #7048e8;
-  --secondary-color: #9775fa;
-  --button-bg: var(--primary-color);
-  --button-border: var(--primary-color);
-  --gradient-bg: linear-gradient(
-    to right,
-    var(--primary-color),
-    var(--secondary-color)
-  );
-  --white: #fff;
-  --grey: #eee;
-  --black: #222;
-}
+@import url(../index.css);
 
 /* General Element Styling */
 h1 {
@@ -41,7 +25,7 @@ span {
 }
 
 a {
-  color: var(--primary-color) !important;
+  color: var(--primary-purple) !important;
   font-size: 14px;
   text-decoration: none !important;
   margin: 15px 0;
@@ -51,16 +35,22 @@ a {
 
 button {
   border-radius: 30px !important;
-  border: 2px solid var(--button-border);
-  background-color: var(--button-bg);
+  border: 2px solid var(--primary-purple);
+  background: var(--purple-gradient);
   color: var(--white);
   font-size: 14px;
   font-weight: bold;
   padding: 14px 50px;
   letter-spacing: 1px;
   text-transform: uppercase;
-  transition: transform 80ms ease-in;
+  transition: all 0.3s ease;
   cursor: pointer;
+  box-shadow: var(--shadow-light);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
 }
 
 button:active {
@@ -72,8 +62,14 @@ button:focus {
 }
 
 button.ghost {
-  background-color: transparent;
+  background: transparent;
   border-color: var(--white);
+  color: var(--white);
+}
+
+button.ghost:hover {
+  background: var(--white);
+  color: var(--primary-purple);
 }
 
 form {
@@ -88,12 +84,24 @@ form {
 }
 
 input {
-  background-color: var(--grey);
-  border: none;
+  background-color: var(--bg-white-transparent);
+  border: 1px solid var(--border-purple);
   padding: 14px 18px;
   margin: 12px 0 !important;
   width: 100%;
   border-radius: 10px;
+  transition: all 0.3s ease;
+  color: var(--text-primary);
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary-purple);
+  box-shadow: 0 0 0 3px var(--border-purple);
+}
+
+input::placeholder {
+  color: var(--text-muted);
 }
 
 .social-container {
@@ -101,7 +109,7 @@ input {
 }
 
 .social-container a {
-  border: 1px solid var(--grey);
+  border: 1px solid var(--border-purple-medium);
   border-radius: 50%;
   display: inline-flex;
   justify-content: center;
@@ -109,18 +117,26 @@ input {
   margin: 0 5px;
   height: 40px;
   width: 40px;
+  color: var(--primary-purple);
+  transition: all 0.3s ease;
+}
+
+.social-container a:hover {
+  background-color: var(--purple-gradient);
+  color: var(--white);
+  border-color: transparent;
 }
 
 /* Container Styles */
 .container {
   background-color: var(--white);
   border-radius: 10px;
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  box-shadow: var(--shadow-heavy);
   position: relative;
   overflow: hidden;
   width: 768px;
   max-width: 100%;
-  min-height: 480px;
+  min-height: 800px;
 }
 
 .form-container {
@@ -183,7 +199,7 @@ input {
 }
 
 .overlay {
-  background: var(--gradient-bg);
+  background: var(--bg-primary);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 0 0;

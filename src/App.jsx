@@ -1,10 +1,18 @@
 import SignUp from "./pages/SignUp";
+// import EventDetails from "./pages/EventDetails";
+// import EventHeader from "./components/EventDetails/EventHeader";
+// import Footer from "./components/Footer";
 import "./styles/App.css";
 
 function App() {
   return (
     <>
-      <h1>Maryam is here </h1>
+      {/* <EventHeader /> */}
+      <div className="App">
+        <SignUp />
+        {/* <EventDetails /> */}
+      </div>
+      {/* <Footer /> */}
     </>
   );
 }

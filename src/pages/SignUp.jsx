@@ -1,4 +1,4 @@
-import AuthContainer from "../components/AuthContainer";
+import AuthContainer from "../components/Login&Signup/AuthContainer";
 
 const SignUp = () => {
   return (

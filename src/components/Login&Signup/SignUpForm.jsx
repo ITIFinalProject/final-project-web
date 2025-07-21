@@ -1,3 +1,5 @@
+import { IoLogoFacebook, IoLogoGoogle, IoLogoLinkedin } from "react-icons/io5";
+
 const SignUpForm = () => {
   return (
     <div className="form-container sign-up-container">
@@ -5,19 +7,22 @@ const SignUpForm = () => {
         <h1>Create Account</h1>
         <div className="social-container">
           <a href="#" className="social">
-            <i className="fab fa-facebook-f"></i>
+            <IoLogoFacebook />
           </a>
           <a href="#" className="social">
-            <i className="fab fa-google-plus-g"></i>
+            <IoLogoGoogle />
           </a>
           <a href="#" className="social">
-            <i className="fab fa-linkedin-in"></i>
+            <IoLogoLinkedin />
           </a>
         </div>
         <span>or use your email for registration</span>
         <input type="text" placeholder="Name" />
         <input type="email" placeholder="Email" />
         <input type="password" placeholder="Password" />
+        <input type="password" placeholder="Confirm Password" />
+        <input type="tel" placeholder="Phone Number" />
+        <input type="text" placeholder="Address" />
         <button>Sign Up</button>
       </form>
     </div>

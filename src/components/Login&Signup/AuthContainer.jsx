@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm";
-import "../styles/auth.css";
+import "../../styles/auth.css";
 
 const SMALL_SCREEN_BREAKPOINT = 675;
 
