@@ -3,9 +3,9 @@ import "./styles/App.css";
 
 function App() {
   return (
-    <div className="App">
-      <SignUp />
-    </div>
+    <>
+      <h1>Maryam is here </h1>
+    </>
   );
 }
 
