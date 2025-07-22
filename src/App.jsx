@@ -1,18 +1,18 @@
-import SignUp from "./pages/SignUp";
-// import EventDetails from "./pages/EventDetails";
-// import EventHeader from "./components/EventDetails/EventHeader";
-// import Footer from "./components/Footer";
+// import SignUp from "./pages/SignUp";
+import EventDetails from "./pages/EventDetails";
+import EventHeader from "./components/EventDetails/EventHeader";
+import Footer from "./components/Footer";
 import "./styles/App.css";
 
 function App() {
   return (
     <>
-      {/* <EventHeader /> */}
+      <EventHeader />
       <div className="App">
-        <SignUp />
-        {/* <EventDetails /> */}
+        {/* <SignUp /> */}
+        <EventDetails />
       </div>
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 }
