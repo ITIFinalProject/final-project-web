@@ -2,6 +2,7 @@
 import EventDetails from "./pages/EventDetails";
 import EventHeader from "./components/EventHeader";
 import Footer from "./components/Footer";
+import InterestedEvents from "./pages/InterestedEvents";
 import "./styles/App.css";
 
 function App() {
@@ -10,7 +11,8 @@ function App() {
       <EventHeader />
       <div className="App">
         {/* <SignUp /> */}
-        <EventDetails />
+        {/* <EventDetails /> */}
+        <InterestedEvents />
       </div>
       <Footer />
     </>
