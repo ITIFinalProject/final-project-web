@@ -4,7 +4,7 @@ const SignUpForm = () => {
   return (
     <div className="form-container sign-up-container">
       <form>
-        <h1>Create Account</h1>
+        <h1 className="title">Create Account</h1>
         <div className="social-container">
           <a href="#" className="social">
             <IoLogoFacebook />

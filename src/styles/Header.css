@@ -1,0 +1,54 @@
+/* Header Styles */
+.event-header {
+  background: var(--header-bg);
+  backdrop-filter: blur(10px);
+  padding: 12px 0;
+  position: static;
+  margin-bottom: 15px;
+  color: var(--white);
+  border-bottom: 1px solid var(--header-border);
+}
+
+.event-header .navbar-brand {
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--primary-beige) !important;
+  text-shadow: 0 2px 4px var(--black-shadow);
+}
+
+.event-header .nav-link {
+  color: var(--footer-text) !important;
+  margin-right: 20px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.event-header .nav-link:hover {
+  color: var(--primary-beige) !important;
+  transform: translateY(-2px);
+}
+
+.create-event-btn {
+  background: var(--main-gradient);
+  color: var(--white);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  margin-right: 15px;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-light);
+}
+
+.create-event-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+}
+
+.profile-avatar {
+  width: 36px;
+  height: 36px;
+  background: var(--text-gradient);
+  border-radius: 50%;
+  border: 2px solid var(--glass-border);
+}

@@ -1,6 +1,4 @@
-import Footer from "../components/Footer";
 import HeroBanner from "../components/EventDetails/HeroBanner";
-
 import EventTitleSection from "../components/EventDetails/EventTitleSection";
 import DateTimeSection from "../components/EventDetails/DateTimeSection";
 import LocationSection from "../components/EventDetails/LocationSection";

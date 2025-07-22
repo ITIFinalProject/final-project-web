@@ -4,6 +4,12 @@
 h1 {
   font-weight: bold;
   margin: 0;
+  color: var(--text-primary);
+}
+h1.title {
+  margin-bottom: 20px;
+  text-align: center;
+  color: var(--text-primary);
 }
 
 h2 {
@@ -11,7 +17,7 @@ h2 {
 }
 
 p {
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 100;
   line-height: 20px;
   letter-spacing: 0.5px;
@@ -20,12 +26,14 @@ p {
 }
 
 span {
-  font-size: 12px;
+  font-size: 16px;
   text-transform: capitalize;
+  font-weight: 500;
+  color: var(--text-secondary);
 }
 
 a {
-  color: var(--primary-purple) !important;
+  color: var(--primary-blue) !important;
   font-size: 14px;
   text-decoration: none !important;
   margin: 15px 0;
@@ -35,8 +43,8 @@ a {
 
 button {
   border-radius: 30px !important;
-  border: 2px solid var(--primary-purple);
-  background: var(--purple-gradient);
+  border: 2px solid var(--primary-blue);
+  background: var(--main-gradient);
   color: var(--white);
   font-size: 14px;
   font-weight: bold;
@@ -69,7 +77,7 @@ button.ghost {
 
 button.ghost:hover {
   background: var(--white);
-  color: var(--primary-purple);
+  color: var(--primary-blue);
 }
 
 form {
@@ -84,8 +92,8 @@ form {
 }
 
 input {
-  background-color: var(--bg-white-transparent);
-  border: 1px solid var(--border-purple);
+  /* background-color: var(--primary-light) !important; */
+  border: 1px solid var(--border-beige);
   padding: 14px 18px;
   margin: 12px 0 !important;
   width: 100%;
@@ -96,12 +104,13 @@ input {
 
 input:focus {
   outline: none;
-  border-color: var(--primary-purple);
-  box-shadow: 0 0 0 3px var(--border-purple);
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px var(--border-blue);
 }
 
 input::placeholder {
-  color: var(--text-muted);
+  color: var(--text-primary);
+  opacity: 1; /* Ensures full color visibility */
 }
 
 .social-container {
@@ -109,7 +118,8 @@ input::placeholder {
 }
 
 .social-container a {
-  border: 1px solid var(--border-purple-medium);
+  border: 1px solid var(--border-beige);
+  background-color: var(--bg-white) !important;
   border-radius: 50%;
   display: inline-flex;
   justify-content: center;
@@ -117,12 +127,13 @@ input::placeholder {
   margin: 0 5px;
   height: 40px;
   width: 40px;
-  color: var(--primary-purple);
+  color: var(--primary-blue);
   transition: all 0.3s ease;
+  font-size: 1.5rem;
 }
 
 .social-container a:hover {
-  background-color: var(--purple-gradient);
+  background-color: var(--main-gradient);
   color: var(--white);
   border-color: transparent;
 }

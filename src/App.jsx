@@ -1,6 +1,6 @@
 // import SignUp from "./pages/SignUp";
 import EventDetails from "./pages/EventDetails";
-import EventHeader from "./components/EventDetails/EventHeader";
+import EventHeader from "./components/EventHeader";
 import Footer from "./components/Footer";
 import "./styles/App.css";
 

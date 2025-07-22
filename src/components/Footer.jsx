@@ -1,4 +1,5 @@
 import { IoLogoGooglePlaystore, IoLogoApple } from "react-icons/io5";
+import "../styles/Footer.css";
 
 const Footer = () => {
   return (

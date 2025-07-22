@@ -1,4 +1,5 @@
 import { IoCalendar } from "react-icons/io5";
+import "../styles/Header.css";
 
 const EventHeader = () => {
   return (

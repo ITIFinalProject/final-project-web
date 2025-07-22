@@ -1,0 +1,84 @@
+/* Footer */
+.event-footer {
+  background: var(--footer-bg);
+  color: var(--white);
+  padding: 60px 0 40px;
+  margin-top: 40px;
+}
+
+.footer-section h6 {
+  color: var(--white);
+  font-weight: 700;
+  margin-bottom: 25px;
+  font-size: 1.1rem;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section li {
+  margin-bottom: 10px;
+}
+
+.footer-section a {
+  color: var(--footer-text);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.footer-section a:hover {
+  color: var(--primary-beige);
+  text-decoration: none;
+  transform: translateX(3px);
+}
+
+.app-download {
+  display: flex;
+  align-items: center;
+  background: var(--main-gradient-light);
+  border: 1px solid var(--border-beige);
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  text-decoration: none;
+  color: var(--white);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.app-download:hover {
+  text-decoration: none;
+  color: var(--white);
+  background: linear-gradient(135deg, var(--border-beige), var(--border-beige));
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--border-beige);
+}
+
+.app-icon {
+  font-size: 1.8rem;
+  margin-right: 12px;
+  color: var(--primary-blue);
+}
+
+.app-text .small-text {
+  font-size: 0.75rem;
+  color: var(--footer-text-muted);
+}
+
+.app-text .main-text {
+  font-weight: 700;
+  color: var(--white);
+}
+
+/* Footer Bottom */
+.footer-bottom {
+  border-top: 1px solid var(--footer-border);
+  margin-top: 50px;
+  padding-top: 25px;
+  text-align: center;
+  color: var(--footer-text-muted);
+  font-size: 0.95rem;
+}

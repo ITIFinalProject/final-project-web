@@ -4,7 +4,7 @@ const LoginForm = () => {
   return (
     <div className="form-container sign-in-container">
       <form>
-        <h1>Log in</h1>
+        <h1 className="title">Log in</h1>
         <div className="social-container">
           <a href="#" className="social">
             <IoLogoFacebook />
