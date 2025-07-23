@@ -1,20 +1,6 @@
 @import url(../index.css);
 
 /* General Element Styling */
-.main-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  width: 100%;
-}
-
-.page-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
 h1 {
   font-weight: bold;
   margin: 0;
@@ -103,8 +89,7 @@ form {
   padding: 0 50px;
   height: 100%;
   text-align: center;
-}
-
+} 
 input {
   border: 1px solid var(--border-beige);
   padding: 14px 18px;
