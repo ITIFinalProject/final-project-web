@@ -1,0 +1,327 @@
+@import url(../index.css);
+.profile-dashboard {
+  min-height: 100vh;
+  /* background-color: var(--bg-white); */
+  padding: 20px 0;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  background-color: var(--bg-card);
+  padding: 0;
+  min-height: calc(100vh - 40px);
+  border-radius: 8px;
+  box-shadow: var(--shadow-light);
+}
+
+.sidebar-title {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+  padding: 20px;
+  border-bottom: 1px solid var(--border-beige);
+  border-radius: 8px 8px 0 0;
+}
+
+.sidebar-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar-item {
+  border-bottom: 1px solid var(--border-beige);
+}
+
+.sidebar-button {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 15px 20px;
+  text-align: left;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.sidebar-button:hover {
+  background-color: var(--glass-bg);
+  color: var(--text-primary);
+}
+
+.sidebar-button.active {
+  background-color: var(--primary-dark);
+  color: var(--white);
+  font-weight: 600;
+}
+
+/* Main Content Styles */
+.main-content {
+  background-color: var(--white);
+  border-radius: 8px;
+  box-shadow: var(--shadow-light);
+  min-height: calc(100vh - 40px);
+}
+
+.content-page {
+  padding: 30px;
+}
+
+.page-title {
+  color: var(--text-primary);
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 30px;
+  border-bottom: 2px solid var(--border-beige);
+  padding-bottom: 15px;
+}
+
+.section-title {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  margin-top: 30px;
+}
+
+.section-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+/* Profile Photo Styles */
+.user-photo-section {
+  margin-bottom: 30px;
+}
+
+.user-photo-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.user-photo {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.user-avatar {
+  width: 120px;
+  height: 120px;
+  background-color: var(--primary-beige);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: var(--white);
+}
+
+.camera-icon {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 35px;
+  height: 35px;
+  background-color: var(--primary-dark);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  font-size: 0.9rem;
+  cursor: pointer;
+  box-shadow: var(--shadow-medium);
+}
+
+/* Form Styles */
+.form-label {
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.form-control {
+  border: 1px solid var(--border-beige);
+  border-radius: 6px;
+  padding: 12px 15px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background-color: var(--white);
+}
+
+.form-control:focus {
+  border-color: var(--primary-dark);
+  box-shadow: 0 0 0 0.2rem var(--glass-bg);
+  outline: none;
+}
+
+.form-control::placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Email Page Styles */
+.email-form-section {
+  margin: 0 auto;
+}
+
+.current-email {
+  background-color: var(--bg-white);
+  padding: 15px 20px;
+  border-radius: 6px;
+  margin-bottom: 30px;
+  border-left: 4px solid var(--primary-dark);
+}
+
+.current-email-label {
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-right: 10px;
+}
+
+.current-email-value {
+  color: var(--text-secondary);
+  font-family: "Courier New", monospace;
+}
+
+/* Password Page Styles */
+.password-form-section {
+  margin: 0 auto;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.password-message {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+/* Button Styles */
+.action-buttons {
+  text-align: center;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-beige);
+}
+
+.save-button,
+.confirm-btn {
+  background-color: var(--primary-dark);
+  border: 1px solid var(--primary-dark);
+  color: var(--white);
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  min-width: 160px;
+  cursor: pointer;
+}
+
+.save-button:hover,
+.confirm-btn:hover {
+  background-color: var(--primary-blue);
+  border-color: var(--primary-blue);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-medium);
+}
+
+.confirm-btn:active,
+.save-button:active {
+  transform: scale(0.98);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .profile-dashboard {
+    padding: 10px;
+  }
+
+  .sidebar {
+    margin-bottom: 20px;
+    min-height: auto;
+    width: 100%;
+  }
+
+  .content-page {
+    padding: 20px 15px;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .profile-photo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profile-avatar {
+    width: 100px;
+    height: 100px;
+    font-size: 2.5rem;
+  }
+
+  .camera-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .content-page {
+    padding: 15px 10px;
+  }
+
+  .sidebar-title {
+    font-size: 1.1rem;
+    padding: 15px;
+  }
+
+  .sidebar-button {
+    padding: 12px 15px;
+    font-size: 0.9rem;
+  }
+
+  .page-title {
+    font-size: 1.3rem;
+  }
+
+  .section-title {
+    font-size: 1rem;
+  }
+}
+
+/* Animation for smooth transitions */
+.sidebar-button,
+.form-control,
+.save-button,
+.confirm-btn {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Focus states for accessibility */
+.sidebar-button:focus,
+.save-button:focus,
+.confirm-btn:focus {
+  outline: 2px solid var(--primary-dark);
+  outline-offset: 2px;
+}
+
+/* Loading state for buttons (future enhancement) */
+.save-button:active,
+.confirm-btn:active {
+  transform: scale(0.98);
+}
