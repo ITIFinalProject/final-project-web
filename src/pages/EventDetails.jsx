@@ -11,7 +11,7 @@ import "../styles/EventDetails.css";
 
 const EventDetails = () => {
   return (
-    <div>
+    <div className="container">
       <HeroBanner />
       <EventTitleSection />
       <DateTimeSection />

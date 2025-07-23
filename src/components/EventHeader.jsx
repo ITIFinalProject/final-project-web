@@ -44,7 +44,7 @@ const EventHeader = () => {
                 <li className="nav-item">
                   <a
                     className="nav-link"
-                    href="#"
+                    href="/"
                     onClick={() => setIsNavOpen(false)}
                   >
                     Home
