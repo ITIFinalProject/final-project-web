@@ -5,9 +5,9 @@
   backdrop-filter: blur(10px);
   padding: 12px 0;
   position: relative;
-  margin-bottom: 15px;
+  /* margin-bottom: 15px; */
   color: var(--white);
-  border-bottom: 1px solid var(--header-border);
+  /* border-bottom: 1px solid var(--header-border); */
   z-index: 1040;
 }
 
