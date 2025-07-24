@@ -197,6 +197,16 @@ const EventHeader = () => {
                   Sign Up
                 </NavLink>
               </li>
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/Profile" onClick={() => setIsNavOpen(false)}>
+                  Profile
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/Album" onClick={() => setIsNavOpen(false)}>
+                  Album
+                </NavLink>
+              </li>
             </ul>
 
             <div className="d-flex align-items-center header-actions">
@@ -224,15 +234,13 @@ const EventHeader = () => {
                     <IoPersonCircle />
                   </div>
                   <IoChevronDown
-                    className={`dropdown-arrow ${
-                      isProfileDropdownOpen ? "open" : ""
-                    }`}
+                    className={`dropdown-arrow ${isProfileDropdownOpen ? "open" : ""
+                      }`}
                   />
                 </button>
                 <div
-                  className={`dropdown-menu-custom ${
-                    isProfileDropdownOpen ? "show" : ""
-                  }`}
+                  className={`dropdown-menu-custom ${isProfileDropdownOpen ? "show" : ""
+                    }`}
                 >
                   <NavLink to="/SignUp" className="dropdown-item-custom">
                     <IoPersonCircle className="dropdown-icon" />
