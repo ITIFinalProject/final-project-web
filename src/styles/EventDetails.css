@@ -15,6 +15,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 15px;
   border-radius: 20px;
   overflow: hidden;
   z-index: 1;
@@ -542,7 +543,7 @@ body {
   box-shadow: var(--shadow-card-hover);
 }
 
-.event-image {
+.other-event-image {
   position: relative;
   height: 200px;
   overflow: hidden;
@@ -568,7 +569,7 @@ body {
   padding: 6px 12px;
   border-radius: 15px;
   font-size: 0.8rem;
-  font-weight: 600;
+  /* font-weight: 600; */
   backdrop-filter: blur(10px);
 }
 
@@ -587,7 +588,7 @@ body {
 
 .event-title-card {
   font-size: 1.1rem;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--text-dark);
   margin-bottom: 10px;
   line-height: 1.4;

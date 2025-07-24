@@ -1,6 +1,7 @@
 import EventCard from "../components/EventCard";
 import { IoArrowBack } from "react-icons/io5";
 import "../styles/InterestedEvents.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const InterestedEvents = () => {
   const events = [
