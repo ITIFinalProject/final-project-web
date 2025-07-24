@@ -109,7 +109,7 @@ const InterestedEvents = () => {
               <button className="back-button">
                 <IoArrowBack className="back-arrow" />
               </button>
-              <h1 className="page-title">Interested Events</h1>
+              <h1 className="page-header ">Interested Events</h1>
             </div>
           </div>
         </div>
