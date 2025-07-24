@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 function CountDown() {
 
-  const eventDate = '2025-08-31T23:59:59'; // Example event date
+  const eventDate = '2025-08-04T23:59:59'; // Example event date
   const calculateTimeLeft = () => {
     const difference = +new Date(eventDate) - +new Date();
     if (difference <= 0) return null;

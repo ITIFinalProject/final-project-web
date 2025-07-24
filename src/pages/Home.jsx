@@ -1,4 +1,4 @@
-import '../styles/Home.css'
+import '../styles/home.css'
 import Hero from '../components/Home/Hero'
 import Categories from '../components/Home/Categories'
 import Trending from '../components/Home/Trending'
@@ -9,7 +9,7 @@ import CreateBanner from '../components/Home/CreateBanner'
 
 const Home = () => {
     return (
-        <section className='home-container'>
+        <section className='home-page'>
             <Hero />
             <Categories />
             <Trending />

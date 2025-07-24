@@ -1,7 +1,7 @@
 @import url(../index.css);
 
 /* General Element Styling */
-h1 {
+/* h1 {
   font-weight: bold;
   margin: 0;
   color: var(--text-primary);
@@ -109,7 +109,7 @@ input:focus {
 input::placeholder {
   color: var(--text-primary);
   opacity: 1;
-}
+} */
 
 .social-container {
   margin: 20px 0;
