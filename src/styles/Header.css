@@ -10,7 +10,14 @@
   /* border-bottom: 1px solid var(--header-border); */
   z-index: 1040;
 }
-
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 80%;
+  margin: 0 auto;
+  padding: 0 20px;
+}
 .event-header .navbar-brand {
   font-size: 28px;
   font-weight: bold;

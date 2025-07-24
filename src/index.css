@@ -8,7 +8,6 @@
 }
 body {
   font-family: "Montserrat", sans-serif;
-  /* min-height: 100vh; */
 }
 :root {
   /* Primary Colors */
@@ -18,10 +17,10 @@ body {
   --primary-light: #f9f3ef;
 
   /*grays colors*/
-  --dark:#1e1e1e;
-  --light:#ffffff;
-  --grayLight:#B9B9B9;
-  --grayDark:#686868;
+  --dark: #1e1e1e;
+  --light: #ffffff;
+  --grayLight: #b9b9b9;
+  --grayDark: #686868;
 
   /* Header Colors */
   --header-bg: #1b3c53;
@@ -81,13 +80,12 @@ body {
   --black-shadow: rgba(27, 60, 83, 0.3);
   --black-light-shadow: rgba(27, 60, 83, 0.1);
   --black-text-shadow: rgba(27, 60, 83, 0.5);
-  --purple:#3C253D;
-  --pink: #FFE1FF;
+  --purple: #3c253d;
+  --pink: #ffe1ff;
 }
 
-
-/* .active{
+.active {
   color: var(--primary-dark) !important;
   font-weight: bold;
   border-bottom: 2px solid var(--primary-dark);
-} */
+}

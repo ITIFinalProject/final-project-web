@@ -142,6 +142,7 @@ import {
 } from "react-icons/io5";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+
 import "../styles/Header.css";
 
 const EventHeader = () => {
@@ -155,7 +156,7 @@ const EventHeader = () => {
   return (
     <header className="event-header">
       <nav className="navbar navbar-expand-lg navbar-dark">
-        <div className="container">
+        <div className="header-container">
           <NavLink
             className="navbar-brand"
             to="/"

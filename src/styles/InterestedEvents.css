@@ -1,10 +1,5 @@
 @import url(../index.css);
 
-.interested-events-page {
-  /* height: 100vh; */
-  font-family: "Montserrat", sans-serif;
-}
-
 /* Page Header Section */
 .page-header {
   display: flex;
@@ -103,7 +98,7 @@
   line-height: 1;
 }
 
-/* Heart Button */
+/* Star Button */
 .star-button {
   position: absolute;
   top: 12px;
@@ -139,7 +134,7 @@
   flex-direction: column;
 }
 
-.event-title {
+.event-name {
   font-size: 14px;
   font-weight: 600;
   color: var(--text-primary);

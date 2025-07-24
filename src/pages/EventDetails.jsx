@@ -6,6 +6,7 @@ import HostSection from "../components/EventDetails/HostSection";
 import EventDescription from "../components/EventDetails/EventDescription";
 import TagsSection from "../components/EventDetails/TagsSection";
 import SimilarEvents from "../components/EventDetails/SimilarEvents";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 import "../styles/EventDetails.css";
 
