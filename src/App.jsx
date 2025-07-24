@@ -7,6 +7,8 @@ import InterestedEvents from "./pages/InterestedEvents";
 import Events from "./pages/Events";
 import NotFound from "./pages/NotFound";
 import Home from "./pages/Home";
+import Profile from "./pages/Profile";
+import Album from "./pages/Album";
 
 function App() {
   return (
@@ -14,12 +16,16 @@ function App() {
       <Router>
         <EventHeader />
         <Routes>
-          <Route path="*" element={<NotFound />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/Events" element={<EventDetails />} />
-          <Route path="/EventDetails/:id" element={<EventDetails />} />
-          <Route path="/InterestedEvents" element={<InterestedEvents />} />
-          <Route path="/SignUp" element={<SignUp />} />
+
+          <Route path='*' element={<NotFound />} />
+          <Route path='/' element={<Home />} />
+          <Route path='/Events' element={<Events />} />
+          <Route path='/EventDetails' element={<EventDetails />} />
+          <Route path='/InterestedEvents' element={<InterestedEvents />} />
+          <Route path='/SignUp' element={<SignUp />} />
+          <Route path='/Profile' element={<Profile />} />
+          <Route path='/Album' element={<Album />} />
+
         </Routes>
         <Footer />
       </Router>
