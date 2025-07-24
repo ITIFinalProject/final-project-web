@@ -175,7 +175,7 @@
 }
 
 .current-email {
-  background-color: var(--bg-white);
+  background-color: var(--text-secondary) !important;
   padding: 15px 20px;
   border-radius: 6px;
   margin-bottom: 30px;
@@ -183,13 +183,13 @@
 }
 
 .current-email-label {
-  color: var(--text-primary);
+  color: var(--primary-light);
   font-weight: 600;
   margin-right: 10px;
 }
 
 .current-email-value {
-  color: var(--text-secondary);
+  color: var(--primary-light);
   font-family: "Courier New", monospace;
 }
 

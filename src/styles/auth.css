@@ -1,121 +1,12 @@
 @import url(../index.css);
+@import url(bootstrap/dist/css/bootstrap.min.css);
 
-/* General Element Styling */
-/* h1 {
-  font-weight: bold;
-  margin: 0;
-  color: var(--text-primary);
-}
-h1.title {
-  margin-bottom: 20px;
-  text-align: center;
-  color: var(--text-primary);
-}
-
-h2 {
-  text-align: center;
-}
-
-p {
-  font-size: 18px;
-  font-weight: 100;
-  line-height: 20px;
-  letter-spacing: 0.5px;
-  margin: 20px 0 30px;
-  text-transform: capitalize;
-}
-
-span {
-  font-size: 16px;
-  text-transform: capitalize;
-  font-weight: 500;
-  color: var(--text-secondary);
-}
-
-a {
-  color: var(--primary-blue) !important;
-  font-size: 14px;
-  text-decoration: none !important;
-  margin: 15px 0;
-  transition: color 0.3s ease;
-  cursor: pointer;
-}
-
-button {
-  border-radius: 30px !important;
-  border: 2px solid var(--primary-blue);
-  background: var(--main-gradient);
-  color: var(--white);
-  font-size: 14px;
-  font-weight: bold;
-  padding: 14px 50px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  box-shadow: var(--shadow-light);
-}
-
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-medium);
-}
-
-button:active {
-  transform: scale(0.95);
-}
-
-button:focus {
-  outline: none;
-}
-
-button.ghost {
-  background: transparent;
-  border-color: var(--white);
-  color: var(--white);
-}
-
-button.ghost:hover {
-  background: var(--white);
-  color: var(--primary-blue);
-}
-
-form {
-  background-color: var(--white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  padding: 0 50px;
-  height: 100%;
-  text-align: center;
-} 
-input {
-  border: 1px solid var(--border-beige);
-  padding: 14px 18px;
-  margin: 12px 0 !important;
-  width: 100%;
-  border-radius: 10px;
-  transition: all 0.3s ease;
-  color: var(--text-primary);
-}
-
-input:focus {
-  outline: none;
-  border-color: var(--primary-blue);
-  box-shadow: 0 0 0 3px var(--border-blue);
-}
-
-input::placeholder {
-  color: var(--text-primary);
-  opacity: 1;
-} */
 
 .social-container {
   margin: 20px 0;
 }
 
-.social-container a {
+.social-container .social-link {
   border: 1px solid var(--border-beige);
   background-color: var(--bg-white) !important;
   border-radius: 50%;
@@ -130,15 +21,26 @@ input::placeholder {
   font-size: 1.5rem;
 }
 
-.social-container a:hover {
+.social-container .social-link:hover {
   background-color: var(--main-gradient);
-  color: var(--white);
-  border-color: transparent;
+  transform: translate(2px, 2px);
 }
 
 /* Container Styles */
-.container {
-  background-color: var(--white);
+.main-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+.page-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.auth-container {
   border-radius: 10px;
   box-shadow: var(--shadow-heavy);
   position: relative;
@@ -278,7 +180,7 @@ input::placeholder {
     border-radius: 0;
     padding: 0 10px;
   }
-  form {
+  .auth-form {
     padding: 0 10px;
     min-width: 0;
     width: 100%;

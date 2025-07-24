@@ -3,6 +3,7 @@ import Sidebar from "../components/Profile/Sidebar";
 import AccountInfoPage from "../components/Profile/AccountInfoPage";
 import ChangeEmailPage from "../components/Profile/ChangeEmailPage";
 import PasswordPage from "../components/Profile/PasswordPage";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/Profile.css";
 const Profile = () => {
   const [activeSection, setActiveSection] = useState("account-info");

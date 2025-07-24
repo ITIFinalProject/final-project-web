@@ -42,7 +42,7 @@ const EventCard = ({ event }) => {
       </div>
 
       <div className="event-content">
-        <h3 className="event-title">{event.title}</h3>
+        <h3 className="event-name">{event.title}</h3>
 
         <div className="event-location">
           <IoLocationSharp className="location-icon" />

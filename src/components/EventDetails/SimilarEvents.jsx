@@ -41,7 +41,7 @@ const SimilarEvents = () => {
         <div className="events-grid">
           {events.map((event) => (
             <div key={event.id} className="event-card">
-              <div className="event-image">
+              <div className="other-event-image">
                 <img src={event.image} alt={event.title} />
                 <div className="event-category">{event.category}</div>
               </div>
