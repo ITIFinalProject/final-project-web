@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import '../styles/album.css';
 import { FiCamera } from 'react-icons/fi';
-import { FaPlus, FaXmark } from "react-icons/fa";
+import { FaPlus} from "react-icons/fa";
+import { FaXmark } from "react-icons/fa6";
 
 const eventImagesData = {
   "Tech Expo 2025": Array.from({ length: 12 }, (_, i) => ({
