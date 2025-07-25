@@ -28,8 +28,8 @@
   color: var(--primary-blue);
 }
 
-.page-title {
-  font-size: 20px;
+.page-header {
+  font-size: 26px;
   font-weight: 600;
   color: var(--text-primary);
   margin: 0;

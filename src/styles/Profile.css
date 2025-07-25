@@ -55,7 +55,7 @@
 
 .sidebar-button.active {
   background-color: var(--primary-dark);
-  color: var(--white);
+  color: var(--white) !important;
   font-weight: 600;
 }
 
@@ -144,18 +144,18 @@
 /* Form Styles */
 .form-label {
   color: var(--text-primary);
-  font-weight: 600;
+  font-weight: 500;
   margin-bottom: 8px;
   display: block;
 }
 
 .form-control {
-  border: 1px solid var(--border-beige);
+  border: 1px solid var(--border-dark);
   border-radius: 6px;
   padding: 12px 15px;
   font-size: 0.95rem;
   transition: all 0.3s ease;
-  background-color: var(--white);
+  /* background-color: var(--white); */
 }
 
 .form-control:focus {
@@ -165,7 +165,7 @@
 }
 
 .form-control::placeholder {
-  color: var(--text-muted);
+  color: var(--text-primary);
   font-style: italic;
 }
 
