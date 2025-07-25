@@ -82,6 +82,15 @@ body {
   --black-text-shadow: rgba(27, 60, 83, 0.5);
   --purple: #3c253d;
   --pink: #ffe1ff;
+
+  /* Chatbot specific colors */
+  --chatbot-primary: var(--primary-dark);
+  --chatbot-secondary: var(--primary-blue);
+  --chatbot-accent: var(--primary-beige);
+  --chatbot-bg: var(--bg-white);
+  --chatbot-text: var(--text-primary);
+  --chatbot-border: var(--border-beige);
+  --chatbot-shadow: var(--shadow-medium);
 }
 
 .active {
