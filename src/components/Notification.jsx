@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { IoMail, IoCheckmarkCircle } from "react-icons/io5";
+import "../styles/Notification.css"; // Assuming you have a CSS file for styling
 
 const Notification = () => {
   const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] =
