@@ -1,5 +1,6 @@
 .album-wrapper {
-  padding: 2rem;
+  width: 85%;
+  margin: 70px auto;
   background: var(--bg-white-transparent);
   min-height: 100vh;
 }
