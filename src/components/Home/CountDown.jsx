@@ -32,7 +32,7 @@ function CountDown() {
 
   return (
     <div className="countdown-container">
-      <h2 className="countdown-title">Next Event Countdown</h2>
+      <h2 className="countdown-title">Next Event Count Down</h2>
       <div className="countdown-timer">
         <div className="time-box">
           <span className="number">{timeLeft.days}</span>

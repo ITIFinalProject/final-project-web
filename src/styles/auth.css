@@ -1,6 +1,6 @@
 @import url(../index.css);
 @import url(bootstrap/dist/css/bootstrap.min.css);
-/* General Element Styling */
+
 .auth-title {
   font-weight: bold;
   margin: 0;
@@ -112,6 +112,7 @@
   color: var(--text-primary);
   opacity: 1;
 }
+
 
 .social-container {
   margin: 20px 0;

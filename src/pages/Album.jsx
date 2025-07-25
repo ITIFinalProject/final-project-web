@@ -11,13 +11,13 @@ const eventImagesData = {
     cols: i % 3 === 0 ? 2 : 1,
     isUploaded: false,
   })),
-  "Art Festival": Array.from({ length: 13 }, (_, i) => ({
+  "Art Festival": Array.from({ length: 10 }, (_, i) => ({
     seed: `art${i + 1}`,
     rows: i % 5 === 0 ? 2 : 1,
     cols: i % 2 === 0 ? 2 : 1,
     isUploaded: false,
   })),
-  "Sports Gala": Array.from({ length: 10 }, (_, i) => ({
+  "Sports Gala": Array.from({ length: 9 }, (_, i) => ({
     seed: `sports${i + 1}`,
     rows: i % 3 === 0 ? 2 : 1,
     cols: i % 4 === 0 ? 2 : 1,
