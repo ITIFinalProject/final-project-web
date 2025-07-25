@@ -4,7 +4,7 @@ import {
   getMockResponse,
   validateApiKey,
 } from "../../services/openaiService";
-import "./Chatbot.css";
+import "../../styles/Chatbot.css";
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);

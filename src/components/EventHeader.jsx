@@ -6,6 +6,7 @@ import {
 } from "react-icons/io5";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import Notification from "./Notification";
 // import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/Header.css";
 
@@ -89,12 +90,20 @@ const EventHeader = () => {
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink className="nav-link" to="/Profile" onClick={() => setIsNavOpen(false)}>
+                <NavLink
+                  className="nav-link"
+                  to="/Profile"
+                  onClick={() => setIsNavOpen(false)}
+                >
                   Profile
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink className="nav-link" to="/Album" onClick={() => setIsNavOpen(false)}>
+                <NavLink
+                  className="nav-link"
+                  to="/Album"
+                  onClick={() => setIsNavOpen(false)}
+                >
                   Album
                 </NavLink>
               </li>
@@ -115,6 +124,10 @@ const EventHeader = () => {
                   <IoStar />
                 </button>
               </NavLink>
+
+              {/* Notification Component */}
+              <Notification />
+
               <div className="profile-dropdown">
                 <button
                   className="profile-btn"
@@ -125,13 +138,15 @@ const EventHeader = () => {
                     <IoPersonCircle />
                   </div>
                   <IoChevronDown
-                    className={`dropdown-arrow ${isProfileDropdownOpen ? "open" : ""
-                      }`}
+                    className={`dropdown-arrow ${
+                      isProfileDropdownOpen ? "open" : ""
+                    }`}
                   />
                 </button>
                 <div
-                  className={`dropdown-menu-custom ${isProfileDropdownOpen ? "show" : ""
-                    }`}
+                  className={`dropdown-menu-custom ${
+                    isProfileDropdownOpen ? "show" : ""
+                  }`}
                 >
                   <NavLink to="/SignUp" className="dropdown-item-custom">
                     <IoPersonCircle className="dropdown-icon" />
