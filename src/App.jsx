@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Album from "./pages/Album";
+import CreateEvent from "./pages/CreateEvent";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/SignUp" element={<SignUp />} />
           <Route path="/Profile" element={<Profile />} />
           <Route path="/Album" element={<Album />} />
+          <Route path="/CreateEvent" element={<CreateEvent />} />
         </Routes>
         <Footer />
         <Chatbot />

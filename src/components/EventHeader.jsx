@@ -101,12 +101,12 @@ const EventHeader = () => {
             </ul>
 
             <div className="d-flex align-items-center header-actions">
-              <button
+              <NavLink to="/CreateEvent"
                 className="create-event-btn"
                 onClick={() => setIsNavOpen(false)}
               >
                 Create Event
-              </button>
+              </NavLink>
               <NavLink to="/InterestedEvents" title="Interested Events">
                 <button
                   className="interested-btn"
