@@ -63,7 +63,10 @@
   padding: 40px 20px;
   text-align: center;
 }
-
+.categories h2{
+  font-weight: bold;
+  margin: 10px 0;
+}
 .category-list {
   display: flex;
   justify-content: center;
@@ -109,7 +112,9 @@
   margin: 50px auto 80px;
   text-align: center;
 }
-
+.trending-events h2 {
+  font-weight: bold;
+}
 .custom-controls {
   display: flex;
   justify-content: center;

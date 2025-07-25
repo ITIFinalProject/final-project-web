@@ -21,7 +21,7 @@ body {
   z-index: 1;
 }
 
-.back-btn {
+.hero-banner .back-btn {
   position: absolute;
   top: 20px;
   left: 20px;
