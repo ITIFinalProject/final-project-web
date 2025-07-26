@@ -1,0 +1,128 @@
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  updateProfile,
+  sendPasswordResetEmail,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
+import { doc, setDoc, getDoc } from "firebase/firestore";
+import { auth, db } from "../firebase/config";
+
+// Google Auth Provider
+const googleProvider = new GoogleAuthProvider();
+
+// Sign up with email and password
+export const signUpWithEmailAndPassword = async (email, password, userData) => {
+  try {
+    // Create user account
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const user = userCredential.user;
+
+    // Update user profile with display name
+    await updateProfile(user, {
+      displayName: userData.name,
+    });
+
+    // Save additional user data to Firestore
+    await setDoc(doc(db, "users", user.uid), {
+      uid: user.uid,
+      name: userData.name,
+      email: userData.email,
+      phone: userData.phone || "",
+      address: userData.address || "",
+      // ممكن نشبل دول عادي ..
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+
+    return { user, error: null };
+  } catch (error) {
+    console.error("Error signing up:", error);
+    return { user: null, error: error.message };
+  }
+};
+
+// Sign in with email and password
+export const loginWithEmailAndPassword = async (email, password) => {
+  try {
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    return { user: userCredential.user, error: null };
+  } catch (error) {
+    console.error("Error signing in:", error);
+    return { user: null, error: error.message };
+  }
+};
+
+// Sign in with Google
+export const signInWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    const user = result.user;
+
+    // Check if user document exists, if not create it
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    if (!userDoc.exists()) {
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        name: user.displayName || "",
+        email: user.email,
+        phone: "",
+        address: "",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+    }
+
+    return { user, error: null };
+  } catch (error) {
+    console.error("Error signing in with Google:", error);
+    return { user: null, error: error.message };
+  }
+};
+
+// Sign out
+export const logOut = async () => {
+  try {
+    await signOut(auth);
+    return { error: null };
+  } catch (error) {
+    console.error("Error signing out:", error);
+    return { error: error.message };
+  }
+};
+
+// Reset password
+export const resetPassword = async (email) => {
+  try {
+    await sendPasswordResetEmail(auth, email);
+    return { error: null };
+  } catch (error) {
+    console.error("Error sending password reset email:", error);
+    return { error: error.message };
+  }
+};
+
+// Get user data from Firestore
+export const getUserData = async (uid) => {
+  try {
+    const userDoc = await getDoc(doc(db, "users", uid));
+    if (userDoc.exists()) {
+      return { userData: userDoc.data(), error: null };
+    } else {
+      return { userData: null, error: "User not found" };
+    }
+  } catch (error) {
+    console.error("Error getting user data:", error);
+    return { userData: null, error: error.message };
+  }
+};
