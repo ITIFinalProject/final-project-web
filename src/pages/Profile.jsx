@@ -12,10 +12,8 @@ const Profile = () => {
     switch (activeSection) {
       case "account-info":
         return <AccountInfoPage />;
-      case "change-email":
+      case "email-password":
         return <ChangeEmailPage />;
-      case "password":
-        return <PasswordPage />;
       default:
         return <AccountInfoPage />;
     }

@@ -1,16 +1,32 @@
-const PasswordPage = () => (
-  <div className="content-page">
-    <h2 className="page-title">Set Password</h2>
+const PasswordPage = () => {
+  return (
+    <div className="content-page">
+      <h3 className="page-title">Set Password</h3>
+      <div className="row">
+        <div className="col-md-8  mx-auto">
+          <div className="mb-4">
+            <label className="form-label">New Password:</label>
+            <input
+              type="password"
+              className="form-control"
+              placeholder="Enter new password"
+            />
+          </div>
 
-    <div className="password-form-section">
-      <p className="password-message">
-        A password has not been set for your account.
-      </p>
-
+          <div className="mb-4">
+            <label className="form-label">Confirm Password:</label>
+            <input
+              type="password"
+              className="form-control"
+              placeholder="Enter again"
+            />
+          </div>
+        </div>
+      </div>
       <div className="action-buttons">
-        <button className="confirm-btn">Set Password</button>
+        <button className="confirm-btn">Save New Password</button>
       </div>
     </div>
-  </div>
-);
+  );
+};
 export default PasswordPage;
