@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import Sidebar from "../components/Profile/Sidebar";
 import AccountInfoPage from "../components/Profile/AccountInfoPage";
-import ChangeEmailPage from "../components/Profile/ChangeEmailPage";
-import PasswordPage from "../components/Profile/PasswordPage";
+import EmailPasswordPage from "../components/Profile/EmailPasswordPage";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/Profile.css";
 const Profile = () => {
@@ -13,7 +12,7 @@ const Profile = () => {
       case "account-info":
         return <AccountInfoPage />;
       case "email-password":
-        return <ChangeEmailPage />;
+        return <EmailPasswordPage />;
       default:
         return <AccountInfoPage />;
     }

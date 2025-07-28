@@ -6,6 +6,7 @@ import {
   sendPasswordResetEmail,
   signInWithPopup,
   GoogleAuthProvider,
+  updatePassword,
 } from "firebase/auth";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { auth, db } from "../firebase/config";
@@ -124,5 +125,46 @@ export const getUserData = async (uid) => {
   } catch (error) {
     console.error("Error getting user data:", error);
     return { userData: null, error: error.message };
+  }
+};
+
+// Update user data in Firestore
+export const updateUserData = async (uid, userData) => {
+  try {
+    await setDoc(
+      doc(db, "users", uid),
+      {
+        ...userData,
+        updatedAt: new Date().toISOString(),
+      },
+      { merge: true }
+    );
+
+    // Update Firebase Auth profile if name changed
+    if (userData.name && auth.currentUser) {
+      await updateProfile(auth.currentUser, {
+        displayName: userData.name,
+      });
+    }
+
+    return { error: null };
+  } catch (error) {
+    console.error("Error updating user data:", error);
+    return { error: error.message };
+  }
+};
+
+// Update user password
+export const updateUserPassword = async (newPassword) => {
+  try {
+    if (!auth.currentUser) {
+      return { error: "No user is currently signed in" };
+    }
+
+    await updatePassword(auth.currentUser, newPassword);
+    return { error: null };
+  } catch (error) {
+    console.error("Error updating password:", error);
+    return { error: error.message };
   }
 };

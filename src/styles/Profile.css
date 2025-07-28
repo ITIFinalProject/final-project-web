@@ -325,3 +325,102 @@
 .confirm-btn:active {
   transform: scale(0.98);
 }
+
+/* Section header with edit button */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.edit-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-btn:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.cancel-btn {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: all 0.3s ease;
+}
+
+.cancel-btn:hover {
+  background-color: #5a6268;
+  transform: translateY(-1px);
+}
+
+.cancel-btn:disabled,
+.confirm-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Read-only input styling */
+.form-control[readonly] {
+  background-color: #f8f9fa;
+  color: var(--text-secondary);
+  border-color: #e9ecef;
+}
+
+.form-control[readonly]:focus {
+  background-color: #f8f9fa;
+  border-color: #e9ecef;
+  box-shadow: none;
+}
+
+/* Loading state */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+/* Small text styling */
+.text-muted {
+  color: #6c757d !important;
+  font-size: 0.875rem;
+}
+
+/* Password section styling */
+.password-section {
+  background-color: var(--bg-card);
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+  box-shadow: var(--shadow-light);
+}
+
+.password-display {
+  padding: 10px 0;
+}
+
+.password-text {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: 5px;
+  font-family: monospace;
+}
+
+.password-form {
+  margin-top: 15px;
+}
