@@ -424,3 +424,81 @@
 .password-form {
   margin-top: 15px;
 }
+
+/* Password validation feedback */
+.password-validation {
+  margin-top: 8px;
+}
+
+.validation-error {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.validation-success {
+  color: #28a745;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Google user notice styles */
+.google-user-notice {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 15px;
+}
+
+.notice-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.notice-icon {
+  font-size: 1.5rem;
+  margin-top: 2px;
+}
+
+.notice-text {
+  flex: 1;
+}
+
+.notice-title {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+.notice-description {
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+.google-account-link {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--primary-blue);
+  color: var(--white);
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+}
+
+.google-account-link:hover {
+  background-color: var(--primary-dark);
+  color: var(--white);
+  text-decoration: none;
+}
