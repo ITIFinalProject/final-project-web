@@ -1,27 +1,18 @@
-import React from 'react';
+import { useSelector } from 'react-redux';
 
 const Filter = ({ selectedCategory, onCategoryChange, selectedDate, onDateChange }) => {
-  const categories = [
-    'All',
-    'Entertainment',
-    'Educational & Business',
-    'Cultural & Arts',
-    'Sports & Fitness',
-    'Technology & Innovation',
-    'Travel & Adventure',
-  ];
+  const categoriesFromStore = useSelector((state) => state.category.list);
+  const categories = ['All', ...categoriesFromStore];
 
   return (
     <div className="filter-container">
       <div>
         {/* <label htmlFor="category">Category:</label> */}
-        <select
-        //   id="category"
-          value={selectedCategory}
-          onChange={(e) => onCategoryChange(e.target.value)}
-        >
+        <select value={selectedCategory} onChange={(e) => onCategoryChange(e.target.value)}>
           {categories.map((cat) => (
-            <option key={cat} value={cat}>{cat}</option>
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
           ))}
         </select>
       </div>
