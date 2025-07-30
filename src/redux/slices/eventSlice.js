@@ -5,7 +5,7 @@ import { db } from "../../firebase/config"; // adjust path to your firebase conf
 // Async thunk to fetch events
 export const fetchEvents = createAsyncThunk("events/fetchEvents", async () => {
   const querySnapshot = await getDocs(collection(db, "events"));
-  const events = querySnapshot.docs.map(doc => ({
+  const events = querySnapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
   }));

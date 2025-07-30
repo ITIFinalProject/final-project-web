@@ -1,9 +1,71 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { IoStar, IoLocationSharp, IoPeopleSharp } from "react-icons/io5";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  addToInterested,
+  removeFromInterested,
+} from "../redux/slices/interestedSlice";
 import "../styles/InterestedEvents.css"; // Import the CSS file
 
 // EventCard Component (would be in src/components/EventCard.jsx)
 const EventCard = ({ event }) => {
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.auth);
+
+  // Memoized selector to avoid creating new objects on every render
+  const eventIds = useSelector((state) => {
+    return state.interested?.eventIds || [];
+  });
+
+  const [isInterested, setIsInterested] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    // Check if this event is in the user's interested events
+    if (eventIds && Array.isArray(eventIds)) {
+      setIsInterested(eventIds.includes(event.id));
+    }
+  }, [eventIds, event.id]);
+
+  const handleStarClick = async () => {
+    if (!currentUser) {
+      // You might want to show a login prompt here
+      alert("Please log in to add events to your interested list");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      if (isInterested) {
+        // Remove from interested
+        await dispatch(
+          removeFromInterested({
+            userId: currentUser.uid,
+            eventId: event.id,
+          })
+        ).unwrap();
+      } else {
+        // Add to interested
+        await dispatch(
+          addToInterested({
+            userId: currentUser.uid,
+            eventId: event.id,
+            eventData: {
+              title: event.title,
+              date: event.date,
+              location: event.location,
+            },
+          })
+        ).unwrap();
+      }
+    } catch (error) {
+      console.error("Error updating interested events:", error);
+      alert("Failed to update interested events. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const getDateDisplay = (dateStr) => {
     const months = [
       "JAN",
@@ -36,8 +98,12 @@ const EventCard = ({ event }) => {
           <div className="date-month">{dateDisplay.month}</div>
           <div className="date-day">{dateDisplay.day}</div>
         </div>
-        <button className="star-button">
-          <IoStar className="star-icon" />
+        <button
+          className={`star-button ${isInterested ? "starred" : ""}`}
+          onClick={handleStarClick}
+          disabled={isLoading}
+        >
+          <IoStar className={`star-icon ${isInterested ? "filled" : ""}`} />
         </button>
       </div>
 
