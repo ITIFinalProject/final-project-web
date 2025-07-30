@@ -16,7 +16,7 @@ const LongCard = ({ event }) => {
     return (
         <div className="long-card">
             <div className="image-section">
-                <img src={event.image} alt={event.title}/>
+                <img src={event.bannerUrl} alt={event.title}/>
                 <div className="date-badge">
                     <div className="month">{dateDisplay.month}</div>
                     <div className="day">{dateDisplay.day}</div>

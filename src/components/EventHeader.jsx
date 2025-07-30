@@ -80,7 +80,7 @@ const EventHeader = () => {
                   Events
                 </NavLink>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <NavLink
                   className={({ isActive }) =>
                     `nav-link${isActive ? " active" : ""}`
@@ -90,7 +90,7 @@ const EventHeader = () => {
                 >
                   Interested
                 </NavLink>
-              </li>
+              </li> */}
 
               <li className="nav-item">
                 <NavLink

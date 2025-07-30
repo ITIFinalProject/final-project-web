@@ -16,6 +16,7 @@ import Album from "./pages/Album";
 import CreateEvent from "./pages/CreateEvent";
 import AuthInitializer from "./components/AuthInitializer";
 import ProtectedRoute from "./components/ProtectedRoute";
+import FloatingChatPanel from "./components/EventChat/FloatingChatPanel";
 
 function App() {
   return (
@@ -65,6 +66,9 @@ function App() {
           </Routes>
           <Footer />
           <Chatbot />
+          <ProtectedRoute>
+            <FloatingChatPanel />
+          </ProtectedRoute>
         </Router>
       </AuthInitializer>
     </Provider>
