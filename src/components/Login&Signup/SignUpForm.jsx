@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { IoLogoGoogle, IoLogoLinkedin } from "react-icons/io5";
+import { IoLogoGoogle, IoLogoFacebook } from "react-icons/io5";
 import {
   signUpWithEmailAndPassword,
   signInWithGoogle,
+  signInWithFacebook,
 } from "../../services/authService";
 import { signUpSchema } from "../../schemas";
 
@@ -70,6 +71,25 @@ const SignUpForm = () => {
     }
   };
 
+  const handleFacebookSignIn = async () => {
+    setLoading(true);
+    setAuthError("");
+
+    try {
+      const { error } = await signInWithFacebook();
+
+      if (error) {
+        setAuthError(error);
+      } else {
+        navigate("/");
+      }
+    } catch {
+      setAuthError("An unexpected error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="form-container sign-up-container">
       <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
@@ -93,9 +113,14 @@ const SignUpForm = () => {
           >
             <IoLogoGoogle />
           </button>
-          <a href="#" className="social social-link">
-            <IoLogoLinkedin />
-          </a>
+          <button
+            type="button"
+            className="social social-link"
+            onClick={handleFacebookSignIn}
+            disabled={loading}
+          >
+            <IoLogoFacebook />
+          </button>
         </div>
 
         <span className="auth-span">or use your email for registration</span>

@@ -6,6 +6,7 @@ import {
   sendPasswordResetEmail,
   signInWithPopup,
   GoogleAuthProvider,
+  FacebookAuthProvider,
   updatePassword,
 } from "firebase/auth";
 import { doc, setDoc, getDoc } from "firebase/firestore";
@@ -13,6 +14,11 @@ import { auth, db } from "../firebase/config";
 
 // Google Auth Provider
 const googleProvider = new GoogleAuthProvider();
+
+// Facebook Auth Provider
+const facebookProvider = new FacebookAuthProvider();
+facebookProvider.addScope("email");
+facebookProvider.addScope("public_profile");
 
 // Sign up with email and password
 export const signUpWithEmailAndPassword = async (email, password, userData) => {
@@ -89,6 +95,34 @@ export const signInWithGoogle = async () => {
     return { user, error: null };
   } catch (error) {
     console.error("Error signing in with Google:", error);
+    return { user: null, error: error.message };
+  }
+};
+
+// Sign in with Facebook
+export const signInWithFacebook = async () => {
+  try {
+    const result = await signInWithPopup(auth, facebookProvider);
+    const user = result.user;
+
+    // Check if user document exists, if not create it
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    if (!userDoc.exists()) {
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        name: user.displayName || "",
+        email: user.email,
+        phone: "",
+        address: "",
+        profileImageUrl: user.photoURL || "", // Use Facebook profile image if available
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+    }
+
+    return { user, error: null };
+  } catch (error) {
+    console.error("Error signing in with Facebook:", error);
     return { user: null, error: error.message };
   }
 };
