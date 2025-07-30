@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import Sidebar from "../components/Profile/Sidebar";
 import AccountInfoPage from "../components/Profile/AccountInfoPage";
-import ChangeEmailPage from "../components/Profile/ChangeEmailPage";
-import PasswordPage from "../components/Profile/PasswordPage";
+import EmailPasswordPage from "../components/Profile/EmailPasswordPage";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/Profile.css";
 const Profile = () => {
@@ -12,10 +11,8 @@ const Profile = () => {
     switch (activeSection) {
       case "account-info":
         return <AccountInfoPage />;
-      case "change-email":
-        return <ChangeEmailPage />;
-      case "password":
-        return <PasswordPage />;
+      case "email-password":
+        return <EmailPasswordPage />;
       default:
         return <AccountInfoPage />;
     }

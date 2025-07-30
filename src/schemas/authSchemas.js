@@ -37,8 +37,12 @@ export const signUpSchema = yup.object().shape({
     .oneOf([yup.ref("password")], "Passwords do not match"),
   phone: yup
     .string()
+    .required("Phone number is required")
     .matches(/^[0-9+\-\s()]*$/, "Please enter a valid phone number"),
-  address: yup.string(),
+  address: yup
+    .string()
+    .required("Address is required")
+    .min(5, "Address must be at least 5 characters"),
 });
 
 // Password reset validation schema

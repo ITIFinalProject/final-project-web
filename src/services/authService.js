@@ -6,12 +6,19 @@ import {
   sendPasswordResetEmail,
   signInWithPopup,
   GoogleAuthProvider,
+  FacebookAuthProvider,
+  updatePassword,
 } from "firebase/auth";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { auth, db } from "../firebase/config";
 
 // Google Auth Provider
 const googleProvider = new GoogleAuthProvider();
+
+// Facebook Auth Provider
+const facebookProvider = new FacebookAuthProvider();
+facebookProvider.addScope("email");
+facebookProvider.addScope("public_profile");
 
 // Sign up with email and password
 export const signUpWithEmailAndPassword = async (email, password, userData) => {
@@ -36,6 +43,7 @@ export const signUpWithEmailAndPassword = async (email, password, userData) => {
       email: userData.email,
       phone: userData.phone || "",
       address: userData.address || "",
+      profileImageUrl: "", // Default empty profile image
       // ممكن نشبل دول عادي ..
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -78,6 +86,7 @@ export const signInWithGoogle = async () => {
         email: user.email,
         phone: "",
         address: "",
+        profileImageUrl: user.photoURL || "", // Use Google profile image if available
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       });
@@ -86,6 +95,34 @@ export const signInWithGoogle = async () => {
     return { user, error: null };
   } catch (error) {
     console.error("Error signing in with Google:", error);
+    return { user: null, error: error.message };
+  }
+};
+
+// Sign in with Facebook
+export const signInWithFacebook = async () => {
+  try {
+    const result = await signInWithPopup(auth, facebookProvider);
+    const user = result.user;
+
+    // Check if user document exists, if not create it
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    if (!userDoc.exists()) {
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        name: user.displayName || "",
+        email: user.email,
+        phone: "",
+        address: "",
+        profileImageUrl: user.photoURL || "", // Use Facebook profile image if available
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+    }
+
+    return { user, error: null };
+  } catch (error) {
+    console.error("Error signing in with Facebook:", error);
     return { user: null, error: error.message };
   }
 };
@@ -124,5 +161,65 @@ export const getUserData = async (uid) => {
   } catch (error) {
     console.error("Error getting user data:", error);
     return { userData: null, error: error.message };
+  }
+};
+
+// Update user data in Firestore
+export const updateUserData = async (uid, userData) => {
+  try {
+    await setDoc(
+      doc(db, "users", uid),
+      {
+        ...userData,
+        updatedAt: new Date().toISOString(),
+      },
+      { merge: true }
+    );
+
+    // Update Firebase Auth profile if name changed
+    if (userData.name && auth.currentUser) {
+      await updateProfile(auth.currentUser, {
+        displayName: userData.name,
+      });
+    }
+
+    return { error: null };
+  } catch (error) {
+    console.error("Error updating user data:", error);
+    return { error: error.message };
+  }
+};
+
+// Update user password
+export const updateUserPassword = async (newPassword) => {
+  try {
+    if (!auth.currentUser) {
+      return { error: "No user is currently signed in" };
+    }
+
+    await updatePassword(auth.currentUser, newPassword);
+    return { error: null };
+  } catch (error) {
+    console.error("Error updating password:", error);
+    return { error: error.message };
+  }
+};
+
+// Update user profile image URL
+export const updateUserProfileImage = async (uid, imagePath) => {
+  try {
+    await setDoc(
+      doc(db, "users", uid),
+      {
+        imagePath,
+        updatedAt: new Date().toISOString(),
+      },
+      { merge: true }
+    );
+
+    return { error: null };
+  } catch (error) {
+    console.error("Error updating profile image:", error);
+    return { error: error.message };
   }
 };

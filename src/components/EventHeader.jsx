@@ -142,7 +142,15 @@ const EventHeader = () => {
                       aria-expanded={isProfileDropdownOpen}
                     >
                       <div className="profile-avatar">
-                        <IoPersonCircle />
+                        {userData?.profileImageUrl ? (
+                          <img
+                            src={userData.profileImageUrl}
+                            alt="Profile"
+                            className="profile-image"
+                          />
+                        ) : (
+                          <IoPersonCircle />
+                        )}
                       </div>
                       <span className="profile-name">
                         {userData?.name || currentUser?.displayName || "User"}
