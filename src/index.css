@@ -13,6 +13,9 @@ body {
 a{
   text-decoration: none;
 }
+input{
+  outline: none !important;
+}
 :root {
   /* Primary Colors */
   --primary-dark: #1b3c53;
@@ -86,6 +89,9 @@ a{
   --black-text-shadow: rgba(27, 60, 83, 0.5);
   --purple: #3c253d;
   --pink: #ffe1ff;
+  --error-red: #ef4444;
+  --success-green: #10b981;
+  --background-light: #f8fafc;
 
   /* Chatbot specific colors */
   --chatbot-primary: var(--primary-dark);
