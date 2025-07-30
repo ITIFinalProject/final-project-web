@@ -139,6 +139,30 @@
   font-size: 0.9rem;
   cursor: pointer;
   box-shadow: var(--shadow-medium);
+  transition: background-color 0.3s ease;
+}
+
+.camera-icon:hover {
+  background-color: var(--primary-beige);
+}
+
+/* Spinner for loading state */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid var(--white);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Form Styles */

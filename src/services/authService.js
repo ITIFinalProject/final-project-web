@@ -37,6 +37,7 @@ export const signUpWithEmailAndPassword = async (email, password, userData) => {
       email: userData.email,
       phone: userData.phone || "",
       address: userData.address || "",
+      profileImageUrl: "", // Default empty profile image
       // ممكن نشبل دول عادي ..
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -79,6 +80,7 @@ export const signInWithGoogle = async () => {
         email: user.email,
         phone: "",
         address: "",
+        profileImageUrl: user.photoURL || "", // Use Google profile image if available
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       });
@@ -165,6 +167,25 @@ export const updateUserPassword = async (newPassword) => {
     return { error: null };
   } catch (error) {
     console.error("Error updating password:", error);
+    return { error: error.message };
+  }
+};
+
+// Update user profile image URL
+export const updateUserProfileImage = async (uid, imagePath) => {
+  try {
+    await setDoc(
+      doc(db, "users", uid),
+      {
+        imagePath,
+        updatedAt: new Date().toISOString(),
+      },
+      { merge: true }
+    );
+
+    return { error: null };
+  } catch (error) {
+    console.error("Error updating profile image:", error);
     return { error: error.message };
   }
 };
