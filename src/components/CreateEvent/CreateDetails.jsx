@@ -1,20 +1,22 @@
+import { useState, useEffect } from "react";
+import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import { useSelector } from "react-redux";
+import { db } from "../../firebase/config";
+import { collection, getDocs } from "firebase/firestore";
+import { getAddressFromCoords } from "../../utils/geocode";
 /*suddenly after merge marker begin to not appear */
-import L from 'leaflet';
+import L from "leaflet";
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: new URL('leaflet/dist/images/marker-icon-2x.png', import.meta.url).href,
-  iconUrl: new URL('leaflet/dist/images/marker-icon.png', import.meta.url).href,
-  shadowUrl: new URL('leaflet/dist/images/marker-shadow.png', import.meta.url).href,
-}); 
-
-
-import { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import { useSelector } from 'react-redux';
-import { db } from '../../firebase/config';
-import { collection, getDocs } from 'firebase/firestore';
-import { getAddressFromCoords } from '../../utils/geocode';
+  iconRetinaUrl: new URL(
+    "leaflet/dist/images/marker-icon-2x.png",
+    import.meta.url
+  ).href,
+  iconUrl: new URL("leaflet/dist/images/marker-icon.png", import.meta.url).href,
+  shadowUrl: new URL("leaflet/dist/images/marker-shadow.png", import.meta.url)
+    .href,
+});
 
 const LocationPicker = ({ setLocation, setErrors, errors }) => {
   useMapEvents({
@@ -35,17 +37,15 @@ const LocationPicker = ({ setLocation, setErrors, errors }) => {
   return null;
 };
 
-
 const CreateDetails = ({ onContinue, latlng }) => {
   const user = useSelector((state) => state.auth.currentUser);
   const [formData, setFormData] = useState({
-    title: '',
-    category: '',
-    description: '',
-    capacity: '',
-    type: '',
+    title: "",
+    category: "",
+    description: "",
+    capacity: "",
+    type: "",
   });
-
 
   const categories = useSelector((state) => state.category.list);
   const [allUsers, setAllUsers] = useState([]);
@@ -53,7 +53,6 @@ const CreateDetails = ({ onContinue, latlng }) => {
   const [filteredGuests, setFilteredGuests] = useState([]);
   const [location, setLocation] = useState(null);
   const [errors, setErrors] = useState({});
-
 
   // Fetch all users from Firestore
   useEffect(() => {
@@ -118,7 +117,8 @@ const CreateDetails = ({ onContinue, latlng }) => {
     // Validate required fields
     if (!formData.title) newErrors.title = "Title is required";
     if (!formData.category) newErrors.category = "Category is required";
-    if (!formData.description) newErrors.description = "Description is required";
+    if (!formData.description)
+      newErrors.description = "Description is required";
     if (!formData.startDate) newErrors.startDate = "Start date is required";
     if (!formData.endDate) newErrors.endDate = "End date is required";
     if (!formData.startTime) newErrors.startTime = "Start time is required";
@@ -131,8 +131,7 @@ const CreateDetails = ({ onContinue, latlng }) => {
       return;
     }
 
-
-    latlng({ lat: location.lat, lng: location.lng })
+    latlng({ lat: location.lat, lng: location.lng });
     const address = await getAddressFromCoords(location.lat, location.lng);
     if (!address) {
       alert("Failed to get address from coordinates.");
@@ -148,7 +147,10 @@ const CreateDetails = ({ onContinue, latlng }) => {
       hostId: user.uid,
       hostName: user.displayName,
       location: address,
-      date: (formData.startDate == formData.endDate) ? formData.startDate : `${formData.startDate} - ${formData.endDate}`,
+      date:
+        formData.startDate == formData.endDate
+          ? formData.startDate
+          : `${formData.startDate} - ${formData.endDate}`,
       time: `${formData.startTime} - ${formData.endTime} `,
       guests: formData.guests,
     };
@@ -158,50 +160,28 @@ const CreateDetails = ({ onContinue, latlng }) => {
       delete preparedData.guests;
     }
 
-    // ✅ Just pass data to parent to go to next step    
+    // ✅ Just pass data to parent to go to next step
     onContinue(preparedData);
   };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   return (
     <div>
       <form className="details-form" onSubmit={handleSubmit}>
         {/* MARK:main
-  */}
+         */}
         <section>
           <h3>Event Details</h3>
           <label>
             Event Title <span>*</span>
-
           </label>
           {/* <br /> */}
-          <input type="text" name="title" value={formData.title} onChange={handleChange} />
+          <input
+            type="text"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+          />
           {errors.title && <p className="error-msg">{errors.title}</p>}
-
 
           <label>
             Event Category <span>*</span>
@@ -221,24 +201,27 @@ const CreateDetails = ({ onContinue, latlng }) => {
           </label>
         </section>
 
-
-
-
-
         {/* MARK:type
- */}
+         */}
         <section>
           <div>
             <label>
               Capacity <span>*</span>
             </label>
             {/* <br /> */}
-            <input type="number" name="capacity" value={formData.capacity} onChange={handleChange} />
+            <input
+              type="number"
+              name="capacity"
+              value={formData.capacity}
+              onChange={handleChange}
+            />
             {errors.capacity && <p className="error-msg">{errors.capacity}</p>}
           </div>
 
           <div className="radio-group">
-            <label>Type <span>*</span>&nbsp;</label>
+            <label>
+              Type <span>*</span>&nbsp;
+            </label>
             <label>
               <input
                 type="radio"
@@ -261,8 +244,6 @@ const CreateDetails = ({ onContinue, latlng }) => {
             </label>
             {errors.type && <p className="error-msg">{errors.type}</p>}
           </div>
-
-
 
           {formData.type === "Private" && (
             <div className="guest-selector">
@@ -298,14 +279,8 @@ const CreateDetails = ({ onContinue, latlng }) => {
           )}
         </section>
 
-
-
-
-
-
-
         {/* MARK:time
-  */}
+         */}
 
         <section>
           <h3>Date & Time</h3>
@@ -316,7 +291,9 @@ const CreateDetails = ({ onContinue, latlng }) => {
               </label>
               {/* <br /> */}
               <input type="date" name="startDate" onChange={handleChange} />
-              {errors.startDate && <p className="error-msg">{errors.startDate}</p>}
+              {errors.startDate && (
+                <p className="error-msg">{errors.startDate}</p>
+              )}
             </div>
             <div>
               <label>
@@ -334,7 +311,9 @@ const CreateDetails = ({ onContinue, latlng }) => {
               </label>
               {/* <br /> */}
               <input type="time" name="startTime" onChange={handleChange} />
-              {errors.startTime && <p className="error-msg">{errors.startTime}</p>}
+              {errors.startTime && (
+                <p className="error-msg">{errors.startTime}</p>
+              )}
             </div>
             <div>
               <label>
@@ -347,10 +326,8 @@ const CreateDetails = ({ onContinue, latlng }) => {
           </div>
         </section>
 
-
-
         {/* MARK:location
-  */}
+         */}
         <section>
           <h3>Location (Click map to select)</h3>
           <MapContainer
@@ -362,7 +339,8 @@ const CreateDetails = ({ onContinue, latlng }) => {
             <LocationPicker
               setLocation={setLocation}
               setErrors={setErrors}
-              errors={errors} />
+              errors={errors}
+            />
             {location && <Marker position={location} />}
           </MapContainer>
           {errors.location && <p className="error-msg">{errors.location}</p>}
@@ -371,20 +349,25 @@ const CreateDetails = ({ onContinue, latlng }) => {
         <section>
           <h3>Additional Information</h3>
           <label>
-
             Description <span>*</span>
-
           </label>
           {/* <br /> */}
-          <textarea rows={5} name="description" value={formData.description} onChange={handleChange} />
-          {errors.description && <p className="error-msg">{errors.description}</p>}
+          <textarea
+            rows={5}
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+          />
+          {errors.description && (
+            <p className="error-msg">{errors.description}</p>
+          )}
         </section>
 
         <button type="submit" className="save-btn">
           Save & Continue
         </button>
       </form>
-    </div >
+    </div>
   );
 };
 
