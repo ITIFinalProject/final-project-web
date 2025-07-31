@@ -87,7 +87,7 @@ const EventDetails = () => {
       <EventTitleSection event={currentEvent} />
       <DateTimeSection event={currentEvent} />
       <LocationSection event={currentEvent} />
-      <HostSection event={currentEvent} />
+      {/* <HostSection event={currentEvent} /> */}
       <EventDescription event={currentEvent} />
       <TagsSection event={currentEvent} />
       <SimilarEvents currentEventId={eventId} />

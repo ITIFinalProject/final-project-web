@@ -24,23 +24,23 @@ const EventTitleSection = ({ event }) => {
   };
 
   return (
-    <div className="event-title-section">
+    <div className="det-event-title-section">
       <div className="container">
         <div className="row align-items-center">
           <div className="col-lg-8">
-            <h1 className="event-title">{event?.title || "Event Title"}</h1>
+            <h1 className="det-event-title">{event?.title || "Event Title"}</h1>
           </div>
           <div className="col-lg-4 text-lg-end">
-            <div className="action-buttons">
+            <div className="det-action-buttons">
               <button
-                className={`action-btn ${isBookmarked ? "bookmarked" : ""}`}
+                className={`det-action-btn ${isBookmarked ? "bookmarked" : ""}`}
                 onClick={handleBookmark}
                 title="Bookmark event"
               >
                 <IoStar />
               </button>
               <button
-                className="action-btn"
+                className="det-action-btn"
                 onClick={handleShare}
                 title="Share event"
               >

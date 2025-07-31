@@ -98,12 +98,23 @@ const EventCard = ({ event }) => {
     ];
 
     try {
-      let date;
-      if (dateStr.seconds) {
-        // Firestore timestamp
-        date = new Date(dateStr.seconds * 1000);
+      let dateToFormat;
+
+      // Handle date range formats like "03/08/2025 - 06/08/2025" or "2025-09-13 - 2025-11-28"
+      if (typeof dateStr === "string" && dateStr.includes(" - ")) {
+        // Extract the start date from the range
+        const startDate = dateStr.split(" - ")[0].trim();
+        dateToFormat = startDate;
       } else {
-        date = new Date(dateStr);
+        dateToFormat = dateStr;
+      }
+
+      let date;
+      if (dateToFormat.seconds) {
+        // Firestore timestamp
+        date = new Date(dateToFormat.seconds * 1000);
+      } else {
+        date = new Date(dateToFormat);
       }
 
       if (isNaN(date.getTime())) {
@@ -115,7 +126,7 @@ const EventCard = ({ event }) => {
         day: date.getDate().toString().padStart(2, "0"),
       };
     } catch (error) {
-      console.error("Error parsing date:", error);
+      console.error("Error parsing date:", error, "Input:", dateStr);
       return { month: "TBD", day: "00" };
     }
   };
