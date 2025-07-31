@@ -71,7 +71,7 @@ const SimilarEvents = ({ currentEventId }) => {
               <div className="event-card">
                 <div className="other-event-image">
                   <img
-                    src={event.imageUrl || "/no-event.jpg"}
+                    src={event.bannerUrl || event.image || "/no-event.jpg"}
                     alt={event.title}
                     onError={(e) => {
                       e.target.src = "/no-event.jpg";

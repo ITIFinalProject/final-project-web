@@ -115,7 +115,10 @@ const LongCard = ({ event }) => {
     <Link to={`/event/${event.id}`} className="long-card-link">
       <div className="long-card">
         <div className="image-section">
-          <img src={event.bannerUrl} alt={event.title} />
+          <img
+            src={event.bannerUrl || event.image || "/no-event.jpg"}
+            alt={event.title}
+          />
           <div className="date-badge">
             <div className="month">{dateDisplay.month}</div>
             <div className="day">{dateDisplay.day}</div>

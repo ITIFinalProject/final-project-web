@@ -10,9 +10,9 @@ const HeroBanner = ({ event }) => {
 
   return (
     <div className="hero-banner">
-      {event?.bannerUrl ? (
+      {event?.bannerUrl || event?.image ? (
         <img
-          src={event.bannerUrl}
+          src={event.bannerUrl || event.image || "/no-event.jpg"}
           alt={event.title || "Event Banner"}
           className="hero-banner-image"
         />

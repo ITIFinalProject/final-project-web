@@ -8,8 +8,8 @@ import { getCoordsFromAddress } from "../../utils/geocode";
 // Fix for default markers in react-leaflet
 delete L.Icon.Default.prototype._getIconUrl;
 
-// Default coordinates (Mumbai)
-const DEFAULT_POSITION = [19.0596, 72.8295];
+// Default coordinates (Cairo, Egypt)
+const DEFAULT_POSITION = [30.0444, 31.2357];
 
 // Create a red marker icon
 const redIcon = new L.Icon({

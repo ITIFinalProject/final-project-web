@@ -98,7 +98,11 @@ const EventCard = ({ event }) => {
     <Link to={`/event/${event.id}`} className="event-card-link">
       <div className="event-card">
         <div className="event-image-container">
-          <img src={event.image} alt={event.title} className="event-image" />
+          <img
+            src={event.image || event.bannerUrl || "/no-event.jpg"}
+            alt={event.title}
+            className="event-image"
+          />
           <div className="date-badge">
             <div className="date-month">{dateDisplay.month}</div>
             <div className="date-day">{dateDisplay.day}</div>
