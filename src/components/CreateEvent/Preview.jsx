@@ -6,13 +6,13 @@ import {
 } from "react-icons/fa";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { useAuth } from "../../redux/hooks";
+import { useSelector } from "react-redux";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../firebase/config";
 import { useNavigate } from "react-router-dom";
 const Preview = ({ eventData, onBack, latlng }) => {
   const navigate = useNavigate();
-  const { currentUser, userData } = useAuth();
+  const user = useSelector((state) => state.auth.currentUser);
 
   const {
     title,
@@ -28,6 +28,7 @@ const Preview = ({ eventData, onBack, latlng }) => {
     hostId,
     guests,
   } = eventData;
+  
 
   const { lat, lng } = latlng || [30.0444, 31.2357];
 
@@ -41,10 +42,6 @@ const Preview = ({ eventData, onBack, latlng }) => {
     try {
       await addDoc(collection(db, "events"), {
         ...eventData,
-        hostId: currentUser.uid, // Add the creator's ID
-        createdBy: currentUser.uid, // Alternative field name
-        createdAt: new Date(),
-        updatedAt: new Date(),
       });
 
       // alert("Event published!");
@@ -126,7 +123,7 @@ const Preview = ({ eventData, onBack, latlng }) => {
               </div>
               <div className="host-meta">
                 <p className="host-name">{hostName || "Unknown Host"}</p>
-                <p>{userData.email || "Unknown Host"}</p>
+                <p>{user.email || "Unknown Host"}</p>
                 {/* <div className="host-actions">
                   <button className="btn-outline">Contact</button>
                   <button className="btn-filled">+ Follow</button>
