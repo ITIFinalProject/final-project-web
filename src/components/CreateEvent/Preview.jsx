@@ -37,11 +37,34 @@ const Preview = ({ eventData, onBack, latlng }) => {
 
 
 
-  const onPublish = async () => {    
+const onPublish = async () => {
     try {
-      await addDoc(collection(db, "events"), {
+      // First, add the event to Firestore
+      const docRef = await addDoc(collection(db, "events"), {
         ...eventData,
+        id: docRef.id,
       });
+
+      // Create the event data with the generated ID
+      const eventWithId = {
+        ...eventData,
+        id: docRef.id,
+      };
+
+      // If it's a private event with guests, create invitations
+      if (
+        eventData.type === "Private" &&
+        eventData.guests &&
+        eventData.guests.length > 0
+      ) {
+        try {
+          await notificationService.createEventInvitations(eventWithId);
+          console.log("Invitations sent successfully");
+        } catch (invitationError) {
+          console.error("Error sending invitations:", invitationError);
+          // Don't fail the whole process if invitations fail
+        }
+      }
 
       // alert("Event published!");
       //toast
