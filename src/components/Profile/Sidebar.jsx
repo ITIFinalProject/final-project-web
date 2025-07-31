@@ -2,6 +2,7 @@ const Sidebar = ({ activeSection, setActiveSection }) => {
   const menuItems = [
     { id: "account-info", label: "Account Info" },
     { id: "email-password", label: "Email & Password" },
+    { id: "my-events", label: "My Events" },
   ];
 
   return (

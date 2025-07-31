@@ -1,36 +1,34 @@
-import { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import { useSelector } from 'react-redux';
-import { db } from '../../firebase/config';
-import { collection, getDocs } from 'firebase/firestore';
-import { getAddressFromCoords } from '../../utils/geocode';
-
+import { useState, useEffect } from "react";
+import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import { useSelector } from "react-redux";
+import { db } from "../../firebase/config";
+import { collection, getDocs } from "firebase/firestore";
+import { getAddressFromCoords } from "../../utils/geocode";
 
 const LocationPicker = ({ setLocation }) => {
   useMapEvents({
     click(e) {
       setLocation(e.latlng);
-    }
+    },
   });
   return null;
 };
 
 const CreateDetails = ({ onContinue, latlng }) => {
   const [formData, setFormData] = useState({
-    title: '',
-    category: '',
-    description: '',
+    title: "",
+    category: "",
+    description: "",
     // startDate: '',
-    startTime: '',
-    endTime: '',
+    startTime: "",
+    endTime: "",
     // hostName: '',
-    capacity: '',
+    capacity: "",
     // location: '',
     // hostId: '',
-    type: '',
+    type: "",
   });
-
 
   // {
   //   title: "Event Title",
@@ -49,12 +47,11 @@ const CreateDetails = ({ onContinue, latlng }) => {
   //   ],
   // }
 
-
   const [location, setLocation] = useState(null);
 
   const user = useSelector((state) => state.auth.currentUser);
   const [allUsers, setAllUsers] = useState([]);
-  const [guestSearch, setGuestSearch] = useState('');
+  const [guestSearch, setGuestSearch] = useState("");
   const [filteredGuests, setFilteredGuests] = useState([]);
 
   // Automatically assign host name from logged-in user
@@ -67,7 +64,7 @@ const CreateDetails = ({ onContinue, latlng }) => {
   // Fetch all users from Firestore
   useEffect(() => {
     const fetchUsers = async () => {
-      const querySnapshot = await getDocs(collection(db, 'users'));
+      const querySnapshot = await getDocs(collection(db, "users"));
       const users = querySnapshot.docs
         .map((doc) => ({ id: doc.id, ...doc.data() }))
         .filter((u) => u.id !== user?.uid); // exclude self
@@ -82,7 +79,6 @@ const CreateDetails = ({ onContinue, latlng }) => {
   };
 
   const handleGuestSearch = (e) => {
-
     const input = e.target.value.toLowerCase();
     setGuestSearch(input);
     const filtered = allUsers.filter((u) =>
@@ -98,7 +94,7 @@ const CreateDetails = ({ onContinue, latlng }) => {
           ...prev,
           guests: [...(prev.guests || []), guest],
         }));
-        setGuestSearch('');
+        setGuestSearch("");
         setFilteredGuests([]);
       } else {
         alert("You've reached the maximum capacity for guests.");
@@ -113,19 +109,18 @@ const CreateDetails = ({ onContinue, latlng }) => {
     }));
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!location) {
-      alert('Please select a location on the map.');
+      alert("Please select a location on the map.");
       return;
     }
-  latlng({ lat: location.lat, lng: location.lng })
+    latlng({ lat: location.lat, lng: location.lng });
 
     const address = await getAddressFromCoords(location.lat, location.lng);
     if (!address) {
-      alert('Failed to get address from coordinates.');
+      alert("Failed to get address from coordinates.");
       return;
     }
 
@@ -134,20 +129,20 @@ const CreateDetails = ({ onContinue, latlng }) => {
       // hostId: user.uid,
       // hostName: user.name,
       location: address,
-      date: formData.startDate,
-      time: `${formData.startTime} - ${formData.endTime}`,
+      startDate: formData.startDate, // Keep consistent naming
+      startTime: formData.startTime, // Keep separate
+      endTime: formData.endTime, // Keep separate
+      // Remove the old 'date' and 'time' fields to avoid confusion
     };
 
-
     // If public, guests field should be removed
-    if (formData.type !== 'Private') {
+    if (formData.type !== "Private") {
       delete preparedData.guests;
     }
 
     // ✅ Just pass data to parent to go to next step
     onContinue(preparedData);
   };
-
 
   const categories = useSelector((state) => state.category.list);
 
@@ -158,22 +153,38 @@ const CreateDetails = ({ onContinue, latlng }) => {
           <h3>Event Details</h3>
           <label>
             Event Title <span>*</span>
-            <input type="text" name="title" value={formData.title} onChange={handleChange} />
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+            />
           </label>
 
           <label>
             Event Category <span>*</span>
-            <select name="category" value={formData.category} onChange={handleChange}>
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+            >
               <option>Please select one</option>
               {categories.map((cat) => (
-                <option key={cat} value={cat}>{cat}</option>
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
               ))}
             </select>
           </label>
 
           <label>
             Capacity
-            <input type="number" name="capacity" value={formData.capacity} onChange={handleChange} />
+            <input
+              type="number"
+              name="capacity"
+              value={formData.capacity}
+              onChange={handleChange}
+            />
           </label>
 
           <label>
@@ -185,9 +196,7 @@ const CreateDetails = ({ onContinue, latlng }) => {
             </select>
           </label>
 
-
-
-          {formData.type === 'Private' && (
+          {formData.type === "Private" && (
             <div className="guest-selector">
               <label>
                 Invite Guests (up to {formData.capacity})
@@ -211,16 +220,15 @@ const CreateDetails = ({ onContinue, latlng }) => {
                 {formData.guests?.map((guest) => (
                   <div key={guest.id} className="guest-chip">
                     {guest.name}
-                    <button onClick={() => handleRemoveGuest(guest.id)}>✕</button>
+                    <button onClick={() => handleRemoveGuest(guest.id)}>
+                      ✕
+                    </button>
                   </div>
                 ))}
               </div>
             </div>
           )}
         </section>
-
-
-
 
         <section>
           <h3>Date & Time</h3>
@@ -240,7 +248,11 @@ const CreateDetails = ({ onContinue, latlng }) => {
 
         <section>
           <h3>Location (Click map to select)</h3>
-          <MapContainer center={[30.0444, 31.2357]} zoom={13} style={{ height: '300px' }}>
+          <MapContainer
+            center={[30.0444, 31.2357]}
+            zoom={13}
+            style={{ height: "300px" }}
+          >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             <LocationPicker setLocation={setLocation} />
             {location && <Marker position={location} />}
@@ -256,11 +268,17 @@ const CreateDetails = ({ onContinue, latlng }) => {
 
           <label>
             Description
-            <textarea name="description" value={formData.description} onChange={handleChange} />
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+            />
           </label>
         </section>
 
-        <button type="submit" className="save-btn">Save & Continue</button>
+        <button type="submit" className="save-btn">
+          Save & Continue
+        </button>
       </form>
     </div>
   );

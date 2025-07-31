@@ -14,6 +14,7 @@ import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Album from "./pages/Album";
 import CreateEvent from "./pages/CreateEvent";
+import EditEvent from "./pages/EditEvent";
 import AuthInitializer from "./components/AuthInitializer";
 import ProtectedRoute from "./components/ProtectedRoute";
 import FloatingChatPanel from "./components/EventChat/FloatingChatPanel";
@@ -60,6 +61,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <CreateEvent />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/edit-event/:eventId"
+              element={
+                <ProtectedRoute>
+                  <EditEvent />
                 </ProtectedRoute>
               }
             />
