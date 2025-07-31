@@ -17,31 +17,26 @@ const Preview = ({ eventData, onBack, latlng }) => {
   const {
     title,
     location,
-    startDate,
-    startTime,
-    endTime,
+    date,
+    time,
     type,
     bannerUrl,
     category,
     capacity,
     description,
-    hostName = userData?.name,
-    // hostId = userData?.id,
+    hostName,
+    hostId,
     guests,
   } = eventData;
 
   const { lat, lng } = latlng || [30.0444, 31.2357];
 
-  const onPublish = async () => {
-    if (!eventData?.title || !eventData?.startDate || !eventData?.startTime) {
-      alert("Please fill in all required fields.");
-      return;
-    }
 
-    if (!currentUser) {
-      alert("You must be logged in to create an event.");
-      return;
-    }
+
+
+
+
+  const onPublish = async () => {    
 
     try {
       await addDoc(collection(db, "events"), {
@@ -88,12 +83,10 @@ const Preview = ({ eventData, onBack, latlng }) => {
           <div className="event-meta">
             <div className="meta-block">
               <h4>Date and Time</h4>
-              <p>
-                <FaCalendarAlt className="icon" /> {startDate}
-              </p>
-              <p>
-                <FaClock className="icon" /> {startTime} - {endTime}
-              </p>
+
+              <p><FaCalendarAlt className="icon" /> {date}</p>
+              <p><FaClock className="icon" /> {time}</p>
+
               {/* <a href="#" className="add-calendar">+ Add to Calendar</a> */}
             </div>
 

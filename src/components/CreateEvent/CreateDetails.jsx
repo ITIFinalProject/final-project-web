@@ -1,65 +1,51 @@
-import { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import { useSelector } from "react-redux";
-import { db } from "../../firebase/config";
-import { collection, getDocs } from "firebase/firestore";
-import { getAddressFromCoords } from "../../utils/geocode";
 
-const LocationPicker = ({ setLocation }) => {
+import { useState, useEffect } from 'react';
+import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import { useSelector } from 'react-redux';
+import { db } from '../../firebase/config';
+import { collection, getDocs } from 'firebase/firestore';
+import { getAddressFromCoords } from '../../utils/geocode';
+
+const LocationPicker = ({ setLocation, setErrors, errors }) => {
   useMapEvents({
     click(e) {
       setLocation(e.latlng);
+
+      // Clear error if exists
+      if (errors?.location) {
+        setErrors((prev) => {
+          const newErrors = { ...prev };
+          delete newErrors.location;
+          return newErrors;
+        });
+      }
     },
   });
+
   return null;
 };
 
+
 const CreateDetails = ({ onContinue, latlng }) => {
+  const user = useSelector((state) => state.auth.currentUser);
   const [formData, setFormData] = useState({
-    title: "",
-    category: "",
-    description: "",
-    // startDate: '',
-    startTime: "",
-    endTime: "",
-    // hostName: '',
-    capacity: "",
-    // location: '',
-    // hostId: '',
-    type: "",
+
+    title: '',
+    category: '',
+    description: '',
+    capacity: '',
+    type: '',
   });
 
-  // {
-  //   title: "Event Title",
-  //   description: "Optional description",
-  //   date: "2025-08-01",
-  //   time: "14:00",
-  //   location: "Cairo",
-  //   category: '',
-  //   capacity: 10,
-  //   type: "Private",
-  //   hostName: "Hagar Gamal",        // From logged-in user
-  //   hostId: "currentUser.uid",      // (Recommended for secure querying)
-  //   guests: [                       // Only if Private
-  //     { id: "abc123", name: "Jane Doe", email: "jane@example.com" },
-  //     { id: "xyz456", name: "Ahmed Ali", email: "ahmed@example.com" }
-  //   ],
-  // }
 
-  const [location, setLocation] = useState(null);
-
-  const user = useSelector((state) => state.auth.currentUser);
+  const categories = useSelector((state) => state.category.list);
   const [allUsers, setAllUsers] = useState([]);
   const [guestSearch, setGuestSearch] = useState("");
   const [filteredGuests, setFilteredGuests] = useState([]);
+  const [location, setLocation] = useState(null);
+  const [errors, setErrors] = useState({});
 
-  // Automatically assign host name from logged-in user
-  useEffect(() => {
-    if (user?.name) {
-      setFormData((prev) => ({ ...prev, hostName: user.name }));
-    }
-  }, [user, setFormData]);
 
   // Fetch all users from Firestore
   useEffect(() => {
@@ -76,6 +62,14 @@ const CreateDetails = ({ onContinue, latlng }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (errors[name]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
   };
 
   const handleGuestSearch = (e) => {
@@ -112,12 +106,24 @@ const CreateDetails = ({ onContinue, latlng }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!location) {
-      alert("Please select a location on the map.");
+    const newErrors = {};
+    // Validate required fields
+    if (!formData.title) newErrors.title = "Title is required";
+    if (!formData.category) newErrors.category = "Category is required";
+    if (!formData.description) newErrors.description = "Description is required";
+    if (!formData.startDate) newErrors.startDate = "Start date is required";
+    if (!formData.startTime) newErrors.startTime = "Start time is required";
+    if (!formData.endTime) newErrors.endTime = "End time is required";
+    if (!formData.type) newErrors.type = "Event type is required";
+    if (!formData.capacity) newErrors.capacity = "Capacity is required";
+    if (!location) newErrors.location = "Location must be selected on map";
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
-    latlng({ lat: location.lat, lng: location.lng });
 
+
+    latlng({ lat: location.lat, lng: location.lng })
     const address = await getAddressFromCoords(location.lat, location.lng);
     if (!address) {
       alert("Failed to get address from coordinates.");
@@ -125,9 +131,13 @@ const CreateDetails = ({ onContinue, latlng }) => {
     }
 
     const preparedData = {
-      ...formData,
-      // hostId: user.uid,
-      // hostName: user.name,
+      title: formData.title,
+      category: formData.category,
+      description: formData.description,
+      capacity: formData.capacity,
+      type: formData.type,
+      hostId: user.uid,
+      hostName: user.displayName,
       location: address,
       startDate: formData.startDate, // Keep consistent naming
       startTime: formData.startTime, // Keep separate
@@ -140,26 +150,50 @@ const CreateDetails = ({ onContinue, latlng }) => {
       delete preparedData.guests;
     }
 
-    // ✅ Just pass data to parent to go to next step
+    // ✅ Just pass data to parent to go to next step    
     onContinue(preparedData);
   };
 
-  const categories = useSelector((state) => state.category.list);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   return (
-    <div className="create-details">
+    <div>
       <form className="details-form" onSubmit={handleSubmit}>
+        {/* MARK:main
+  */}
         <section>
           <h3>Event Details</h3>
           <label>
             Event Title <span>*</span>
-            <input
-              type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-            />
+
           </label>
+          {/* <br /> */}
+          <input type="text" name="title" value={formData.title} onChange={handleChange} />
+          {errors.title && <p className="error-msg">{errors.title}</p>}
+
 
           <label>
             Event Category <span>*</span>
@@ -175,26 +209,52 @@ const CreateDetails = ({ onContinue, latlng }) => {
                 </option>
               ))}
             </select>
+            {errors.category && <p className="error-msg">{errors.category}</p>}
           </label>
+        </section>
 
-          <label>
-            Capacity
-            <input
-              type="number"
-              name="capacity"
-              value={formData.capacity}
-              onChange={handleChange}
-            />
-          </label>
 
-          <label>
-            Type <span>*</span>
-            <select name="type" value={formData.type} onChange={handleChange}>
-              <option value="">Please select</option>
-              <option value="Public">Public</option>
-              <option value="Private">Private</option>
-            </select>
-          </label>
+
+
+
+        {/* MARK:type
+ */}
+        <section>
+          <div>
+            <label>
+              Capacity <span>*</span>
+            </label>
+            {/* <br /> */}
+            <input type="number" name="capacity" value={formData.capacity} onChange={handleChange} />
+            {errors.capacity && <p className="error-msg">{errors.capacity}</p>}
+          </div>
+
+          <div className="radio-group">
+            <label>Type <span>*</span>&nbsp;</label>
+            <label>
+              <input
+                type="radio"
+                name="type"
+                value="Public"
+                checked={formData.type === "Public"}
+                onChange={handleChange}
+              />
+              Public
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="type"
+                value="Private"
+                checked={formData.type === "Private"}
+                onChange={handleChange}
+              />
+              Private
+            </label>
+            {errors.type && <p className="error-msg">{errors.type}</p>}
+          </div>
+
+
 
           {formData.type === "Private" && (
             <div className="guest-selector">
@@ -230,22 +290,50 @@ const CreateDetails = ({ onContinue, latlng }) => {
           )}
         </section>
 
+
+
+
+
+
+
+        {/* MARK:time
+  */}
+
         <section>
           <h3>Date & Time</h3>
-          <label>
-            Start Date
-            <input type="date" name="startDate" onChange={handleChange} />
-          </label>
-          <label>
-            Start Time
-            <input type="time" name="startTime" onChange={handleChange} />
-          </label>
-          <label>
-            End Time
-            <input type="time" name="endTime" onChange={handleChange} />
-          </label>
+          <div className="row-inputs">
+            <div>
+              <label>
+                Start Date <span>*</span>
+              </label>
+              {/* <br /> */}
+              <input type="date" name="startDate" onChange={handleChange} />
+              {errors.startDate && <p className="error-msg">{errors.startDate}</p>}
+            </div>
+
+            <div>
+              <label>
+                Start Time <span>*</span>
+              </label>
+              {/* <br /> */}
+              <input type="time" name="startTime" onChange={handleChange} />
+              {errors.startTime && <p className="error-msg">{errors.startTime}</p>}
+            </div>
+            <div>
+              <label>
+                End Time <span>*</span>
+              </label>
+              {/* <br /> */}
+              <input type="time" name="endTime" onChange={handleChange} />
+              {errors.endTime && <p className="error-msg">{errors.endTime}</p>}
+            </div>
+          </div>
         </section>
 
+
+
+        {/* MARK:location
+  */}
         <section>
           <h3>Location (Click map to select)</h3>
           <MapContainer
@@ -254,33 +342,32 @@ const CreateDetails = ({ onContinue, latlng }) => {
             style={{ height: "300px" }}
           >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            <LocationPicker setLocation={setLocation} />
+            <LocationPicker
+              setLocation={setLocation}
+              setErrors={setErrors}
+              errors={errors} />
             {location && <Marker position={location} />}
           </MapContainer>
+          {errors.location && <p className="error-msg">{errors.location}</p>}
         </section>
 
         <section>
           <h3>Additional Information</h3>
-          {/* <label>
-            Host Name
-            <input type="text" name="hostName" value={formData.hostName} onChange={handleChange} />
-          </label> */}
-
           <label>
-            Description
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-            />
+
+            Description <span>*</span>
+
           </label>
+          {/* <br /> */}
+          <textarea rows={5} name="description" value={formData.description} onChange={handleChange} />
+          {errors.description && <p className="error-msg">{errors.description}</p>}
         </section>
 
         <button type="submit" className="save-btn">
           Save & Continue
         </button>
       </form>
-    </div>
+    </div >
   );
 };
 
