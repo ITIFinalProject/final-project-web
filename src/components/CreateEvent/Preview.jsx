@@ -41,10 +41,6 @@ const Preview = ({ eventData, onBack, latlng }) => {
     try {
       await addDoc(collection(db, "events"), {
         ...eventData,
-        hostId: currentUser.uid, // Add the creator's ID
-        createdBy: currentUser.uid, // Alternative field name
-        createdAt: new Date(),
-        updatedAt: new Date(),
       });
 
       // alert("Event published!");

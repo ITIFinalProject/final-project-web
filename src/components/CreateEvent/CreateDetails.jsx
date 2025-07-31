@@ -1,3 +1,12 @@
+/*suddenly after merge marker begin to not appear */
+import L from 'leaflet';
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: new URL('leaflet/dist/images/marker-icon-2x.png', import.meta.url).href,
+  iconUrl: new URL('leaflet/dist/images/marker-icon.png', import.meta.url).href,
+  shadowUrl: new URL('leaflet/dist/images/marker-shadow.png', import.meta.url).href,
+}); 
+
 
 import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
@@ -30,7 +39,6 @@ const LocationPicker = ({ setLocation, setErrors, errors }) => {
 const CreateDetails = ({ onContinue, latlng }) => {
   const user = useSelector((state) => state.auth.currentUser);
   const [formData, setFormData] = useState({
-
     title: '',
     category: '',
     description: '',
@@ -112,6 +120,7 @@ const CreateDetails = ({ onContinue, latlng }) => {
     if (!formData.category) newErrors.category = "Category is required";
     if (!formData.description) newErrors.description = "Description is required";
     if (!formData.startDate) newErrors.startDate = "Start date is required";
+    if (!formData.endDate) newErrors.endDate = "End date is required";
     if (!formData.startTime) newErrors.startTime = "Start time is required";
     if (!formData.endTime) newErrors.endTime = "End time is required";
     if (!formData.type) newErrors.type = "Event type is required";
@@ -139,10 +148,8 @@ const CreateDetails = ({ onContinue, latlng }) => {
       hostId: user.uid,
       hostName: user.displayName,
       location: address,
-      startDate: formData.startDate, // Keep consistent naming
-      startTime: formData.startTime, // Keep separate
-      endTime: formData.endTime, // Keep separate
-      // Remove the old 'date' and 'time' fields to avoid confusion
+      date: (formData.startDate == formData.endDate) ? formData.startDate : `${formData.startDate} - ${formData.endDate}`,
+      time: `${formData.startTime} - ${formData.endTime} `
     };
 
     // If public, guests field should be removed
@@ -310,7 +317,16 @@ const CreateDetails = ({ onContinue, latlng }) => {
               <input type="date" name="startDate" onChange={handleChange} />
               {errors.startDate && <p className="error-msg">{errors.startDate}</p>}
             </div>
-
+            <div>
+              <label>
+                End Date <span>*</span>
+              </label>
+              {/* <br /> */}
+              <input type="date" name="endDate" onChange={handleChange} />
+              {errors.endDate && <p className="error-msg">{errors.endDate}</p>}
+            </div>
+          </div>
+          <div className="row-inputs">
             <div>
               <label>
                 Start Time <span>*</span>
