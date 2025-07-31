@@ -77,7 +77,9 @@ const LongCard = ({ event }) => {
     }
   };
 
-  const getDateDisplay = (dateStr) => {
+  const getDateDisplay = (dateString) => {
+    let dateStr = dateString.split("-")[0];
+    
     if (!dateStr) return { month: "TBD", day: "00" };
 
     const months = [

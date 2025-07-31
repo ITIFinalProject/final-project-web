@@ -136,25 +136,37 @@ import LongCard from '../components/Events/LongCard'
 import Filter from '../components/Events/Filter'
 import { useSelector, useDispatch } from "react-redux";
 import { fetchEvents } from "../redux/slices/eventSlice";
-
+import { useLocation } from 'react-router-dom';
 const Events = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const { data: events, loading, error } = useSelector((state) => state.events);
-  
+
   // Filter and pagination state
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedDate, setSelectedDate] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const eventsPerPage = 4;
+  // const user = useSelector((state) => state.auth.currentUser);
+  const { currentUser, userData } = useSelector(
+    (state) => state.auth
+  );
+  useEffect(() => {
+    dispatch(fetchEvents(currentUser.uid));
+  }, [dispatch]);
 
   useEffect(() => {
-    dispatch(fetchEvents());
-  }, [dispatch]);
+    const params = new URLSearchParams(location.search);
+    const categoryFromURL = params.get('category');
+    if (categoryFromURL && ['Entertainment', 'Educational & Business', 'Cultural & Arts', 'Sports & Fitness', 'Technology & Innovation', 'Travel & Adventure'].includes(categoryFromURL)) {
+      setSelectedCategory(categoryFromURL);
+    }
+  }, [location.search]);
 
   // Filter events based on selected criteria
   const filteredEvents = useMemo(() => {
     if (!events) return [];
-    
+
     let filtered = events;
 
     if (selectedCategory !== 'All') {
@@ -217,13 +229,13 @@ const Events = () => {
 
   return (
     <section className='events-page'>
-      <Filter 
+      <Filter
         selectedCategory={selectedCategory}
         onCategoryChange={handleCategoryChange}
         selectedDate={selectedDate}
         onDateChange={handleDateChange}
       />
-      
+
       <div className="events-content">
         <div className="events-header">
           <h2>Events</h2>
@@ -243,7 +255,7 @@ const Events = () => {
             <div className="no-events">
               <div className="no-events-icon">
                 <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+                  <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z" />
                 </svg>
               </div>
               <h3>No events found</h3>
@@ -254,13 +266,13 @@ const Events = () => {
 
         {totalPages > 1 && (
           <div className="pagination">
-            <button 
+            <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
               className="pagination-btn"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
               </svg>
               Previous
             </button>
@@ -272,7 +284,7 @@ const Events = () => {
                   {currentPage > 4 && <span className="ellipsis">...</span>}
                 </>
               )}
-              
+
               {getPageNumbers().map(page => (
                 <button
                   key={page}
@@ -293,14 +305,14 @@ const Events = () => {
               )}
             </div>
 
-            <button 
+            <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
               className="pagination-btn"
             >
               Next
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
               </svg>
             </button>
           </div>

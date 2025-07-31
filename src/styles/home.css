@@ -17,7 +17,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.27); 
+  background: rgba(0, 0, 0, 0.27);
   z-index: -1;
 }
 
@@ -30,7 +30,7 @@
   font-size: 2.5rem;
 }
 
-.hero p {
+.hero h5 {
   font-size: 1.6rem;
   margin: 20px 0;
   font-weight: bold;
@@ -38,23 +38,46 @@
 }
 
 .search-bar {
-  margin-top: 20px;
-}
-
-.search-bar input {
+  margin: 20px auto 0;
+  position: relative;
   width: 50%;
 }
 
-.search-bar select,
+.search-bar input {
+  width: 100%;
+}
+
 .search-bar input {
   padding: 10px 20px;
   border: none;
-  margin: 0 10px;
+  /* margin: 0 10px; */
   border-radius: 5px;
 }
 
-
-
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background-color: var(--white);
+  color: var(--dark);
+}
+.search-results div{
+  padding: 8px;
+  cursor: pointer;
+  border-bottom: 0.5px solid var(--grayDark);
+  display: flex;
+  gap: 10px;
+}
+.search-results a{
+  color: var(--dark);
+}
+.search-results div img{
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+}
 
 
 /*MARK:Category
@@ -63,10 +86,12 @@
   padding: 40px 20px;
   text-align: center;
 }
-.categories h2{
+
+.categories h2 {
   font-weight: bold;
   margin: 10px 0;
 }
+
 .category-list {
   display: flex;
   justify-content: center;
@@ -112,9 +137,11 @@
   margin: 50px auto 80px;
   text-align: center;
 }
+
 .trending-events h2 {
   font-weight: bold;
 }
+
 .custom-controls {
   display: flex;
   justify-content: center;
@@ -170,12 +197,13 @@
 
 /*MARK:Calendar
 */
-.calendar-wrapper{
+.calendar-wrapper {
   display: flex;
   gap: 30px;
   width: 85%;
   margin: 50px auto;
 }
+
 .calendar-container {
   width: 100%;
   max-width: 500px;
@@ -241,6 +269,7 @@
   color: var(--white);
   border: 2px solid var(--primary-dark);
 }
+
 /* .calendar-day.has-event{
   display: flex;
   align-items: center;
@@ -253,6 +282,7 @@
   color: var(--primary-dark);
   font-size: 1.3rem;
 }
+
 .calendar-day.today.has-event::after {
   color: var(--primary-light);
 }
