@@ -18,14 +18,6 @@ L.Icon.Default.mergeOptions({
     .href,
 });
 
-import { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import { useSelector } from "react-redux";
-import { db } from "../../firebase/config";
-import { collection, getDocs } from "firebase/firestore";
-import { getAddressFromCoords } from "../../utils/geocode";
-
 const LocationPicker = ({ setLocation, setErrors, errors }) => {
   useMapEvents({
     click(e) {
