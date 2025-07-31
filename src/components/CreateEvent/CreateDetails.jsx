@@ -149,7 +149,8 @@ const CreateDetails = ({ onContinue, latlng }) => {
       hostName: user.displayName,
       location: address,
       date: (formData.startDate == formData.endDate) ? formData.startDate : `${formData.startDate} - ${formData.endDate}`,
-      time: `${formData.startTime} - ${formData.endTime} `
+      time: `${formData.startTime} - ${formData.endTime} `,
+      guests: formData.guests,
     };
 
     // If public, guests field should be removed
