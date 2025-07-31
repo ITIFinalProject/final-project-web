@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { useState, useEffect } from "react";
+import { getCoordsFromAddress } from "../../utils/geocode";
 
 // Fix for default markers in react-leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -38,18 +39,51 @@ const LocationSection = ({ event }) => {
   const [venuePosition, setVenuePosition] = useState(DEFAULT_POSITION);
   const [currentLocation, setCurrentLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState(DEFAULT_POSITION);
+  const [isLoadingLocation, setIsLoadingLocation] = useState(false);
 
   // Extract location coordinates from event data
   useEffect(() => {
-    if (event?.coordinates) {
-      const coords = [event.coordinates.lat, event.coordinates.lng];
-      setVenuePosition(coords);
-      setMapCenter(coords);
-    } else if (event?.location) {
-      // If we have a location string but no coordinates, use geocoding service
-      // For now, we'll just use the default position
-      setVenuePosition(DEFAULT_POSITION);
-      setMapCenter(DEFAULT_POSITION);
+    const setupLocation = async () => {
+      if (
+        event?.coordinates &&
+        event.coordinates.lat &&
+        event.coordinates.lng
+      ) {
+        // Use provided coordinates
+        const coords = [event.coordinates.lat, event.coordinates.lng];
+        setVenuePosition(coords);
+        setMapCenter(coords);
+      } else if (event?.location) {
+        // Geocode the location string
+        setIsLoadingLocation(true);
+        try {
+          const coords = await getCoordsFromAddress(event.location);
+          if (coords) {
+            const position = [coords.lat, coords.lng];
+            setVenuePosition(position);
+            setMapCenter(position);
+          } else {
+            // Fallback to default if geocoding fails
+            console.log("Geocoding failed, using default position");
+            setVenuePosition(DEFAULT_POSITION);
+            setMapCenter(DEFAULT_POSITION);
+          }
+        } catch (error) {
+          console.error("Error geocoding location:", error);
+          setVenuePosition(DEFAULT_POSITION);
+          setMapCenter(DEFAULT_POSITION);
+        } finally {
+          setIsLoadingLocation(false);
+        }
+      } else {
+        // No location data available
+        setVenuePosition(DEFAULT_POSITION);
+        setMapCenter(DEFAULT_POSITION);
+      }
+    };
+
+    if (event) {
+      setupLocation();
     }
   }, [event]);
 
@@ -79,6 +113,9 @@ const LocationSection = ({ event }) => {
           <IoLocationSharp />
           <div className="location-text">
             <div>{event?.location || "Location TBD"}</div>
+            {isLoadingLocation && (
+              <small className="text-muted">Loading map location...</small>
+            )}
           </div>
         </div>
         <div className="map-container">
