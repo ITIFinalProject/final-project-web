@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -29,6 +30,7 @@ const LocationPicker = ({ setLocation, setErrors, errors }) => {
 const CreateDetails = ({ onContinue, latlng }) => {
   const user = useSelector((state) => state.auth.currentUser);
   const [formData, setFormData] = useState({
+
     title: '',
     category: '',
     description: '',
@@ -37,10 +39,9 @@ const CreateDetails = ({ onContinue, latlng }) => {
   });
 
 
-
   const categories = useSelector((state) => state.category.list);
   const [allUsers, setAllUsers] = useState([]);
-  const [guestSearch, setGuestSearch] = useState('');
+  const [guestSearch, setGuestSearch] = useState("");
   const [filteredGuests, setFilteredGuests] = useState([]);
   const [location, setLocation] = useState(null);
   const [errors, setErrors] = useState({});
@@ -49,7 +50,7 @@ const CreateDetails = ({ onContinue, latlng }) => {
   // Fetch all users from Firestore
   useEffect(() => {
     const fetchUsers = async () => {
-      const querySnapshot = await getDocs(collection(db, 'users'));
+      const querySnapshot = await getDocs(collection(db, "users"));
       const users = querySnapshot.docs
         .map((doc) => ({ id: doc.id, ...doc.data() }))
         .filter((u) => u.id !== user?.uid); // exclude self
@@ -87,7 +88,7 @@ const CreateDetails = ({ onContinue, latlng }) => {
           ...prev,
           guests: [...(prev.guests || []), guest],
         }));
-        setGuestSearch('');
+        setGuestSearch("");
         setFilteredGuests([]);
       } else {
         alert("You've reached the maximum capacity for guests.");
@@ -102,9 +103,9 @@ const CreateDetails = ({ onContinue, latlng }) => {
     }));
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const newErrors = {};
     // Validate required fields
     if (!formData.title) newErrors.title = "Title is required";
@@ -121,10 +122,11 @@ const CreateDetails = ({ onContinue, latlng }) => {
       return;
     }
 
+
     latlng({ lat: location.lat, lng: location.lng })
     const address = await getAddressFromCoords(location.lat, location.lng);
     if (!address) {
-      alert('Failed to get address from coordinates.');
+      alert("Failed to get address from coordinates.");
       return;
     }
 
@@ -137,18 +139,22 @@ const CreateDetails = ({ onContinue, latlng }) => {
       hostId: user.uid,
       hostName: user.displayName,
       location: address,
-      date: formData.startDate,
-      time: `${formData.startTime} - ${formData.endTime}`,
+      startDate: formData.startDate, // Keep consistent naming
+      startTime: formData.startTime, // Keep separate
+      endTime: formData.endTime, // Keep separate
+      // Remove the old 'date' and 'time' fields to avoid confusion
     };
 
     // If public, guests field should be removed
-    if (formData.type !== 'Private') {
+    if (formData.type !== "Private") {
       delete preparedData.guests;
     }
 
     // ✅ Just pass data to parent to go to next step    
     onContinue(preparedData);
   };
+
+
 
 
 
@@ -182,6 +188,7 @@ const CreateDetails = ({ onContinue, latlng }) => {
           <h3>Event Details</h3>
           <label>
             Event Title <span>*</span>
+
           </label>
           {/* <br /> */}
           <input type="text" name="title" value={formData.title} onChange={handleChange} />
@@ -190,15 +197,22 @@ const CreateDetails = ({ onContinue, latlng }) => {
 
           <label>
             Event Category <span>*</span>
-            <select name="category" value={formData.category} onChange={handleChange}>
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+            >
               <option>Please select one</option>
               {categories.map((cat) => (
-                <option key={cat} value={cat}>{cat}</option>
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
               ))}
             </select>
             {errors.category && <p className="error-msg">{errors.category}</p>}
           </label>
         </section>
+
 
 
 
@@ -242,8 +256,7 @@ const CreateDetails = ({ onContinue, latlng }) => {
 
 
 
-
-          {formData.type === 'Private' && (
+          {formData.type === "Private" && (
             <div className="guest-selector">
               <label>
                 Invite Guests (up to {formData.capacity})
@@ -267,7 +280,9 @@ const CreateDetails = ({ onContinue, latlng }) => {
                 {formData.guests?.map((guest) => (
                   <div key={guest.id} className="guest-chip">
                     {guest.name}
-                    <button onClick={() => handleRemoveGuest(guest.id)}>✕</button>
+                    <button onClick={() => handleRemoveGuest(guest.id)}>
+                      ✕
+                    </button>
                   </div>
                 ))}
               </div>
@@ -280,8 +295,10 @@ const CreateDetails = ({ onContinue, latlng }) => {
 
 
 
+
         {/* MARK:time
   */}
+
         <section>
           <h3>Date & Time</h3>
           <div className="row-inputs">
@@ -319,7 +336,11 @@ const CreateDetails = ({ onContinue, latlng }) => {
   */}
         <section>
           <h3>Location (Click map to select)</h3>
-          <MapContainer center={[30.0444, 31.2357]} zoom={13} style={{ height: '300px' }}>
+          <MapContainer
+            center={[30.0444, 31.2357]}
+            zoom={13}
+            style={{ height: "300px" }}
+          >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             <LocationPicker
               setLocation={setLocation}
@@ -333,14 +354,18 @@ const CreateDetails = ({ onContinue, latlng }) => {
         <section>
           <h3>Additional Information</h3>
           <label>
+
             Description <span>*</span>
+
           </label>
           {/* <br /> */}
           <textarea rows={5} name="description" value={formData.description} onChange={handleChange} />
           {errors.description && <p className="error-msg">{errors.description}</p>}
         </section>
 
-        <button type="submit" className="save-btn">Save & Continue</button>
+        <button type="submit" className="save-btn">
+          Save & Continue
+        </button>
       </form>
     </div >
   );

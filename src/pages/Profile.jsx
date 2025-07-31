@@ -1,11 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Sidebar from "../components/Profile/Sidebar";
 import AccountInfoPage from "../components/Profile/AccountInfoPage";
 import EmailPasswordPage from "../components/Profile/EmailPasswordPage";
+import MyEventsPage from "../components/Profile/MyEventsPage";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/Profile.css";
 const Profile = () => {
+  const location = useLocation();
   const [activeSection, setActiveSection] = useState("account-info");
+
+  useEffect(() => {
+    // Check if we came from EditEvent page with a specific section
+    if (location.state?.activeSection) {
+      setActiveSection(location.state.activeSection);
+    }
+  }, [location]);
 
   const renderContent = () => {
     switch (activeSection) {
@@ -13,6 +23,8 @@ const Profile = () => {
         return <AccountInfoPage />;
       case "email-password":
         return <EmailPasswordPage />;
+      case "my-events":
+        return <MyEventsPage />;
       default:
         return <AccountInfoPage />;
     }

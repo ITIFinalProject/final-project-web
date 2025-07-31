@@ -9,8 +9,7 @@ body {
 .hero-banner {
   position: relative;
   height: 400px;
-  background: url("https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80")
-    no-repeat center;
+  background: no-repeat center;
   background-size: cover;
   display: flex;
   align-items: center;
@@ -19,6 +18,16 @@ body {
   border-radius: 20px;
   overflow: hidden;
   z-index: 1;
+}
+
+.hero-banner-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
 }
 
 .hero-banner .back-btn {
@@ -35,6 +44,7 @@ body {
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  z-index: 2;
 }
 
 .back-btn:hover {
@@ -99,7 +109,7 @@ body {
 }
 
 .section-title {
-  font-size: 2rem;
+  font-size: 2rem !important;
   font-weight: 700;
   background: var(--text-gradient);
   background-clip: text;
@@ -648,7 +658,7 @@ body {
     display: none;
   }
 
-  .event-title-section,
+  /* .event-title-section,
   .datetime-section,
   .location-section,
   .host-section,
@@ -657,7 +667,7 @@ body {
   .similar-events-section {
     margin: 0 10px 15px 10px;
     padding: 30px 0;
-  }
+  } */
 
   .events-grid {
     grid-template-columns: 1fr;
@@ -710,4 +720,66 @@ body {
   .section-title {
     font-size: 1.3rem;
   }
+}
+
+/* Event Card Link Styles */
+.event-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.event-card-link:hover {
+  text-decoration: none;
+  color: inherit;
+  transform: translateY(-5px);
+}
+
+.event-card-link:hover .event-card {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Placeholder banner styles */
+.placeholder-banner {
+  background: var(--primary-gray);
+  color: var(--text-secondary);
+  min-height: 300px;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+/* Host avatar styles */
+.host-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Action button styles */
+.action-btn.bookmarked {
+  color: var(--primary-yellow);
+}
+
+.contact-btn,
+.follow-btn {
+  background: none;
+  border: 1px solid var(--primary-blue);
+  color: var(--primary-blue);
+  padding: 8px 16px;
+  border-radius: 20px;
+  margin: 0 5px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.contact-btn:hover,
+.follow-btn:hover {
+  background: var(--primary-blue);
+  /* color: white; */
 }

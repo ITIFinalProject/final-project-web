@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
-// import EventDetails from "./pages/EventDetails";
+import EventDetails from "./pages/EventDetails";
 import EventHeader from "./components/EventHeader";
 import Footer from "./components/Footer";
 import Chatbot from "./components/Chatbot/Chatbot";
@@ -14,6 +14,7 @@ import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Album from "./pages/Album";
 import CreateEvent from "./pages/CreateEvent";
+import EditEvent from "./pages/EditEvent";
 import AuthInitializer from "./components/AuthInitializer";
 import ProtectedRoute from "./components/ProtectedRoute";
 import FloatingChatPanel from "./components/EventChat/FloatingChatPanel";
@@ -28,7 +29,7 @@ function App() {
             <Route path="*" element={<NotFound />} />
             <Route path="/" element={<Home />} />
             <Route path="/Events" element={<Events />} />
-            {/* <Route path="/EventDetails" element={<EventDetails />} /> */}
+            <Route path="/event/:eventId" element={<EventDetails />} />
             <Route path="/login" element={<Login />} />
             <Route path="/SignUp" element={<SignUp />} />
             <Route
@@ -63,12 +64,22 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/edit-event/:eventId"
+              element={
+                <ProtectedRoute>
+                  <EditEvent />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
           <Footer />
           <Chatbot />
+
           {/* <ProtectedRoute> */}
             <FloatingChatPanel />
           {/* </ProtectedRoute> */}
+
         </Router>
       </AuthInitializer>
     </Provider>

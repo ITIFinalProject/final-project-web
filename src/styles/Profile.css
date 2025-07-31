@@ -80,9 +80,9 @@
   padding-bottom: 15px;
 }
 
-.section-title {
+.section-subtitle {
   color: var(--text-primary);
-  font-size: 1.1rem;
+  font-size: 1.5rem !important;
   font-weight: 600;
   margin-bottom: 20px;
   margin-top: 30px;
@@ -144,6 +144,32 @@
 
 .camera-icon:hover {
   background-color: var(--primary-beige);
+}
+
+/* Profile image styles */
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.user-avatar .fa-user {
+  cursor: pointer;
+}
+
+/* Error message styles */
+.error-message {
+  color: #dc3545;
+  font-size: 0.875rem;
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* Hidden file input */
+.hidden-file-input {
+  display: none;
 }
 
 /* Spinner for loading state */
@@ -525,4 +551,255 @@
   background-color: var(--primary-dark);
   color: var(--white);
   text-decoration: none;
+}
+
+/* My Events Page Styles */
+.my-events-page {
+  padding: 20px;
+}
+
+.my-events-page h2 {
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.nav-tabs .nav-link {
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--text-secondary);
+  font-weight: 500;
+  padding: 10px 20px;
+  transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link.active {
+  border-bottom-color: var(--primary);
+  color: var(--primary);
+  background: none;
+}
+
+.nav-tabs .nav-link:hover {
+  border-color: transparent;
+  color: var(--primary);
+}
+
+/* My Event Card Styles */
+.my-event-card {
+  border: 1px solid var(--border-beige);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.my-event-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.event-image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.event-image {
+  width: 100%;
+  /* height: 200px; */
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.my-event-card:hover .event-image {
+  transform: scale(1.05);
+}
+
+.event-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: var(--primary-dark);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.owner-badge {
+  background-color: var(--success, #28a745);
+}
+
+.event-details .detail-item {
+  font-size: 0.875rem;
+}
+
+.detail-item .text-primary {
+  color: var(--primary) !important;
+}
+
+.my-event-card .card-body {
+  padding: 1rem;
+}
+
+.my-event-card .card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+}
+
+.my-event-card .card-text {
+  line-height: 1.4;
+  margin-bottom: 1rem;
+}
+.tab-content {
+  border-bottom: none !important;
+}
+
+.my-event-card .btn-sm {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+/* Empty state styles */
+.text-center.py-5 {
+  padding: 3rem 0;
+}
+
+.text-center.py-5 h5 {
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.text-center.py-5 p {
+  margin-bottom: 1.5rem;
+}
+
+/* My Events Tab Navigation Styles */
+.my-events-tabs {
+  margin-bottom: 2rem;
+}
+
+.my-events-tab-button {
+  background-color: var(--bg-white);
+  color: var(--grayDark);
+  border-bottom: 1px solid var(--border-beige);
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.my-events-tab-button.active {
+  background-color: var(--primary-blue);
+  color: var(--primary-light) !important;
+  border-bottom: 3px solid var(--primary-blue);
+}
+
+/* Custom Event Card Button Styles */
+.event-btn-edit {
+  background-color: transparent;
+  border: 2px solid var(--primary-blue);
+  color: var(--primary-blue);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  min-width: 70px;
+}
+
+.event-btn-edit:hover {
+  background-color: var(--primary-blue);
+  color: var(--white);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(69, 104, 130, 0.3);
+  text-decoration: none;
+}
+
+.event-btn-view {
+  background-color: transparent;
+  border: 2px solid var(--primary-dark);
+  color: var(--primary-dark);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  min-width: 70px;
+}
+
+.event-btn-view:hover {
+  background-color: var(--primary-dark);
+  color: var(--white);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(27, 60, 83, 0.3);
+  text-decoration: none;
+}
+
+.my-events-tab-button:hover {
+  background-color: var(--glass-bg-hover);
+}
+
+/* My Events Content Styles */
+.my-events-empty-state {
+  padding: 3rem 0;
+}
+
+.my-events-empty-title {
+  color: var(--grayDark);
+  margin-bottom: 1rem;
+}
+
+.my-events-empty-text {
+  color: var(--grayDark);
+  margin-bottom: 2rem;
+}
+
+.my-events-cta-button {
+  background-color: var(--primary-blue);
+  color: var(--white);
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.my-events-cta-button:hover {
+  background-color: var(--primary-dark);
+  color: var(--white);
+  text-decoration: none;
+}
+
+.my-events-list {
+  gap: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .my-events-page {
+    padding: 15px;
+  }
+
+  .d-flex.justify-content-between {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .nav-tabs .nav-link {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+  }
 }

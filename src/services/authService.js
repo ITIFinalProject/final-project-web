@@ -43,7 +43,7 @@ export const signUpWithEmailAndPassword = async (email, password, userData) => {
       email: userData.email,
       phone: userData.phone || "",
       address: userData.address || "",
-      profileImageUrl: "", // Default empty profile image
+      imagePath: "", // Default empty profile image
       // ممكن نشبل دول عادي ..
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -86,7 +86,7 @@ export const signInWithGoogle = async () => {
         email: user.email,
         phone: "",
         address: "",
-        profileImageUrl: user.photoURL || "", // Use Google profile image if available
+        imagePath: user.photoURL || "", // Use Google profile image if available
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       });
@@ -114,7 +114,7 @@ export const signInWithFacebook = async () => {
         email: user.email,
         phone: "",
         address: "",
-        profileImageUrl: user.photoURL || "", // Use Facebook profile image if available
+        imagePath: user.photoURL || "", // Use Facebook profile image if available
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       });

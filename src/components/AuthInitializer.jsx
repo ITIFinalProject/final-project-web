@@ -1,9 +1,14 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { listenToAuthState } from "../redux/slices/authSlice";
+import {
+  fetchInterestedEventIds,
+  clearInterestedEvents,
+} from "../redux/slices/interestedSlice";
 
 const AuthInitializer = ({ children }) => {
   const dispatch = useDispatch();
+  const { currentUser, loading } = useSelector((state) => state.auth);
 
   useEffect(() => {
     let unsubscribe;
@@ -20,6 +25,18 @@ const AuthInitializer = ({ children }) => {
       }
     };
   }, [dispatch]);
+
+  // Fetch interested events when user logs in, but only after auth is not loading
+  useEffect(() => {
+    if (!loading) {
+      if (currentUser) {
+        dispatch(fetchInterestedEventIds(currentUser.uid));
+      } else {
+        // Clear interested events when user logs out
+        dispatch(clearInterestedEvents());
+      }
+    }
+  }, [dispatch, currentUser, loading]);
 
   return children;
 };

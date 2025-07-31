@@ -1,4 +1,9 @@
-import { FaCalendarAlt, FaClock, FaMapMarkerAlt, FaTicketAlt } from "react-icons/fa";
+import {
+  FaCalendarAlt,
+  FaClock,
+  FaMapMarkerAlt,
+  FaTicketAlt,
+} from "react-icons/fa";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useAuth } from "../../redux/hooks";
@@ -6,9 +11,8 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../firebase/config";
 import { useNavigate } from "react-router-dom";
 const Preview = ({ eventData, onBack, latlng }) => {
-
   const navigate = useNavigate();
-  const { currentUser, userData, loading } = useAuth();
+  const { currentUser, userData } = useAuth();
 
   const {
     title,
@@ -31,22 +35,26 @@ const Preview = ({ eventData, onBack, latlng }) => {
 
 
 
+
   const onPublish = async () => {    
+
     try {
-      const docRef = await addDoc(collection(db, "events"), {
+      await addDoc(collection(db, "events"), {
         ...eventData,
+        hostId: currentUser.uid, // Add the creator's ID
+        createdBy: currentUser.uid, // Alternative field name
+        createdAt: new Date(),
+        updatedAt: new Date(),
       });
 
       // alert("Event published!");
       //toast
-      navigate("/"); 
+      navigate("/");
     } catch (error) {
       console.error("Error adding document: ", error);
       alert("Something went wrong while publishing the event.");
     }
   };
-
-
 
   return (
     <div className="preview-container">
@@ -60,7 +68,11 @@ const Preview = ({ eventData, onBack, latlng }) => {
 
       <div className="event-preview-box">
         {bannerUrl ? (
-          <img src={bannerUrl} alt="Event Banner" className="event-image-placeholder" />
+          <img
+            src={bannerUrl}
+            alt="Event Banner"
+            className="event-image-placeholder"
+          />
         ) : (
           <div className="event-image-placeholder">No Banner</div>
         )}
@@ -71,14 +83,18 @@ const Preview = ({ eventData, onBack, latlng }) => {
           <div className="event-meta">
             <div className="meta-block">
               <h4>Date and Time</h4>
+
               <p><FaCalendarAlt className="icon" /> {date}</p>
               <p><FaClock className="icon" /> {time}</p>
+
               {/* <a href="#" className="add-calendar">+ Add to Calendar</a> */}
             </div>
 
             <div className="meta-block">
               <h4>Event Main Information</h4>
-              <p><FaTicketAlt /> Type: {type} </p>
+              <p>
+                <FaTicketAlt /> Type: {type}{" "}
+              </p>
               <p> Capacity: {capacity}</p>
               <p> Category: {category}</p>
             </div>
@@ -86,9 +102,16 @@ const Preview = ({ eventData, onBack, latlng }) => {
 
           <div className="create-location">
             <h4>Location</h4>
-            <p><FaMapMarkerAlt className="icon" /> {location || "Address unavailable"}</p>
+            <p>
+              <FaMapMarkerAlt className="icon" />{" "}
+              {location || "Address unavailable"}
+            </p>
             <div className="map-placeholder">
-              <MapContainer center={[lat, lng]} zoom={13} style={{ height: "200px", width: "100%" }}>
+              <MapContainer
+                center={[lat, lng]}
+                zoom={13}
+                style={{ height: "200px", width: "100%" }}
+              >
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                 <Marker position={[lat, lng]} />
               </MapContainer>
@@ -98,7 +121,9 @@ const Preview = ({ eventData, onBack, latlng }) => {
           <div className="host-section">
             <h4>Hosted by</h4>
             <div className="host-info">
-              <div className="host-avatar">{hostName?.[0]?.toUpperCase() || "?"}</div>
+              <div className="host-avatar">
+                {hostName?.[0]?.toUpperCase() || "?"}
+              </div>
               <div className="host-meta">
                 <p className="host-name">{hostName || "Unknown Host"}</p>
                 <p>{userData.email || "Unknown Host"}</p>
@@ -129,8 +154,12 @@ const Preview = ({ eventData, onBack, latlng }) => {
       </div>
 
       <div className="preview-actions">
-        <button onClick={onBack} className="back-btn">Back</button>
-        <button className="save-btn" onClick={onPublish}>Publish Event</button>
+        <button onClick={onBack} className="back-btn">
+          Back
+        </button>
+        <button className="save-btn" onClick={onPublish}>
+          Publish Event
+        </button>
       </div>
     </div>
   );
