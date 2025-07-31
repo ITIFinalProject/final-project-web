@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../firebase/config";
 import { useNavigate } from "react-router-dom";
+import { notificationService } from "../../services/notificationService";
 const Preview = ({ eventData, onBack, latlng }) => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.currentUser);
@@ -28,15 +29,36 @@ const Preview = ({ eventData, onBack, latlng }) => {
     hostId,
     guests,
   } = eventData;
-  
 
   const { lat, lng } = latlng || [30.0444, 31.2357];
 
   const onPublish = async () => {
     try {
-      await addDoc(collection(db, "events"), {
+      // First, add the event to Firestore
+      const docRef = await addDoc(collection(db, "events"), {
         ...eventData,
       });
+
+      // Create the event data with the generated ID
+      const eventWithId = {
+        ...eventData,
+        id: docRef.id,
+      };
+
+      // If it's a private event with guests, create invitations
+      if (
+        eventData.type === "Private" &&
+        eventData.guests &&
+        eventData.guests.length > 0
+      ) {
+        try {
+          await notificationService.createEventInvitations(eventWithId);
+          console.log("Invitations sent successfully");
+        } catch (invitationError) {
+          console.error("Error sending invitations:", invitationError);
+          // Don't fail the whole process if invitations fail
+        }
+      }
 
       // alert("Event published!");
       //toast
