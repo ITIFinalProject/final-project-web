@@ -6,7 +6,6 @@ import { db } from '../../firebase/config';
 import { collection, getDocs } from 'firebase/firestore';
 import { getAddressFromCoords } from '../../utils/geocode';
 
-
 const LocationPicker = ({ setLocation, setErrors, errors }) => {
   useMapEvents({
     click(e) {
@@ -28,26 +27,22 @@ const LocationPicker = ({ setLocation, setErrors, errors }) => {
 
 
 const CreateDetails = ({ onContinue, latlng }) => {
+  const user = useSelector((state) => state.auth.currentUser);
   const [formData, setFormData] = useState({
     title: '',
     category: '',
     description: '',
-    startDate: '',
-    startTime: '',
-    endTime: '',
     capacity: '',
     type: '',
   });
 
 
 
-  const user = useSelector((state) => state.auth.currentUser);
   const categories = useSelector((state) => state.category.list);
   const [allUsers, setAllUsers] = useState([]);
   const [guestSearch, setGuestSearch] = useState('');
   const [filteredGuests, setFilteredGuests] = useState([]);
   const [location, setLocation] = useState(null);
-  const [address, setAddress] = useState("");
   const [errors, setErrors] = useState({});
 
 
@@ -134,7 +129,13 @@ const CreateDetails = ({ onContinue, latlng }) => {
     }
 
     const preparedData = {
-      ...formData,
+      title: formData.title,
+      category: formData.category,
+      description: formData.description,
+      capacity: formData.capacity,
+      type: formData.type,
+      hostId: user.uid,
+      hostName: user.displayName,
       location: address,
       date: formData.startDate,
       time: `${formData.startTime} - ${formData.endTime}`,
@@ -145,7 +146,7 @@ const CreateDetails = ({ onContinue, latlng }) => {
       delete preparedData.guests;
     }
 
-    // ✅ Just pass data to parent to go to next step
+    // ✅ Just pass data to parent to go to next step    
     onContinue(preparedData);
   };
 
@@ -182,7 +183,7 @@ const CreateDetails = ({ onContinue, latlng }) => {
           <label>
             Event Title <span>*</span>
           </label>
-          <br />
+          {/* <br /> */}
           <input type="text" name="title" value={formData.title} onChange={handleChange} />
           {errors.title && <p className="error-msg">{errors.title}</p>}
 
@@ -209,7 +210,7 @@ const CreateDetails = ({ onContinue, latlng }) => {
             <label>
               Capacity <span>*</span>
             </label>
-            <br />
+            {/* <br /> */}
             <input type="number" name="capacity" value={formData.capacity} onChange={handleChange} />
             {errors.capacity && <p className="error-msg">{errors.capacity}</p>}
           </div>
@@ -288,7 +289,7 @@ const CreateDetails = ({ onContinue, latlng }) => {
               <label>
                 Start Date <span>*</span>
               </label>
-              <br />
+              {/* <br /> */}
               <input type="date" name="startDate" onChange={handleChange} />
               {errors.startDate && <p className="error-msg">{errors.startDate}</p>}
             </div>
@@ -297,7 +298,7 @@ const CreateDetails = ({ onContinue, latlng }) => {
               <label>
                 Start Time <span>*</span>
               </label>
-              <br />
+              {/* <br /> */}
               <input type="time" name="startTime" onChange={handleChange} />
               {errors.startTime && <p className="error-msg">{errors.startTime}</p>}
             </div>
@@ -305,7 +306,7 @@ const CreateDetails = ({ onContinue, latlng }) => {
               <label>
                 End Time <span>*</span>
               </label>
-              <br />
+              {/* <br /> */}
               <input type="time" name="endTime" onChange={handleChange} />
               {errors.endTime && <p className="error-msg">{errors.endTime}</p>}
             </div>
@@ -334,7 +335,7 @@ const CreateDetails = ({ onContinue, latlng }) => {
           <label>
             Description <span>*</span>
           </label>
-          <br />
+          {/* <br /> */}
           <textarea rows={5} name="description" value={formData.description} onChange={handleChange} />
           {errors.description && <p className="error-msg">{errors.description}</p>}
         </section>
