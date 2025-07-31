@@ -31,13 +31,7 @@ const Preview = ({ eventData, onBack, latlng }) => {
 
   const { lat, lng } = latlng || [30.0444, 31.2357];
 
-
-
-
-
-
-  const onPublish = async () => {    
-
+  const onPublish = async () => {
     try {
       await addDoc(collection(db, "events"), {
         ...eventData,
@@ -84,8 +78,12 @@ const Preview = ({ eventData, onBack, latlng }) => {
             <div className="meta-block">
               <h4>Date and Time</h4>
 
-              <p><FaCalendarAlt className="icon" /> {date}</p>
-              <p><FaClock className="icon" /> {time}</p>
+              <p>
+                <FaCalendarAlt className="icon" /> {date}
+              </p>
+              <p>
+                <FaClock className="icon" /> {time}
+              </p>
 
               {/* <a href="#" className="add-calendar">+ Add to Calendar</a> */}
             </div>

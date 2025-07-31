@@ -77,9 +77,8 @@ function App() {
           <Chatbot />
 
           {/* <ProtectedRoute> */}
-            <FloatingChatPanel />
+          <FloatingChatPanel />
           {/* </ProtectedRoute> */}
-
         </Router>
       </AuthInitializer>
     </Provider>
