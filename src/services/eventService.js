@@ -136,45 +136,91 @@ export const eventService = {
     }
   },
 
-  // Get events a user has joined (interested in)
+  // Get events a user has joined (from accepted invitations)
   getUserJoinedEvents: async (userId) => {
     try {
-      // First get the event IDs the user is interested in
-      const interestedQuery = query(
-        collection(db, "interestedEvents"),
-        where("userId", "==", userId)
-      );
-      const interestedSnapshot = await getDocs(interestedQuery);
-      const eventIds = interestedSnapshot.docs.map((doc) => doc.data().eventId);
+      console.log("Fetching joined events for user:", userId);
 
-      if (eventIds.length === 0) {
+      // Get events from the user's joinedEvents subcollection
+      const joinedEventsRef = collection(db, "users", userId, "joinedEvents");
+      const joinedSnapshot = await getDocs(joinedEventsRef);
+
+      if (joinedSnapshot.empty) {
+        console.log("No joined events found");
         return [];
       }
 
-      // Then get the actual event data
-      // Note: Firestore 'in' queries have a limit of 10 items
-      const batches = [];
-      for (let i = 0; i < eventIds.length; i += 10) {
-        const batchIds = eventIds.slice(i, i + 10);
-        const eventsQuery = query(
-          collection(db, "events"),
-          where("__name__", "in", batchIds)
-        );
-        batches.push(getDocs(eventsQuery));
+      const joinedEvents = [];
+
+      // For each joined event, get the full event data from the main events collection
+      for (const docSnapshot of joinedSnapshot.docs) {
+        const joinedEventData = docSnapshot.data();
+
+        if (!joinedEventData.eventId) {
+          console.warn(
+            "Invalid eventId found in joined events:",
+            joinedEventData
+          );
+          continue;
+        }
+
+        // Get the full event data from the main events collection
+        const eventRef = doc(db, "events", joinedEventData.eventId);
+        const eventSnapshot = await getDoc(eventRef);
+
+        if (eventSnapshot.exists()) {
+          joinedEvents.push({
+            id: joinedEventData.eventId,
+            joinedAt: joinedEventData.joinedAt,
+            ...eventSnapshot.data(),
+          });
+        } else {
+          console.warn(
+            "Event not found in main collection:",
+            joinedEventData.eventId
+          );
+        }
       }
 
-      const results = await Promise.all(batches);
-      const events = [];
-      results.forEach((snapshot) => {
-        snapshot.docs.forEach((doc) => {
-          events.push({ id: doc.id, ...doc.data() });
-        });
-      });
-
-      return events;
+      console.log("Found joined events:", joinedEvents);
+      return joinedEvents;
     } catch (error) {
       console.error("Error fetching user joined events:", error);
-      throw error;
+
+      // Fallback: try to get from interested events for backward compatibility
+      try {
+        console.log("Attempting fallback: fetching from interested events");
+        const interestedQuery = query(
+          collection(db, "users", userId, "interestedEvents")
+        );
+        const interestedSnapshot = await getDocs(interestedQuery);
+        const eventIds = interestedSnapshot.docs
+          .map((doc) => doc.data().eventId)
+          .filter(Boolean);
+
+        if (eventIds.length === 0) {
+          return [];
+        }
+
+        // Get actual event data
+        const events = [];
+        for (const eventId of eventIds) {
+          try {
+            const eventRef = doc(db, "events", eventId);
+            const eventSnapshot = await getDoc(eventRef);
+            if (eventSnapshot.exists()) {
+              events.push({ id: eventId, ...eventSnapshot.data() });
+            }
+          } catch (eventError) {
+            console.warn("Error fetching event:", eventId, eventError);
+          }
+        }
+
+        return events;
+      } catch (fallbackError) {
+        console.error("Fallback also failed:", fallbackError);
+        return [];
+      }
     }
   },
 

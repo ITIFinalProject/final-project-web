@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../firebase/config";
 import { useNavigate } from "react-router-dom";
+import { notificationService } from "../../services/notificationService";
 const Preview = ({ eventData, onBack, latlng }) => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.currentUser);
@@ -28,14 +29,8 @@ const Preview = ({ eventData, onBack, latlng }) => {
     hostId,
     guests,
   } = eventData;
-  
 
   const { lat, lng } = latlng || [30.0444, 31.2357];
-
-
-
-
-
 
 const onPublish = async () => {
     try {
@@ -103,8 +98,12 @@ const onPublish = async () => {
             <div className="meta-block">
               <h4>Date and Time</h4>
 
-              <p><FaCalendarAlt className="icon" /> {date}</p>
-              <p><FaClock className="icon" /> {time}</p>
+              <p>
+                <FaCalendarAlt className="icon" /> {date}
+              </p>
+              <p>
+                <FaClock className="icon" /> {time}
+              </p>
 
               {/* <a href="#" className="add-calendar">+ Add to Calendar</a> */}
             </div>
