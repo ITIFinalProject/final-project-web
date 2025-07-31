@@ -38,7 +38,6 @@ const Preview = ({ eventData, onBack, latlng }) => {
 
 
   const onPublish = async () => {    
-
     try {
       await addDoc(collection(db, "events"), {
         ...eventData,
