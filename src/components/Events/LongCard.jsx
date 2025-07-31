@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { IoStar, IoLocationSharp, IoPeopleSharp } from "react-icons/io5";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   addToInterested,
   removeFromInterested,
@@ -25,7 +26,10 @@ const LongCard = ({ event }) => {
     }
   }, [eventIds, event.id]);
 
-  const handleStarClick = async () => {
+  const handleStarClick = async (e) => {
+    e.preventDefault(); // Prevent navigation when clicking star
+    e.stopPropagation(); // Stop event bubbling
+
     if (!currentUser) {
       // You might want to show a login prompt here
       alert("Please log in to add events to your interested list");
@@ -50,7 +54,7 @@ const LongCard = ({ event }) => {
             eventId: event.id,
             eventData: {
               title: event.title,
-              date: event.date,
+              date: event.startDate || event.date,
               location: event.location,
             },
           })
@@ -65,6 +69,8 @@ const LongCard = ({ event }) => {
   };
 
   const getDateDisplay = (dateStr) => {
+    if (!dateStr) return { month: "TBD", day: "00" };
+
     const months = [
       "JAN",
       "FEB",
@@ -79,45 +85,66 @@ const LongCard = ({ event }) => {
       "NOV",
       "DEC",
     ];
-    const date = new Date(dateStr);
-    return {
-      month: months[date.getMonth()],
-      day: date.getDate().toString().padStart(2, "0"),
-    };
+
+    try {
+      let date;
+      if (dateStr.seconds) {
+        // Firestore timestamp
+        date = new Date(dateStr.seconds * 1000);
+      } else {
+        date = new Date(dateStr);
+      }
+
+      if (isNaN(date.getTime())) {
+        return { month: "TBD", day: "00" };
+      }
+
+      return {
+        month: months[date.getMonth()],
+        day: date.getDate().toString().padStart(2, "0"),
+      };
+    } catch (error) {
+      console.error("Error parsing date:", error);
+      return { month: "TBD", day: "00" };
+    }
   };
 
-  const dateDisplay = getDateDisplay(event.date);
+  const dateDisplay = getDateDisplay(event.startDate || event.date);
 
   return (
-    <div className="long-card">
-      <div className="image-section">
-        <img src={event.bannerUrl} alt={event.title} />
-        <div className="date-badge">
-          <div className="month">{dateDisplay.month}</div>
-          <div className="day">{dateDisplay.day}</div>
+    <Link to={`/event/${event.id}`} className="long-card-link">
+      <div className="long-card">
+        <div className="image-section">
+          <img src={event.bannerUrl} alt={event.title} />
+          <div className="date-badge">
+            <div className="month">{dateDisplay.month}</div>
+            <div className="day">{dateDisplay.day}</div>
+          </div>
+          <button
+            className={`star-button ${isInterested ? "starred" : ""}`}
+            onClick={handleStarClick}
+            disabled={isLoading}
+          >
+            <IoStar className={`star-icon ${isInterested ? "filled" : ""}`} />
+          </button>
         </div>
-        <button
-          className={`star-button ${isInterested ? "starred" : ""}`}
-          onClick={handleStarClick}
-          disabled={isLoading}
-        >
-          <IoStar className={`star-icon ${isInterested ? "filled" : ""}`} />
-        </button>
-      </div>
 
-      <div className="details-section">
-        <h3 className="title">{event.title}</h3>
-        <div className="location">
-          <IoLocationSharp className="location-icon" />
-          <span>{event.location}</span>
-        </div>
-        <div className="time">{event.time}</div>
-        <div className="interested">
-          <IoPeopleSharp className="people-icon" />
-          <span>{event.interested} interested</span>
+        <div className="details-section">
+          <h3 className="title">{event.title}</h3>
+          <div className="location">
+            <IoLocationSharp className="location-icon" />
+            <span>{event.location}</span>
+          </div>
+          <div className="time">
+            {event.startTime}-{event.endTime}
+          </div>
+          <div className="interested">
+            <IoPeopleSharp className="people-icon" />
+            <span>{event.interested} interested</span>
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

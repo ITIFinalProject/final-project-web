@@ -1,6 +1,21 @@
 import { IoPerson, IoChatbubbles } from "react-icons/io5";
 
-const HostSection = () => {
+const HostSection = ({ event }) => {
+  const handleContactHost = () => {
+    // Add contact functionality here
+    console.log("Contact host:", event?.hostName || "Unknown Host");
+  };
+
+  const handleFollowHost = () => {
+    // Add follow functionality here
+    console.log("Follow host:", event?.hostName || "Unknown Host");
+  };
+
+  const handleJoinChat = () => {
+    // Add chat functionality here
+    console.log("Join chat for event:", event?.title);
+  };
+
   return (
     <div className="host-section">
       <div className="container">
@@ -10,16 +25,20 @@ const HostSection = () => {
             <h3 className="section-title">Hosted by</h3>
             <div className="host-info">
               <div className="host-avatar">
-                <IoPerson />
+                {event?.hostAvatar ? (
+                  <img src={event.hostAvatar} alt="Host Avatar" />
+                ) : (
+                  <IoPerson />
+                )}
               </div>
-              <h5 className="host-name">City Youth Movement</h5>
+              <h5 className="host-name">{event?.hostName || "Unknown Host"}</h5>
               <div className="host-actions">
-                <a href="#" className="contact-btn">
+                <button className="contact-btn" onClick={handleContactHost}>
                   Contact
-                </a>
-                <a href="#" className="follow-btn">
+                </button>
+                <button className="follow-btn" onClick={handleFollowHost}>
                   + Follow
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -38,11 +57,15 @@ const HostSection = () => {
                   excitement about the event!
                 </p>
                 <div className="chat-stats">
-                  <span className="online-count">42 members online</span>
+                  <span className="online-count">
+                    {event?.attendeesCount
+                      ? `${event.attendeesCount} members`
+                      : "Join the discussion"}
+                  </span>
                 </div>
               </div>
             </div>
-            <button className="join-chat-btn">
+            <button className="join-chat-btn" onClick={handleJoinChat}>
               <IoChatbubbles />
               Join Chat Group
             </button>

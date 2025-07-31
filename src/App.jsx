@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
-// import EventDetails from "./pages/EventDetails";
+import EventDetails from "./pages/EventDetails";
 import EventHeader from "./components/EventHeader";
 import Footer from "./components/Footer";
 import Chatbot from "./components/Chatbot/Chatbot";
@@ -29,7 +29,7 @@ function App() {
             <Route path="*" element={<NotFound />} />
             <Route path="/" element={<Home />} />
             <Route path="/Events" element={<Events />} />
-            {/* <Route path="/EventDetails" element={<EventDetails />} /> */}
+            <Route path="/event/:eventId" element={<EventDetails />} />
             <Route path="/login" element={<Login />} />
             <Route path="/SignUp" element={<SignUp />} />
             <Route

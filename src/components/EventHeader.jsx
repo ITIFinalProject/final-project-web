@@ -142,9 +142,9 @@ const EventHeader = () => {
                       aria-expanded={isProfileDropdownOpen}
                     >
                       <div className="profile-avatar">
-                        {userData?.profileImageUrl ? (
+                        {userData?.imagePath ? (
                           <img
-                            src={userData.profileImageUrl}
+                            src={userData.imagePath}
                             alt="Profile"
                             className="profile-image"
                           />

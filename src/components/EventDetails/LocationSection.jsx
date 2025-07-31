@@ -7,6 +7,9 @@ import { useState, useEffect } from "react";
 // Fix for default markers in react-leaflet
 delete L.Icon.Default.prototype._getIconUrl;
 
+// Default coordinates (Mumbai)
+const DEFAULT_POSITION = [19.0596, 72.8295];
+
 // Create a red marker icon
 const redIcon = new L.Icon({
   iconUrl:
@@ -31,11 +34,24 @@ const blueIcon = new L.Icon({
   shadowSize: [41, 41],
 });
 
-const LocationSection = () => {
-  // Coordinates for Bal Gandharva Rang Mandir, Bandra West, Mumbai
-  const venuePosition = [19.0596, 72.8295];
+const LocationSection = ({ event }) => {
+  const [venuePosition, setVenuePosition] = useState(DEFAULT_POSITION);
   const [currentLocation, setCurrentLocation] = useState(null);
-  const [mapCenter, setMapCenter] = useState(venuePosition);
+  const [mapCenter, setMapCenter] = useState(DEFAULT_POSITION);
+
+  // Extract location coordinates from event data
+  useEffect(() => {
+    if (event?.coordinates) {
+      const coords = [event.coordinates.lat, event.coordinates.lng];
+      setVenuePosition(coords);
+      setMapCenter(coords);
+    } else if (event?.location) {
+      // If we have a location string but no coordinates, use geocoding service
+      // For now, we'll just use the default position
+      setVenuePosition(DEFAULT_POSITION);
+      setMapCenter(DEFAULT_POSITION);
+    }
+  }, [event]);
 
   useEffect(() => {
     // Get user's current location
@@ -47,11 +63,8 @@ const LocationSection = () => {
             position.coords.longitude,
           ];
           setCurrentLocation(userLocation);
-          // Center map between venue and user location
-          setMapCenter(userLocation);
         },
-        (error) => {
-          console.log("Error getting location:", error);
+        () => {
           // Keep venue as center if location access is denied
         }
       );
@@ -65,10 +78,7 @@ const LocationSection = () => {
         <div className="location-info">
           <IoLocationSharp />
           <div className="location-text">
-            <div>
-              Bal Gandharva Rang Mandir, Near Junction Of 24th & 32nd Road &
-              Patwardhan Park Off Linking Road, Bandra West, Mumbai, India
-            </div>
+            <div>{event?.location || "Location TBD"}</div>
           </div>
         </div>
         <div className="map-container">
@@ -87,11 +97,11 @@ const LocationSection = () => {
             <Marker position={venuePosition} icon={redIcon}>
               <Popup>
                 <div style={{ textAlign: "center" }}>
-                  <strong>Bal Gandharva Rang Mandir</strong>
+                  <strong>{event?.title || "Event Venue"}</strong>
                   <br />
-                  Event Venue
+                  Event Location
                   <br />
-                  Bandra West, Mumbai
+                  {event?.location || "Location TBD"}
                 </div>
               </Popup>
             </Marker>

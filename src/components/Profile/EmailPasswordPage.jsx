@@ -91,7 +91,7 @@ const EmailPasswordPage = () => {
 
       {/* Email Section - Read Only */}
       <div className="email-section">
-        <h4 className="section-title">Email Address</h4>
+        <h4 className="section-subtitle">Email Address</h4>
         <div className="current-email">
           <span className="current-email-label">Current Email:</span>
           <span className="current-email-value">
@@ -103,7 +103,7 @@ const EmailPasswordPage = () => {
 
       {/* Password Section - Editable */}
       <div className="password-section">
-        <h4 className="section-title">Change Password</h4>
+        <h4 className="section-subtitle">Change Password</h4>
 
         {isGoogleUser ? (
           <div className="google-user-notice">

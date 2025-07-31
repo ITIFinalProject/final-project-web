@@ -1,34 +1,51 @@
-const EventDescription = () => {
+const EventDescription = ({ event }) => {
   return (
     <div className="description-section">
       <div className="container">
         <h3 className="section-title">Event Description</h3>
-        <p className="description-text">
-          Get ready to kick off the Christmas season in Mumbai with{" "}
-          <strong>SOUND OF CHRISTMAS</strong> - your favourite LIVE Christmas
-          concert!
-        </p>
-        <p className="description-text description-highlight">
-          City Youth Movement invites you to the 4th edition of our annual
-          Christmas festivities - by the youth and for the youth! Feel your
-          favourite worship leaders, carols, quizzes and some exciting
-          surprises!
-        </p>
-        <p className="description-text">
-          Bring your family and friends and sing along your favourite Christmas
-          carols on the 2nd of December, 6:30 PM onwards at the Balgandharva
-          Rang Mandir, Bandra West. Book your tickets now!
-        </p>
-        <div className="reasons-list">
-          <h6>3 Reasons to attend the event:</h6>
-          <ol>
-            <li>The FIRST Christmas concert of Mumbai!</li>
-            <li>A special Christmas Choir!</li>
-            <li>Special Dance performances and many more surprises!</li>
-          </ol>
+        <div className="description-content">
+          {event?.description ? (
+            <div className="description-text">
+              {event.description.split("\n").map((paragraph, index) => (
+                <p key={index} className="description-text">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          ) : (
+            <p className="description-text">
+              No description available for this event.
+            </p>
+          )}
+
+          {event?.highlights && event.highlights.length > 0 && (
+            <div className="reasons-list">
+              <h6>Event Highlights:</h6>
+              <ul>
+                {event.highlights.map((highlight, index) => (
+                  <li key={index}>{highlight}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {event?.requirements && (
+            <div className="requirements-section">
+              <h6>Requirements:</h6>
+              <p className="description-text">{event.requirements}</p>
+            </div>
+          )}
+
+          {event?.additionalInfo && (
+            <div className="additional-info">
+              <h6>Additional Information:</h6>
+              <p className="description-text">{event.additionalInfo}</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 };
+
 export default EventDescription;

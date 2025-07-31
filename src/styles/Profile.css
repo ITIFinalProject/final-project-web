@@ -80,9 +80,9 @@
   padding-bottom: 15px;
 }
 
-.section-title {
+.section-subtitle {
   color: var(--text-primary);
-  font-size: 1.1rem;
+  font-size: 1.5rem !important;
   font-weight: 600;
   margin-bottom: 20px;
   margin-top: 30px;
@@ -144,6 +144,32 @@
 
 .camera-icon:hover {
   background-color: var(--primary-beige);
+}
+
+/* Profile image styles */
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.user-avatar .fa-user {
+  cursor: pointer;
+}
+
+/* Error message styles */
+.error-message {
+  color: #dc3545;
+  font-size: 0.875rem;
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* Hidden file input */
+.hidden-file-input {
+  display: none;
 }
 
 /* Spinner for loading state */
@@ -579,7 +605,7 @@
 
 .event-image {
   width: 100%;
-  height: 200px;
+  /* height: 200px; */
   object-fit: cover;
   transition: transform 0.3s ease;
 }
@@ -592,7 +618,7 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  background-color: var(--primary);
+  background-color: var(--primary-dark);
   color: white;
   padding: 4px 8px;
   border-radius: 12px;
@@ -667,8 +693,59 @@
 
 .my-events-tab-button.active {
   background-color: var(--primary-blue);
-  color: var(--white);
+  color: var(--primary-light) !important;
   border-bottom: 3px solid var(--primary-blue);
+}
+
+/* Custom Event Card Button Styles */
+.event-btn-edit {
+  background-color: transparent;
+  border: 2px solid var(--primary-blue);
+  color: var(--primary-blue);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  min-width: 70px;
+}
+
+.event-btn-edit:hover {
+  background-color: var(--primary-blue);
+  color: var(--white);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(69, 104, 130, 0.3);
+  text-decoration: none;
+}
+
+.event-btn-view {
+  background-color: transparent;
+  border: 2px solid var(--primary-dark);
+  color: var(--primary-dark);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  min-width: 70px;
+}
+
+.event-btn-view:hover {
+  background-color: var(--primary-dark);
+  color: var(--white);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(27, 60, 83, 0.3);
+  text-decoration: none;
 }
 
 .my-events-tab-button:hover {

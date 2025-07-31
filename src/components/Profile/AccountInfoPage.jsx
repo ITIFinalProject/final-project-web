@@ -102,7 +102,7 @@ const AccountInfoPage = () => {
 
       <div className="profile-information-section">
         <div className="section-header">
-          <h4 className="section-title">Profile Information</h4>
+          <h4 className="section-subtitle">Profile Information</h4>
           {!isEditing && (
             <button className="edit-btn" onClick={() => setIsEditing(true)}>
               Edit

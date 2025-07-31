@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { IoStar, IoLocationSharp, IoPeopleSharp } from "react-icons/io5";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   addToInterested,
   removeFromInterested,
@@ -27,7 +28,10 @@ const EventCard = ({ event }) => {
     }
   }, [eventIds, event.id]);
 
-  const handleStarClick = async () => {
+  const handleStarClick = async (e) => {
+    e.preventDefault(); // Prevent navigation when clicking star
+    e.stopPropagation(); // Stop event bubbling
+
     if (!currentUser) {
       // You might want to show a login prompt here
       alert("Please log in to add events to your interested list");
@@ -91,41 +95,43 @@ const EventCard = ({ event }) => {
   const dateDisplay = getDateDisplay(event.date);
 
   return (
-    <div className="event-card">
-      <div className="event-image-container">
-        <img src={event.image} alt={event.title} className="event-image" />
-        <div className="date-badge">
-          <div className="date-month">{dateDisplay.month}</div>
-          <div className="date-day">{dateDisplay.day}</div>
-        </div>
-        <button
-          className={`star-button ${isInterested ? "starred" : ""}`}
-          onClick={handleStarClick}
-          disabled={isLoading}
-        >
-          <IoStar className={`star-icon ${isInterested ? "filled" : ""}`} />
-        </button>
-      </div>
-
-      <div className="event-content">
-        <h3 className="event-name">{event.title}</h3>
-
-        <div className="event-location">
-          <IoLocationSharp className="location-icon" />
-          <span>{event.location}</span>
-        </div>
-
-        <div className="event-time">{event.time}</div>
-
-        <div className="event-footer-container">
-          <div className="interested-count">
-            <IoPeopleSharp className="users-icon" />
-            <span>{event.interested} interested</span>
+    <Link to={`/event/${event.id}`} className="event-card-link">
+      <div className="event-card">
+        <div className="event-image-container">
+          <img src={event.image} alt={event.title} className="event-image" />
+          <div className="date-badge">
+            <div className="date-month">{dateDisplay.month}</div>
+            <div className="date-day">{dateDisplay.day}</div>
           </div>
-          {event.price && <span className="event-price">{event.price}</span>}
+          <button
+            className={`star-button ${isInterested ? "starred" : ""}`}
+            onClick={handleStarClick}
+            disabled={isLoading}
+          >
+            <IoStar className={`star-icon ${isInterested ? "filled" : ""}`} />
+          </button>
+        </div>
+
+        <div className="event-content">
+          <h3 className="event-name">{event.title}</h3>
+
+          <div className="event-location">
+            <IoLocationSharp className="location-icon" />
+            <span>{event.location}</span>
+          </div>
+
+          <div className="event-time">{event.time}</div>
+
+          <div className="event-footer-container">
+            <div className="interested-count">
+              <IoPeopleSharp className="users-icon" />
+              <span>{event.interested} interested</span>
+            </div>
+            {event.price && <span className="event-price">{event.price}</span>}
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

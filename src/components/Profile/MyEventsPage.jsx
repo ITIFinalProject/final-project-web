@@ -82,8 +82,8 @@ const MyEventsPage = () => {
 
   if (loading) {
     return (
-      <div className="my-events-page">
-        <h2>My Events</h2>
+      <div className="content-page  ">
+        <h2 className="page-title">My Events</h2>
         <div className="text-center py-4">
           <div className="spinner-border" role="status">
             <span className="visually-hidden">Loading...</span>
@@ -95,20 +95,17 @@ const MyEventsPage = () => {
 
   if (error) {
     return (
-      <div className="my-events-page">
-        <h2>My Events</h2>
+      <div className="content-page">
+        <h2 className="page-title">My Events</h2>
         <div className="alert alert-danger">{error}</div>
       </div>
     );
   }
 
   return (
-    <div className="my-events-page">
+    <div className=" content-page">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>My Events</h2>
-        <Link to="/CreateEvent" className="btn btn-primary">
-          Create New Event
-        </Link>
+        <h2 className="page-title">My Events</h2>
       </div>
 
       {/* Tab Navigation */}

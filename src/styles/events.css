@@ -156,3 +156,39 @@
   font-weight: bold;
   color: var(--grayDark);
 }
+
+/* Long Card Link Styles */
+.long-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.long-card-link:hover {
+  text-decoration: none;
+  color: inherit;
+  transform: translateY(-3px);
+}
+
+.long-card-link:hover .long-card {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Event Card Link Styles for Regular EventCard */
+.event-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.event-card-link:hover {
+  text-decoration: none;
+  color: inherit;
+  transform: translateY(-3px);
+}
+
+.event-card-link:hover .event-card {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
