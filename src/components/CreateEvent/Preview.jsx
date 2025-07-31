@@ -13,16 +13,15 @@ const Preview = ({ eventData, onBack, latlng }) => {
   const {
     title,
     location,
-    startDate,
-    startTime,
-    endTime,
+    date,
+    time,
     type,
     bannerUrl,
     category,
     capacity,
     description,
-    hostName = userData?.name,
-    hostId = userData?.id,
+    hostName,
+    hostId,
     guests,
   } = eventData;
 
@@ -32,12 +31,7 @@ const Preview = ({ eventData, onBack, latlng }) => {
 
 
 
-  const onPublish = async () => {
-    if (!eventData?.title || !eventData?.startDate || !eventData?.startTime) {
-      alert("Please fill in all required fields.");
-      return;
-    }
-
+  const onPublish = async () => {    
     try {
       const docRef = await addDoc(collection(db, "events"), {
         ...eventData,
@@ -77,8 +71,8 @@ const Preview = ({ eventData, onBack, latlng }) => {
           <div className="event-meta">
             <div className="meta-block">
               <h4>Date and Time</h4>
-              <p><FaCalendarAlt className="icon" /> {startDate}</p>
-              <p><FaClock className="icon" /> {startTime} - {endTime}</p>
+              <p><FaCalendarAlt className="icon" /> {date}</p>
+              <p><FaClock className="icon" /> {time}</p>
               {/* <a href="#" className="add-calendar">+ Add to Calendar</a> */}
             </div>
 

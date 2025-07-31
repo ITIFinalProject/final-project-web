@@ -1,0 +1,168 @@
+.events-page {
+    width: 85%;
+    margin: 100px auto;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 40px;
+    position: relative;
+}
+
+/*MARK:Filter
+*/
+.filter-container {
+    background-color: var(--primary-beige);
+    padding: 10px 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    height: fit-content;
+    position: sticky;
+    top: 0;
+}
+
+.filter-container select,.filter-container input {
+    width: 100%;
+    border: 0;
+    margin: 10px 0;
+    outline: 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 10px;
+}
+
+.pagination button {
+  background-color: var(--primary-beige);
+  border: 1px solid var(--grayLight);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+.pagination button:hover {
+  background-color: var(--primary-blue);
+  color: white;
+}
+
+.pagination button.active {
+  background-color: var(--primary-blue);
+  color: white;
+  font-weight: bold;
+}
+
+
+
+
+/*MARK:Long
+*/
+.long-card {
+    display: flex;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    background: var(--primary-light);
+}
+
+.long-card .image-section {
+    position: relative;
+    height: 200px;
+}
+
+.long-card img {
+    width: 350px;
+    height: 100%;
+    object-fit: cover;
+}
+
+.long-card .date-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: var(--light);
+    padding: 4px 8px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.long-card .month {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--grayDark);
+}
+
+.long-card .day {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.long-card .star-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--light);
+    border: none;
+    padding: 6px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.long-card .star-icon {
+    color: #ff9800;
+    font-size: 20px;
+}
+
+.long-card .details-section {
+    padding: 16px;
+}
+
+.long-card .title {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    color: var(--primary-blue);
+    font-weight: bold;
+}
+
+.long-card .location {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: var(--grayDark);
+    margin-bottom: 4px;
+}
+
+.long-card .location-icon {
+    margin-right: 6px;
+}
+
+.long-card .time {
+    font-size: 14px;
+    color: var(--grayLight);
+    margin-bottom: 12px;
+}
+
+
+
+.long-card .interested {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.long-card .people-icon {
+    margin-right: 6px;
+}
+
+.long-card .price {
+    font-weight: bold;
+    color: var(--grayDark);
+}
