@@ -6,12 +6,18 @@ import {
   addToInterested,
   removeFromInterested,
 } from "../redux/slices/interestedSlice";
+import { useInterestedCount } from "../hooks/useInterestedCount";
 import "../styles/InterestedEvents.css"; // Import the CSS file
 
 // EventCard Component (would be in src/components/EventCard.jsx)
 const EventCard = ({ event }) => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.auth);
+
+  // Get interested count for this event
+  const { count: interestedCount, refetch: refetchCount } = useInterestedCount(
+    event.id
+  );
 
   // Memoized selector to avoid creating new objects on every render
   const eventIds = useSelector((state) => {
@@ -56,12 +62,15 @@ const EventCard = ({ event }) => {
             eventId: event.id,
             eventData: {
               title: event.title,
-              date: event.date,
+              date: event.startDate || event.date,
               location: event.location,
             },
           })
         ).unwrap();
       }
+
+      // Refetch the interested count after updating
+      refetchCount();
     } catch (error) {
       console.error("Error updating interested events:", error);
       alert("Failed to update interested events. Please try again.");
@@ -71,6 +80,8 @@ const EventCard = ({ event }) => {
   };
 
   const getDateDisplay = (dateStr) => {
+    if (!dateStr) return { month: "TBD", day: "00" };
+
     const months = [
       "JAN",
       "FEB",
@@ -85,14 +96,31 @@ const EventCard = ({ event }) => {
       "NOV",
       "DEC",
     ];
-    const date = new Date(dateStr);
-    return {
-      month: months[date.getMonth()],
-      day: date.getDate().toString().padStart(2, "0"),
-    };
+
+    try {
+      let date;
+      if (dateStr.seconds) {
+        // Firestore timestamp
+        date = new Date(dateStr.seconds * 1000);
+      } else {
+        date = new Date(dateStr);
+      }
+
+      if (isNaN(date.getTime())) {
+        return { month: "TBD", day: "00" };
+      }
+
+      return {
+        month: months[date.getMonth()],
+        day: date.getDate().toString().padStart(2, "0"),
+      };
+    } catch (error) {
+      console.error("Error parsing date:", error);
+      return { month: "TBD", day: "00" };
+    }
   };
 
-  const dateDisplay = getDateDisplay(event.date);
+  const dateDisplay = getDateDisplay(event.startDate || event.date);
 
   return (
     <Link to={`/event/${event.id}`} className="event-card-link">
@@ -129,7 +157,7 @@ const EventCard = ({ event }) => {
           <div className="event-footer-container">
             <div className="interested-count">
               <IoPeopleSharp className="users-icon" />
-              <span>{event.interested} interested</span>
+              <span>{interestedCount} interested</span>
             </div>
             {event.price && <span className="event-price">{event.price}</span>}
           </div>

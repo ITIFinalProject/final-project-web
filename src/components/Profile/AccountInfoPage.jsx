@@ -49,6 +49,7 @@ const AccountInfoPage = () => {
         email: userData.email, // Keep existing email
         uid: userData.uid, // Keep existing uid
         createdAt: userData.createdAt, // Keep existing createdAt
+        imagePath: userData.imagePath, // Keep existing image path
       };
 
       const { error } = await updateUserData(currentUser.uid, updatedData);
@@ -103,11 +104,6 @@ const AccountInfoPage = () => {
       <div className="profile-information-section">
         <div className="section-header">
           <h4 className="section-subtitle">Profile Information</h4>
-          {!isEditing && (
-            <button className="edit-btn" onClick={() => setIsEditing(true)}>
-              Edit
-            </button>
-          )}
         </div>
 
         <div className="row">

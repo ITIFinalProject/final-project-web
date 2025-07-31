@@ -6,10 +6,16 @@ import {
   addToInterested,
   removeFromInterested,
 } from "../../redux/slices/interestedSlice";
+import { useInterestedCount } from "../../hooks/useInterestedCount";
 
 const LongCard = ({ event }) => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.auth);
+
+  // Get interested count for this event
+  const { count: interestedCount, refetch: refetchCount } = useInterestedCount(
+    event.id
+  );
 
   // Memoized selector to avoid creating new objects on every render
   const eventIds = useSelector((state) => {
@@ -60,6 +66,9 @@ const LongCard = ({ event }) => {
           })
         ).unwrap();
       }
+
+      // Refetch the interested count after updating
+      refetchCount();
     } catch (error) {
       console.error("Error updating interested events:", error);
       alert("Failed to update interested events. Please try again.");
@@ -143,7 +152,7 @@ const LongCard = ({ event }) => {
           </div>
           <div className="interested">
             <IoPeopleSharp className="people-icon" />
-            <span>{event.interested} interested</span>
+            <span>{interestedCount} interested</span>
           </div>
         </div>
       </div>
