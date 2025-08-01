@@ -12,6 +12,7 @@ export const useEditEvent = (eventId, currentUser) => {
     description: "",
     location: "",
     startDate: "",
+    endDate: "",
     startTime: "",
     endTime: "",
     type: "",
@@ -32,72 +33,29 @@ export const useEditEvent = (eventId, currentUser) => {
           return;
         }
 
-        // Format the date and time for input fields
+        // Parse Firebase date and time formats back to separate fields for UI
         let formattedStartDate = "";
+        let formattedEndDate = "";
         let formattedStartTime = "";
         let formattedEndTime = "";
 
-        // Handle startDate (could be 'startDate' or 'date')
-        const dateField = event.startDate || event.date;
-        if (dateField) {
-          try {
-            const date = dateField.toDate
-              ? dateField.toDate()
-              : new Date(dateField);
-
-            // Check if the date is valid
-            if (!isNaN(date.getTime())) {
-              formattedStartDate = date.toISOString().split("T")[0];
-            }
-          } catch (error) {
-            console.error("Error parsing start date:", error);
+        // Parse date field "2025-08-23 _ 2025-08-29" or "2025-08-23"
+        if (event.date) {
+          if (event.date.includes(" _ ")) {
+            const [startDate, endDate] = event.date.split(" _ ");
+            formattedStartDate = startDate.trim();
+            formattedEndDate = endDate.trim();
+          } else {
+            formattedStartDate = event.date;
+            formattedEndDate = event.date; // Same date for single-day events
           }
         }
 
-        // Handle startTime and endTime
-        if (event.startTime) {
-          try {
-            const time = event.startTime.toDate
-              ? event.startTime.toDate()
-              : new Date(event.startTime);
-
-            // Check if the time is valid
-            if (!isNaN(time.getTime())) {
-              formattedStartTime = time
-                .toTimeString()
-                .split(" ")[0]
-                .substring(0, 5);
-            }
-          } catch (error) {
-            console.error("Error parsing start time:", error);
-          }
-        } else if (
-          event.time &&
-          typeof event.time === "string" &&
-          event.time.includes(" - ")
-        ) {
-          // Handle legacy format "HH:MM - HH:MM"
-          const [start, end] = event.time.split(" - ");
-          formattedStartTime = start;
-          formattedEndTime = end;
-        }
-
-        if (event.endTime) {
-          try {
-            const time = event.endTime.toDate
-              ? event.endTime.toDate()
-              : new Date(event.endTime);
-
-            // Check if the time is valid
-            if (!isNaN(time.getTime())) {
-              formattedEndTime = time
-                .toTimeString()
-                .split(" ")[0]
-                .substring(0, 5);
-            }
-          } catch (error) {
-            console.error("Error parsing end time:", error);
-          }
+        // Parse time field "16:05 - 23:00"
+        if (event.time && event.time.includes(" - ")) {
+          const [startTime, endTime] = event.time.split(" - ");
+          formattedStartTime = startTime.trim();
+          formattedEndTime = endTime.trim();
         }
 
         setEventData({
@@ -105,6 +63,7 @@ export const useEditEvent = (eventId, currentUser) => {
           description: event.description || "",
           location: event.location || "",
           startDate: formattedStartDate,
+          endDate: formattedEndDate,
           startTime: formattedStartTime,
           endTime: formattedEndTime,
           capacity: event.capacity || "",
@@ -162,11 +121,34 @@ export const useEditEvent = (eventId, currentUser) => {
     try {
       setSaving(true);
 
-      // Prepare the updated data
+      // Prepare the updated data to match Firebase schema exactly
       const updatedData = {
-        ...eventData,
-        capacity: eventData.capacity ? parseInt(eventData.capacity) : null,
+        title: eventData.title,
+        description: eventData.description,
+        location: eventData.location,
+        category: eventData.category,
+        type: eventData.type,
+        capacity: eventData.capacity,
+        bannerUrl: eventData.bannerUrl,
+        // Combine separate date fields into Firebase format
+        date:
+          eventData.endDate && eventData.endDate !== eventData.startDate
+            ? `${eventData.startDate} _ ${eventData.endDate}`
+            : eventData.startDate,
+        // Combine separate time fields into Firebase format
+        time: `${eventData.startTime} - ${eventData.endTime}`,
       };
+
+      // Only include fields that are not empty/null
+      Object.keys(updatedData).forEach((key) => {
+        if (
+          updatedData[key] === "" ||
+          updatedData[key] === null ||
+          updatedData[key] === undefined
+        ) {
+          delete updatedData[key];
+        }
+      });
 
       await eventService.updateEvent(eventId, updatedData);
       alert("Event updated successfully!");
