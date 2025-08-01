@@ -377,11 +377,11 @@
 }
 
 .no-memories {
-  grid-column: 1 / -1;
+  /* grid-column: 1 / -1; */
   text-align: center;
-  color: rgba(255, 255, 255, 0.8);
-  padding: 3rem;
-  font-size: 1.125rem;
+  color: var(--dark);
+  /* padding: 3rem; */
+  /* font-size: 1.2rem; */
   font-weight: 500;
 }
 
