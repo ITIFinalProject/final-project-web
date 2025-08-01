@@ -18,9 +18,9 @@ const MyEventCard = ({ event, isOwner, onEdit, onDelete }) => {
       let dateToFormat;
 
       // Handle date range formats like "03/08/2025 - 06/08/2025" or "2025-09-13 - 2025-11-28"
-      if (typeof timestamp === "string" && timestamp.includes(" - ")) {
+      if (typeof timestamp === "string" && timestamp.includes(" _ ")) {
         // Extract the start date from the range
-        dateToFormat = timestamp.split(" - ")[0].trim();
+        dateToFormat = timestamp.split(" _ ")[0].trim();
       } else {
         dateToFormat = timestamp;
       }
