@@ -92,9 +92,9 @@ const EventCard = ({ event }) => {
       let dateToFormat;
 
       // Handle date range formats like "03/08/2025 - 06/08/2025" or "2025-09-13 - 2025-11-28"
-      if (typeof dateStr === "string" && dateStr.includes(" - ")) {
+      if (typeof dateStr === "string" && dateStr.includes(" _ ")) {
         // Extract the start date from the range
-        const startDate = dateStr.split(" - ")[0].trim();
+        const startDate = dateStr.split(" _ ")[0].trim();
         dateToFormat = startDate;
       } else {
         dateToFormat = dateStr;
