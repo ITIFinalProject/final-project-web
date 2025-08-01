@@ -378,15 +378,29 @@
   }
 
   .notification-menu-custom {
-    position: relative;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--bg-white);
+    border: 1px solid var(--border-beige);
+    border-radius: 12px;
+    box-shadow: var(--shadow-medium);
+    width: 100%;
+    max-width: 350px;
+    max-height: 400px;
+    margin-top: 8px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1060;
+    backdrop-filter: blur(10px);
+  }
+
+  .notification-menu-custom.show {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
-    margin-top: 15px;
-    box-shadow: none;
-    border: 1px solid var(--border-beige);
-    width: 100%;
-    max-width: 100%;
   }
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { IoMail, IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { notificationService } from "../services/notificationService";
@@ -9,6 +9,7 @@ const Notification = () => {
     useState(false);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const notificationDropdownRef = useRef(null);
 
   const { currentUser } = useSelector((state) => state.auth);
 
@@ -48,6 +49,23 @@ const Notification = () => {
     // Cleanup subscription on component unmount
     return () => unsubscribe();
   }, [currentUser?.uid]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        notificationDropdownRef.current &&
+        !notificationDropdownRef.current.contains(event.target)
+      ) {
+        setIsNotificationDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // Format timestamp for display
   const formatTime = (timestamp) => {
@@ -144,7 +162,7 @@ const Notification = () => {
   };
 
   return (
-    <div className="notification-dropdown">
+    <div className="notification-dropdown" ref={notificationDropdownRef}>
       <button
         className="notification-btn"
         onClick={toggleNotificationDropdown}
