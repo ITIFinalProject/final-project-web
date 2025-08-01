@@ -6,7 +6,7 @@ import {
   IoLogOut,
   IoLogIn,
 } from "react-icons/io5";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Notification from "./Notification";
 import { useAuth } from "../redux/hooks";
@@ -19,10 +19,41 @@ const EventHeader = () => {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const { currentUser, userData, loading } = useAuth();
   const navigate = useNavigate();
+  const profileDropdownRef = useRef(null);
 
   const toggleNav = () => setIsNavOpen(!isNavOpen);
   const toggleProfileDropdown = () =>
     setIsProfileDropdownOpen(!isProfileDropdownOpen);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        profileDropdownRef.current &&
+        !profileDropdownRef.current.contains(event.target)
+      ) {
+        setIsProfileDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Close nav when screen size changes
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 991.98) {
+        setIsNavOpen(false);
+        setIsProfileDropdownOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleSignOut = async () => {
     await logOut();
@@ -40,7 +71,7 @@ const EventHeader = () => {
             to="/"
             onClick={() => setIsNavOpen(false)}
           >
-            <IoCalendar /> Eventify
+            <img src="/logo-light.png" alt="Eventify" className="brand-logo" />
           </NavLink>
 
           <button
@@ -135,7 +166,7 @@ const EventHeader = () => {
                   {/* Notification Component */}
                   <Notification />
 
-                  <div className="profile-dropdown">
+                  <div className="profile-dropdown" ref={profileDropdownRef}>
                     <button
                       className="profile-btn"
                       onClick={toggleProfileDropdown}

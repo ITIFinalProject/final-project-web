@@ -109,8 +109,8 @@ const EventDetailsSection = ({ eventData, onInputChange }) => {
             className="edit-form-control"
           >
             <option value="">Select event type</option>
-            <option value="public">Public</option>
-            <option value="private">Private</option>
+            <option value="Public">Public</option>
+            <option value="Private">Private</option>
           </select>
         </div>
       </div>

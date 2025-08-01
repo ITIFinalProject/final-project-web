@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { IoStar, IoLocationSharp } from "react-icons/io5";
+import { IoStar, IoLocationSharp, IoPeopleOutline } from "react-icons/io5";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import {
@@ -149,8 +149,16 @@ const LongCard = ({ event }) => {
             <span>{event.location}</span>
           </div>
           <div className="time">
-            {event.startTime}-{event.endTime}
+            {event.startTime && event.endTime
+              ? `${event.startTime} - ${event.endTime}`
+              : event.time}
           </div>
+          {event.capacity && (
+            <div className="capacity">
+              <IoPeopleOutline className="people-icon" />
+              <span>Max: {event.capacity} attendees</span>
+            </div>
+          )}
         </div>
       </div>
     </Link>

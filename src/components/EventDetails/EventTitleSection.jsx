@@ -65,19 +65,19 @@ const EventTitleSection = ({ event }) => {
     }
   };
 
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: event?.title || "Event",
-        text: event?.description || "Check out this event!",
-        url: window.location.href,
-      });
-    } else {
-      // Fallback: copy to clipboard
-      navigator.clipboard.writeText(window.location.href);
-      alert("Event link copied to clipboard!");
-    }
-  };
+  // const handleShare = () => {
+  //   if (navigator.share) {
+  //     navigator.share({
+  //       title: event?.title || "Event",
+  //       text: event?.description || "Check out this event!",
+  //       url: window.location.href,
+  //     });
+  //   } else {
+  //     // Fallback: copy to clipboard
+  //     navigator.clipboard.writeText(window.location.href);
+  //     alert("Event link copied to clipboard!");
+  //   }
+  // };
 
   return (
     <div className="det-event-title-section">
@@ -111,7 +111,7 @@ const EventTitleSection = ({ event }) => {
               </button>
               <button
                 className="det-action-btn"
-                onClick={handleShare}
+                // onClick={handleShare}
                 title="Share event"
               >
                 <IoShareSocial />

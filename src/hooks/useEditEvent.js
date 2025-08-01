@@ -40,21 +40,37 @@ export const useEditEvent = (eventId, currentUser) => {
         // Handle startDate (could be 'startDate' or 'date')
         const dateField = event.startDate || event.date;
         if (dateField) {
-          const date = dateField.toDate
-            ? dateField.toDate()
-            : new Date(dateField);
-          formattedStartDate = date.toISOString().split("T")[0];
+          try {
+            const date = dateField.toDate
+              ? dateField.toDate()
+              : new Date(dateField);
+
+            // Check if the date is valid
+            if (!isNaN(date.getTime())) {
+              formattedStartDate = date.toISOString().split("T")[0];
+            }
+          } catch (error) {
+            console.error("Error parsing start date:", error);
+          }
         }
 
         // Handle startTime and endTime
         if (event.startTime) {
-          const time = event.startTime.toDate
-            ? event.startTime.toDate()
-            : new Date(event.startTime);
-          formattedStartTime = time
-            .toTimeString()
-            .split(" ")[0]
-            .substring(0, 5);
+          try {
+            const time = event.startTime.toDate
+              ? event.startTime.toDate()
+              : new Date(event.startTime);
+
+            // Check if the time is valid
+            if (!isNaN(time.getTime())) {
+              formattedStartTime = time
+                .toTimeString()
+                .split(" ")[0]
+                .substring(0, 5);
+            }
+          } catch (error) {
+            console.error("Error parsing start time:", error);
+          }
         } else if (
           event.time &&
           typeof event.time === "string" &&
@@ -67,10 +83,21 @@ export const useEditEvent = (eventId, currentUser) => {
         }
 
         if (event.endTime) {
-          const time = event.endTime.toDate
-            ? event.endTime.toDate()
-            : new Date(event.endTime);
-          formattedEndTime = time.toTimeString().split(" ")[0].substring(0, 5);
+          try {
+            const time = event.endTime.toDate
+              ? event.endTime.toDate()
+              : new Date(event.endTime);
+
+            // Check if the time is valid
+            if (!isNaN(time.getTime())) {
+              formattedEndTime = time
+                .toTimeString()
+                .split(" ")[0]
+                .substring(0, 5);
+            }
+          } catch (error) {
+            console.error("Error parsing end time:", error);
+          }
         }
 
         setEventData({

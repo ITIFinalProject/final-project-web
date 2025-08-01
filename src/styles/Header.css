@@ -9,6 +9,11 @@
   text-decoration: none !important;
   z-index: 1040;
 }
+.brand-logo {
+  height: 50px;
+  width: 90px;
+  margin-right: 24px;
+}
 
 .event-header .navbar-brand {
   font-size: 28px;
@@ -47,6 +52,7 @@
   text-decoration: none !important;
   transition: all 0.3s ease;
   padding-bottom: 4px;
+  display: inline-block;
 }
 
 .event-header .nav-link::after {
@@ -62,6 +68,19 @@
 
 .event-header .nav-link.active::after {
   width: 100%;
+}
+
+/* Mobile specific styles for nav links */
+@media (max-width: 991.98px) {
+  .event-header .nav-link::after {
+    display: none;
+  }
+
+  .event-header .nav-link.active {
+    background: rgba(210, 193, 182, 0.1);
+    border-radius: 8px;
+    padding: 12px 16px !important;
+  }
 }
 
 .event-header .nav-link.active {
@@ -143,7 +162,7 @@
 /* Profile Dropdown Styles */
 .profile-dropdown {
   position: relative;
-  z-index: 1050;
+  /* z-index: 1050; */
 }
 
 .profile-btn {
@@ -283,13 +302,28 @@
   }
 
   .dropdown-menu-custom {
-    position: relative;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--bg-white);
+    border: 1px solid var(--border-beige);
+    border-radius: 12px;
+    box-shadow: var(--shadow-medium);
+    min-width: 180px;
+    padding: 8px 0;
+    margin-top: 8px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1060;
+    backdrop-filter: blur(10px);
+  }
+
+  .dropdown-menu-custom.show {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
-    margin-top: 15px;
-    box-shadow: none;
-    border: 1px solid var(--border-beige);
   }
 }
 
@@ -331,6 +365,19 @@
   border-top: 2px solid transparent;
   border-radius: 50%;
   animation: spin 1s linear infinite;
+}
+.hed-profile-avatar .hed-profile-image {
+  width: 36px;
+  height: 36px;
+  /* background: var(--text-gradient); */
+  border-radius: 50%;
+  /* border: 2px solid var(--glass-border); */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  font-size: 20px;
+  overflow: hidden;
 }
 
 @keyframes spin {

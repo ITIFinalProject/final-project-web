@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { IoStar, IoLocationSharp } from "react-icons/io5";
+import { IoStar, IoLocationSharp, IoPeopleOutline } from "react-icons/io5";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import {
@@ -92,9 +92,9 @@ const EventCard = ({ event }) => {
       let dateToFormat;
 
       // Handle date range formats like "03/08/2025 - 06/08/2025" or "2025-09-13 - 2025-11-28"
-      if (typeof dateStr === "string" && dateStr.includes(" - ")) {
+      if (typeof dateStr === "string" && dateStr.includes(" _ ")) {
         // Extract the start date from the range
-        const startDate = dateStr.split(" - ")[0].trim();
+        const startDate = dateStr.split(" _ ")[0].trim();
         dateToFormat = startDate;
       } else {
         dateToFormat = dateStr;
@@ -156,8 +156,11 @@ const EventCard = ({ event }) => {
 
           <div className="event-time">{event.time}</div>
 
-          <div className="event-footer-container">
-            {event.price && <span className="event-price">{event.price}</span>}
+          <div className="detail-item d-flex align-items-center mb-2">
+            <IoPeopleOutline className="me-2 text-primary" />
+            <small className="text-muted">
+              Max: {event.capacity} attendees
+            </small>
           </div>
         </div>
       </div>

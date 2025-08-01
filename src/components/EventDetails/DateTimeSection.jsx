@@ -82,31 +82,31 @@ const DateTimeSection = ({ event }) => {
     }
   };
 
-  const handleAddToCalendar = () => {
-    // Create a calendar event URL (Google Calendar)
-    const title = encodeURIComponent(event?.title || "Event");
-    const details = encodeURIComponent(event?.description || "");
-    const location = encodeURIComponent(event?.location || "");
+  // const handleAddToCalendar = () => {
+  //   // Create a calendar event URL (Google Calendar)
+  //   const title = encodeURIComponent(event?.title || "Event");
+  //   const details = encodeURIComponent(event?.description || "");
+  //   const location = encodeURIComponent(event?.location || "");
 
-    let startDate = "";
-    if (event?.startDate || event?.date) {
-      try {
-        let date;
-        const dateField = event?.startDate || event?.date;
-        if (dateField.seconds) {
-          date = new Date(dateField.seconds * 1000);
-        } else {
-          date = new Date(dateField);
-        }
-        startDate = date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
-      } catch (error) {
-        console.error("Error formatting date for calendar:", error);
-      }
-    }
+  //   let startDate = "";
+  //   if (event?.startDate || event?.date) {
+  //     try {
+  //       let date;
+  //       const dateField = event?.startDate || event?.date;
+  //       if (dateField.seconds) {
+  //         date = new Date(dateField.seconds * 1000);
+  //       } else {
+  //         date = new Date(dateField);
+  //       }
+  //       startDate = date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+  //     } catch (error) {
+  //       console.error("Error formatting date for calendar:", error);
+  //     }
+  //   }
 
-    const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startDate}/${startDate}&details=${details}&location=${location}`;
-    window.open(calendarUrl, "_blank");
-  };
+  //   const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startDate}/${startDate}&details=${details}&location=${location}`;
+  //   window.open(calendarUrl, "_blank");
+  // };
 
   return (
     <div className="det-datetime-section">
@@ -121,13 +121,13 @@ const DateTimeSection = ({ event }) => {
             <div className="datetime-info">
               <IoTime />
               <span>
-                {formatTime(event?.startTime)}
+                {formatTime(event?.startTime || event?.time)}
                 {event?.endTime && ` - ${formatTime(event?.endTime)}`}
               </span>
             </div>
-            <button className="add-calendar-btn" onClick={handleAddToCalendar}>
+            {/* <button className="add-calendar-btn" onClick={handleAddToCalendar}>
               + Add to Calendar
-            </button>
+            </button> */}
           </div>
           {/* <div className="col-lg-4">
             <div className="ticket-info-card">
