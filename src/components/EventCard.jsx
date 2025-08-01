@@ -91,7 +91,7 @@ const EventCard = ({ event }) => {
     try {
       let dateToFormat;
 
-      // Handle date range formats like "03/08/2025 - 06/08/2025" or "2025-09-13 - 2025-11-28"
+      // Handle date range formats like "31-07-2025 _ 02-08-2025"
       if (typeof dateStr === "string" && dateStr.includes(" _ ")) {
         // Extract the start date from the range
         const startDate = dateStr.split(" _ ")[0].trim();
@@ -105,7 +105,17 @@ const EventCard = ({ event }) => {
         // Firestore timestamp
         date = new Date(dateToFormat.seconds * 1000);
       } else {
-        date = new Date(dateToFormat);
+        // Handle DD-MM-YYYY format
+        if (
+          typeof dateToFormat === "string" &&
+          dateToFormat.includes("-") &&
+          dateToFormat.split("-").length === 3
+        ) {
+          const [day, month, year] = dateToFormat.split("-");
+          date = new Date(year, month - 1, day); // month is 0-indexed
+        } else {
+          date = new Date(dateToFormat);
+        }
       }
 
       if (isNaN(date.getTime())) {

@@ -7,11 +7,11 @@ const DateTimeSection = ({ event }) => {
     try {
       let dateToFormat;
 
-      // Handle date range formats like "03/08/2025 - 06/08/2025" or "2025-09-13 - 2025-11-28"
-      if (typeof dateString === "string" && dateString.includes(" - ")) {
+      // Handle date range formats like "31-07-2025 _ 02-08-2025"
+      if (typeof dateString === "string" && dateString.includes(" _ ")) {
         // For event details, we can show the full range
         const [startDate, endDate] = dateString
-          .split(" - ")
+          .split(" _ ")
           .map((d) => d.trim());
 
         // Format both dates
@@ -20,7 +20,13 @@ const DateTimeSection = ({ event }) => {
           if (dateStr.seconds) {
             date = new Date(dateStr.seconds * 1000);
           } else {
-            date = new Date(dateStr);
+            // Handle DD-MM-YYYY format
+            if (dateStr.includes("-") && dateStr.split("-").length === 3) {
+              const [day, month, year] = dateStr.split("-");
+              date = new Date(year, month - 1, day); // month is 0-indexed
+            } else {
+              date = new Date(dateStr);
+            }
           }
           return date.toLocaleDateString("en-US", {
             weekday: "long",
@@ -49,7 +55,17 @@ const DateTimeSection = ({ event }) => {
         // Firestore timestamp
         date = new Date(dateToFormat.seconds * 1000);
       } else {
-        date = new Date(dateToFormat);
+        // Handle DD-MM-YYYY format
+        if (
+          typeof dateToFormat === "string" &&
+          dateToFormat.includes("-") &&
+          dateToFormat.split("-").length === 3
+        ) {
+          const [day, month, year] = dateToFormat.split("-");
+          date = new Date(year, month - 1, day); // month is 0-indexed
+        } else {
+          date = new Date(dateToFormat);
+        }
       }
 
       return date.toLocaleDateString("en-US", {
