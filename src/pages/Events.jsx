@@ -152,7 +152,7 @@ const Events = () => {
     (state) => state.auth
   );
   useEffect(() => {
-    dispatch(fetchEvents(currentUser.uid));
+    dispatch(fetchEvents(currentUser?.uid));
   }, [dispatch]);
 
   useEffect(() => {
