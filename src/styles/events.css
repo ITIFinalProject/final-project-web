@@ -1,37 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* CSS Variables for consistent theming */
 /* :root {
   --primary-blue: #2563eb;
@@ -52,32 +18,54 @@
 
 /* Global Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideIn {
-  from { transform: translateX(-20px); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 
 @keyframes shimmer {
-  0% { background-position: -200px 0; }
-  100% { background-position: calc(200px + 100%) 0; }
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
 }
 
 /* Main Events Page Layout */
 .events-page {
-
   width: min(90%, 1200px);
   margin: 2rem auto;
   display: grid;
@@ -85,7 +73,6 @@
   gap: 2rem;
   position: relative;
   animation: fadeIn 0.6s ease-out;
-
 }
 
 /* Loading State */
@@ -279,7 +266,11 @@
   font-size: 2rem;
   font-weight: 700;
   color: var(--grayDark);
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-dark) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary-blue) 0%,
+    var(--primary-dark) 100%
+  );
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -443,25 +434,43 @@
   color: white;
 }
 
-
 /* Global Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideIn {
-  from { transform: translateX(-20px); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 
 /* Main Events Page Layout */
@@ -603,7 +612,11 @@
   font-size: 2rem;
   font-weight: 700;
   color: var(--grayDark);
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-dark) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary-blue) 0%,
+    var(--primary-dark) 100%
+  );
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -704,7 +717,7 @@
     grid-template-columns: 250px 1fr;
     gap: 1.5rem;
   }
-  
+
   .long-card .image-section {
     width: 240px;
   }
@@ -716,35 +729,35 @@
     width: 95%;
     gap: 1rem;
   }
-  
+
   .filter-container {
     position: static;
     margin-bottom: 1rem;
   }
-  
+
   .events-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
   }
-  
+
   .events-header h2 {
     font-size: 1.5rem;
   }
-  
+
   .long-card {
     flex-direction: column;
   }
-  
+
   .long-card .image-section {
     width: 100%;
     height: 200px;
   }
-  
+
   .pagination {
     flex-wrap: wrap;
   }
-  
+
   .pagination-btn {
     padding: 0.5rem 0.75rem;
     font-size: 0.8rem;
@@ -756,33 +769,23 @@
     width: 95%;
     margin: 1rem auto;
   }
-  
+
   .filter-container {
     padding: 1rem;
   }
-  
+
   .long-card .details-section {
     padding: 1rem;
   }
-  
+
   .long-card .title {
     font-size: 1.125rem;
   }
-  
+
   .page-numbers {
     display: none;
   }
 }
-
-
-
-
-
-
-
-
-
-
 
 /*MARK:Long
 */
@@ -900,10 +903,6 @@
   display: flex;
   align-items: center;
   font-size: 14px;
-}
-
-.long-card .people-icon {
-  margin-right: 6px;
 }
 
 .long-card .price {

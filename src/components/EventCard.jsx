@@ -1,23 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { IoStar, IoLocationSharp, IoPeopleSharp } from "react-icons/io5";
+import { IoStar, IoLocationSharp } from "react-icons/io5";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import {
   addToInterested,
   removeFromInterested,
 } from "../redux/slices/interestedSlice";
-import { useInterestedCount } from "../hooks/useInterestedCount";
 import "../styles/InterestedEvents.css"; // Import the CSS file
 
 // EventCard Component (would be in src/components/EventCard.jsx)
 const EventCard = ({ event }) => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.auth);
-
-  // Get interested count for this event
-  const { count: interestedCount, refetch: refetchCount } = useInterestedCount(
-    event.id
-  );
 
   // Memoized selector to avoid creating new objects on every render
   const eventIds = useSelector((state) => {
@@ -68,9 +62,6 @@ const EventCard = ({ event }) => {
           })
         ).unwrap();
       }
-
-      // Refetch the interested count after updating
-      refetchCount();
     } catch (error) {
       console.error("Error updating interested events:", error);
       alert("Failed to update interested events. Please try again.");
@@ -166,10 +157,6 @@ const EventCard = ({ event }) => {
           <div className="event-time">{event.time}</div>
 
           <div className="event-footer-container">
-            <div className="interested-count">
-              <IoPeopleSharp className="users-icon" />
-              <span>{interestedCount} interested</span>
-            </div>
             {event.price && <span className="event-price">{event.price}</span>}
           </div>
         </div>

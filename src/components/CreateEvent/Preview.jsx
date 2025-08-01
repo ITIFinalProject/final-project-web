@@ -32,12 +32,11 @@ const Preview = ({ eventData, onBack, latlng }) => {
 
   const { lat, lng } = latlng || [30.0444, 31.2357];
 
-const onPublish = async () => {
+  const onPublish = async () => {
     try {
       // First, add the event to Firestore
       const docRef = await addDoc(collection(db, "events"), {
         ...eventData,
-        id: docRef.id,
       });
 
       // Create the event data with the generated ID

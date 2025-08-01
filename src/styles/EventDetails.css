@@ -101,6 +101,35 @@ body {
   box-shadow: 0 8px 25px var(--border-beige);
 }
 
+.det-action-btn.bookmarked {
+  background: var(--primary-dark);
+  color: var(--light);
+  border-color: var(--primary-dark);
+  box-shadow: 0 4px 15px rgba(27, 60, 83, 0.3);
+}
+
+.det-action-btn.bookmarked:hover {
+  background: var(--primary-blue);
+  color: var(--light);
+  border-color: var(--primary-blue);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(69, 104, 130, 0.4);
+}
+
+.det-action-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.det-action-btn:disabled:hover {
+  background: var(--primary-light);
+  color: var(--primary-blue);
+  border-color: var(--border-beige);
+  transform: none;
+  box-shadow: var(--shadow-light);
+}
+
 /* Date Time Section */
 .det-datetime-section {
   padding: 40px 0;

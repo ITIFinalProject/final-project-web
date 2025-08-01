@@ -13,6 +13,11 @@ const MyEventsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Pagination states
+  const [createdEventsPage, setCreatedEventsPage] = useState(1);
+  const [joinedEventsPage, setJoinedEventsPage] = useState(1);
+  const eventsPerPage = 2;
+
   const fetchUserEvents = useCallback(async () => {
     if (!currentUser) return;
 
@@ -65,9 +70,15 @@ const MyEventsPage = () => {
     ) {
       try {
         await eventService.deleteEvent(eventId);
-        setCreatedEvents((prev) =>
-          prev.filter((event) => event.id !== eventId)
-        );
+        setCreatedEvents((prev) => {
+          const newEvents = prev.filter((event) => event.id !== eventId);
+          // Adjust pagination if needed
+          const totalPages = Math.ceil(newEvents.length / eventsPerPage);
+          if (createdEventsPage > totalPages && totalPages > 0) {
+            setCreatedEventsPage(totalPages);
+          }
+          return newEvents;
+        });
         alert("Event deleted successfully!");
       } catch (err) {
         console.error("Error deleting event:", err);
@@ -78,6 +89,99 @@ const MyEventsPage = () => {
 
   const handleEditEvent = (eventId) => {
     navigate(`/edit-event/${eventId}`);
+  };
+
+  // Pagination logic
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    // Reset to page 1 when switching tabs
+    setCreatedEventsPage(1);
+    setJoinedEventsPage(1);
+  };
+
+  // Get current events for pagination
+  const getCurrentEvents = () => {
+    const events = activeTab === "created" ? createdEvents : joinedEvents;
+    const currentPage =
+      activeTab === "created" ? createdEventsPage : joinedEventsPage;
+    const startIndex = (currentPage - 1) * eventsPerPage;
+    const endIndex = startIndex + eventsPerPage;
+    return events.slice(startIndex, endIndex);
+  };
+
+  // Get total pages
+  const getTotalPages = () => {
+    const events = activeTab === "created" ? createdEvents : joinedEvents;
+    return Math.ceil(events.length / eventsPerPage);
+  };
+
+  // Get current page
+  const getCurrentPage = () => {
+    return activeTab === "created" ? createdEventsPage : joinedEventsPage;
+  };
+
+  // Handle page change
+  const handlePageChange = (page) => {
+    if (activeTab === "created") {
+      setCreatedEventsPage(page);
+    } else {
+      setJoinedEventsPage(page);
+    }
+  };
+
+  // Pagination component
+  const PaginationControls = () => {
+    const totalPages = getTotalPages();
+    const currentPage = getCurrentPage();
+
+    if (totalPages <= 1) return null;
+
+    return (
+      <nav className="d-flex justify-content-center mt-4">
+        <ul className="pagination">
+          <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+            <button
+              className="page-link"
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </button>
+          </li>
+
+          {[...Array(totalPages)].map((_, index) => {
+            const page = index + 1;
+            return (
+              <li
+                key={page}
+                className={`page-item ${currentPage === page ? "active" : ""}`}
+              >
+                <button
+                  className="page-link"
+                  onClick={() => handlePageChange(page)}
+                >
+                  {page}
+                </button>
+              </li>
+            );
+          })}
+
+          <li
+            className={`page-item ${
+              currentPage === totalPages ? "disabled" : ""
+            }`}
+          >
+            <button
+              className="page-link"
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </button>
+          </li>
+        </ul>
+      </nav>
+    );
   };
 
   if (loading) {
@@ -116,7 +220,7 @@ const MyEventsPage = () => {
               className={`flex-fill text-center py-3 border-0 my-events-tab-button ${
                 activeTab === "created" ? "active" : ""
               }`}
-              onClick={() => setActiveTab("created")}
+              onClick={() => handleTabChange("created")}
             >
               Created Events ({createdEvents.length})
             </button>
@@ -124,7 +228,7 @@ const MyEventsPage = () => {
               className={`flex-fill text-center py-3 border-0 my-events-tab-button ${
                 activeTab === "joined" ? "active" : ""
               }`}
-              onClick={() => setActiveTab("joined")}
+              onClick={() => handleTabChange("joined")}
             >
               Joined Events ({joinedEvents.length})
             </button>
@@ -150,16 +254,19 @@ const MyEventsPage = () => {
                   </a>
                 </div>
               ) : (
-                <div className="d-flex flex-column my-events-list">
-                  {createdEvents.map((event) => (
-                    <MyEventCard
-                      key={event.id}
-                      event={event}
-                      isOwner={true}
-                      onEdit={() => handleEditEvent(event.id)}
-                      onDelete={() => handleDeleteEvent(event.id)}
-                    />
-                  ))}
+                <div>
+                  <div className="d-flex flex-column my-events-list">
+                    {getCurrentEvents().map((event) => (
+                      <MyEventCard
+                        key={event.id}
+                        event={event}
+                        isOwner={true}
+                        onEdit={() => handleEditEvent(event.id)}
+                        onDelete={() => handleDeleteEvent(event.id)}
+                      />
+                    ))}
+                  </div>
+                  <PaginationControls />
                 </div>
               )}
             </div>
@@ -180,10 +287,17 @@ const MyEventsPage = () => {
                   </a>
                 </div>
               ) : (
-                <div className="d-flex flex-column my-events-list">
-                  {joinedEvents.map((event) => (
-                    <MyEventCard key={event.id} event={event} isOwner={false} />
-                  ))}
+                <div>
+                  <div className="d-flex flex-column my-events-list">
+                    {getCurrentEvents().map((event) => (
+                      <MyEventCard
+                        key={event.id}
+                        event={event}
+                        isOwner={false}
+                      />
+                    ))}
+                  </div>
+                  <PaginationControls />
                 </div>
               )}
             </div>
