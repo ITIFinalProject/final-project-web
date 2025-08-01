@@ -10,7 +10,7 @@ import { fetchMyEvents } from "../../redux/slices/eventSlice";
 
 function ChatList({ onSelect, onClose }) {
     const dispatch = useDispatch();
-  const { currentUser } = useSelector((state) => state.auth);
+    const { currentUser } = useSelector((state) => state.auth);
 
     const { myEvents, myEventsLoading, myEventsError } = useSelector((state) => ({
         myEvents: state.events.myEvents,
@@ -54,5 +54,18 @@ function ChatList({ onSelect, onClose }) {
         </>
     );
 }
-
 export default ChatList;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
