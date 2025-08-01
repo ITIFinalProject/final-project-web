@@ -7,11 +7,11 @@ const DateTimeSection = ({ event }) => {
     try {
       let dateToFormat;
 
-      // Handle date range formats like "03/08/2025 - 06/08/2025" or "2025-09-13 - 2025-11-28"
-      if (typeof dateString === "string" && dateString.includes(" - ")) {
+      // Handle date range formats like "31-07-2025 _ 02-08-2025"
+      if (typeof dateString === "string" && dateString.includes(" _ ")) {
         // For event details, we can show the full range
         const [startDate, endDate] = dateString
-          .split(" - ")
+          .split(" _ ")
           .map((d) => d.trim());
 
         // Format both dates
@@ -20,7 +20,23 @@ const DateTimeSection = ({ event }) => {
           if (dateStr.seconds) {
             date = new Date(dateStr.seconds * 1000);
           } else {
-            date = new Date(dateStr);
+            // Handle different date formats
+            if (dateStr.includes("-") && dateStr.split("-").length === 3) {
+              const parts = dateStr.split("-").map((num) => parseInt(num, 10));
+
+              // Check if it's DD-MM-YYYY (day > 12 or year < 1000) or YYYY-MM-DD format
+              if (parts[0] > 31 || parts[0] > 1900) {
+                // YYYY-MM-DD format (from web form)
+                const [year, month, day] = parts;
+                date = new Date(year, month - 1, day);
+              } else {
+                // DD-MM-YYYY format (from mobile app)
+                const [day, month, year] = parts;
+                date = new Date(year, month - 1, day);
+              }
+            } else {
+              date = new Date(dateStr);
+            }
           }
           return date.toLocaleDateString("en-US", {
             weekday: "long",
@@ -49,7 +65,27 @@ const DateTimeSection = ({ event }) => {
         // Firestore timestamp
         date = new Date(dateToFormat.seconds * 1000);
       } else {
-        date = new Date(dateToFormat);
+        // Handle different date formats
+        if (
+          typeof dateToFormat === "string" &&
+          dateToFormat.includes("-") &&
+          dateToFormat.split("-").length === 3
+        ) {
+          const parts = dateToFormat.split("-").map((num) => parseInt(num, 10));
+
+          // Check if it's DD-MM-YYYY (day > 12 or year < 1000) or YYYY-MM-DD format
+          if (parts[0] > 31 || parts[0] > 1900) {
+            // YYYY-MM-DD format (from web form)
+            const [year, month, day] = parts;
+            date = new Date(year, month - 1, day);
+          } else {
+            // DD-MM-YYYY format (from mobile app)
+            const [day, month, year] = parts;
+            date = new Date(year, month - 1, day);
+          }
+        } else {
+          date = new Date(dateToFormat);
+        }
       }
 
       return date.toLocaleDateString("en-US", {

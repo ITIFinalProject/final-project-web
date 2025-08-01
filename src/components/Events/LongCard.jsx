@@ -97,12 +97,43 @@ const LongCard = ({ event }) => {
     ];
 
     try {
-      let date;
-      if (dateStr.seconds) {
-        // Firestore timestamp
-        date = new Date(dateStr.seconds * 1000);
+      let dateToFormat;
+
+      // Handle date range formats like "31-07-2025 _ 02-08-2025"
+      if (typeof dateStr === "string" && dateStr.includes(" _ ")) {
+        // Extract the start date from the range
+        const startDate = dateStr.split(" _ ")[0].trim();
+        dateToFormat = startDate;
       } else {
-        date = new Date(dateStr);
+        dateToFormat = dateStr;
+      }
+
+      let date;
+      if (dateToFormat.seconds) {
+        // Firestore timestamp
+        date = new Date(dateToFormat.seconds * 1000);
+      } else {
+        // Handle different date formats
+        if (
+          typeof dateToFormat === "string" &&
+          dateToFormat.includes("-") &&
+          dateToFormat.split("-").length === 3
+        ) {
+          const parts = dateToFormat.split("-").map((num) => parseInt(num, 10));
+
+          // Check if it's DD-MM-YYYY (day > 12 or year < 1000) or YYYY-MM-DD format
+          if (parts[0] > 31 || parts[0] > 1900) {
+            // YYYY-MM-DD format (from web form)
+            const [year, month, day] = parts;
+            date = new Date(year, month - 1, day);
+          } else {
+            // DD-MM-YYYY format (from mobile app)
+            const [day, month, year] = parts;
+            date = new Date(year, month - 1, day);
+          }
+        } else {
+          date = new Date(dateToFormat);
+        }
       }
 
       if (isNaN(date.getTime())) {
@@ -114,7 +145,7 @@ const LongCard = ({ event }) => {
         day: date.getDate().toString().padStart(2, "0"),
       };
     } catch (error) {
-      console.error("Error parsing date:", error, "Input:", dateString);
+      console.error("Error parsing date:", error, "Input:", dateStr);
       return { month: "TBD", day: "00" };
     }
   };
