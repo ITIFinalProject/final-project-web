@@ -1,24 +1,65 @@
 import { IoCalendar, IoTime, IoPricetag, IoTicket } from "react-icons/io5";
+import HostSection from "./HostSection";
 
 const DateTimeSection = ({ event }) => {
   const formatDate = (dateString) => {
     if (!dateString) return "Date TBD";
     try {
+      let dateToFormat;
+
+      // Handle date range formats like "03/08/2025 - 06/08/2025" or "2025-09-13 - 2025-11-28"
+      if (typeof dateString === "string" && dateString.includes(" - ")) {
+        // For event details, we can show the full range
+        const [startDate, endDate] = dateString
+          .split(" - ")
+          .map((d) => d.trim());
+
+        // Format both dates
+        const formatSingleDate = (dateStr) => {
+          let date;
+          if (dateStr.seconds) {
+            date = new Date(dateStr.seconds * 1000);
+          } else {
+            date = new Date(dateStr);
+          }
+          return date.toLocaleDateString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
+        };
+
+        const formattedStart = formatSingleDate(startDate);
+        const formattedEnd = formatSingleDate(endDate);
+
+        // If it's the same date, show only once
+        if (startDate === endDate) {
+          return formattedStart;
+        }
+
+        return `${formattedStart} - ${formattedEnd}`;
+      } else {
+        dateToFormat = dateString;
+      }
+
       // Handle Firestore timestamp or date string
       let date;
-      if (dateString.seconds) {
+      if (dateToFormat.seconds) {
         // Firestore timestamp
-        date = new Date(dateString.seconds * 1000);
+        date = new Date(dateToFormat.seconds * 1000);
       } else {
-        date = new Date(dateString);
+        date = new Date(dateToFormat);
       }
+
       return date.toLocaleDateString("en-US", {
         weekday: "long",
         year: "numeric",
         month: "long",
         day: "numeric",
       });
-    } catch {
+    } catch (error) {
+      console.error("Error formatting date:", error, "Input:", dateString);
       return "Invalid Date";
     }
   };
@@ -68,7 +109,7 @@ const DateTimeSection = ({ event }) => {
   };
 
   return (
-    <div className="datetime-section">
+    <div className="det-datetime-section">
       <div className="container">
         <div className="row">
           <div className="col-lg-8">
@@ -88,7 +129,7 @@ const DateTimeSection = ({ event }) => {
               + Add to Calendar
             </button>
           </div>
-          <div className="col-lg-4">
+          {/* <div className="col-lg-4">
             <div className="ticket-info-card">
               <h5>Ticket Information</h5>
               <div className="ticket-price">
@@ -102,6 +143,9 @@ const DateTimeSection = ({ event }) => {
                 {event?.price ? "Buy Tickets" : "Register"}
               </button>
             </div>
+          </div> */}
+          <div className="col-lg-4">
+            <HostSection event={event} />
           </div>
         </div>
       </div>

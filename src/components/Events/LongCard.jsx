@@ -1,21 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { IoStar, IoLocationSharp, IoPeopleSharp } from "react-icons/io5";
+import { IoStar, IoLocationSharp } from "react-icons/io5";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import {
   addToInterested,
   removeFromInterested,
 } from "../../redux/slices/interestedSlice";
-import { useInterestedCount } from "../../hooks/useInterestedCount";
 
 const LongCard = ({ event }) => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.auth);
-
-  // Get interested count for this event
-  const { count: interestedCount, refetch: refetchCount } = useInterestedCount(
-    event.id
-  );
 
   // Memoized selector to avoid creating new objects on every render
   const eventIds = useSelector((state) => {
@@ -66,9 +60,6 @@ const LongCard = ({ event }) => {
           })
         ).unwrap();
       }
-
-      // Refetch the interested count after updating
-      refetchCount();
     } catch (error) {
       console.error("Error updating interested events:", error);
       alert("Failed to update interested events. Please try again.");
@@ -78,9 +69,17 @@ const LongCard = ({ event }) => {
   };
 
   const getDateDisplay = (dateString) => {
-    let dateStr = dateString.split("-")[0];
-    
-    if (!dateStr) return { month: "TBD", day: "00" };
+    if (!dateString) return { month: "TBD", day: "00" };
+
+    // Handle date range formats like "03/08/2025 - 06/08/2025" or "2025-09-13 - 2025-11-28"
+    let dateStr;
+    if (typeof dateString === "string" && dateString.includes(" - ")) {
+      // Extract the start date from the range
+      dateStr = dateString.split(" - ")[0].trim();
+    } else {
+      // For single dates or other formats
+      dateStr = dateString;
+    }
 
     const months = [
       "JAN",
@@ -115,7 +114,7 @@ const LongCard = ({ event }) => {
         day: date.getDate().toString().padStart(2, "0"),
       };
     } catch (error) {
-      console.error("Error parsing date:", error);
+      console.error("Error parsing date:", error, "Input:", dateString);
       return { month: "TBD", day: "00" };
     }
   };
@@ -152,10 +151,6 @@ const LongCard = ({ event }) => {
           <div className="time">
             {event.startTime}-{event.endTime}
           </div>
-          <div className="interested">
-            <IoPeopleSharp className="people-icon" />
-            <span>{interestedCount} interested</span>
-          </div>
         </div>
       </div>
     </Link>
@@ -163,10 +158,6 @@ const LongCard = ({ event }) => {
 };
 
 export default LongCard;
-
-
-
-
 
 // import React, { useState } from "react";
 // import { IoStar, IoStarOutline, IoLocationSharp, IoPeopleSharp, IoTimeSharp } from "react-icons/io5";
@@ -223,7 +214,7 @@ export default LongCard;
 //             <div className="image-skeleton"></div>
 //           </div>
 //         )}
-        
+
 //         {imageError ? (
 //           <div className="image-fallback">
 //             <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
@@ -232,8 +223,8 @@ export default LongCard;
 //             <span>Image not available</span>
 //           </div>
 //         ) : (
-//           <img 
-//             src={event.bannerUrl} 
+//           <img
+//             src={event.bannerUrl}
 //             alt={event.title}
 //             onLoad={handleImageLoad}
 //             onError={handleImageError}
@@ -246,7 +237,7 @@ export default LongCard;
 //           <div className="day">{dateDisplay.day}</div>
 //         </div>
 
-//         <button 
+//         <button
 //           className={`star-button ${isStarred ? 'starred' : ''}`}
 //           onClick={handleStarClick}
 //           aria-label={isStarred ? 'Remove from favorites' : 'Add to favorites'}
@@ -280,7 +271,7 @@ export default LongCard;
 //             <IoLocationSharp className="location-icon" />
 //             <span>{event.location}</span>
 //           </div>
-          
+
 //           <div className="time">
 //             <IoTimeSharp className="time-icon" />
 //             <span>{event.time}</span>
@@ -313,8 +304,8 @@ export default LongCard;
 
 //         {event.description && (
 //           <div className="event-description">
-//             <p>{event.description.length > 120 ? 
-//               `${event.description.substring(0, 120)}...` : 
+//             <p>{event.description.length > 120 ?
+//               `${event.description.substring(0, 120)}...` :
 //               event.description
 //             }</p>
 //           </div>

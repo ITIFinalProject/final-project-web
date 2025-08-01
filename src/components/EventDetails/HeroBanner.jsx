@@ -21,7 +21,7 @@ const HeroBanner = ({ event }) => {
           <h2 className="text-muted">Event Banner</h2>
         </div>
       )}
-      <button className="back-btn" onClick={handleBackClick}>
+      <button className="det-back-btn" onClick={handleBackClick}>
         <IoChevronBack />
       </button>
     </div>

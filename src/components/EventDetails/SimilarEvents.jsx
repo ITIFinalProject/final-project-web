@@ -26,25 +26,25 @@ const SimilarEvents = ({ currentEventId }) => {
     }
   }, [allEvents, currentEventId]);
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "TBD";
-    try {
-      let date;
-      if (dateString.seconds) {
-        date = new Date(dateString.seconds * 1000);
-      } else {
-        date = new Date(dateString);
-      }
-      return date
-        .toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-        })
-        .toUpperCase();
-    } catch {
-      return "TBD";
-    }
-  };
+  // const formatDate = (dateString) => {
+  //   if (!dateString) return "TBD";
+  //   try {
+  //     let date;
+  //     if (dateString.seconds) {
+  //       date = new Date(dateString.seconds * 1000);
+  //     } else {
+  //       date = new Date(dateString);
+  //     }
+  //     return date
+  //       .toLocaleDateString("en-US", {
+  //         month: "short",
+  //         day: "numeric",
+  //       })
+  //       .toUpperCase();
+  //   } catch {
+  //     return "TBD";
+  //   }
+  // };
 
   if (similarEvents.length === 0) {
     return (
@@ -82,15 +82,15 @@ const SimilarEvents = ({ currentEventId }) => {
                   </div>
                 </div>
                 <div className="event-info">
-                  <div className="event-date">{formatDate(event.date)}</div>
+                  {/* <div className="event-date">{formatDate(event.date)}</div> */}
                   <h4 className="event-title-card">{event.title}</h4>
                   <p className="event-location">
                     {event.location || "Location TBD"}
                   </p>
-                  <div className="event-price">
+                  {/* <div className="event-price">
                     <IoPricetag />
                     <span>{event.price || "FREE"}</span>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </Link>

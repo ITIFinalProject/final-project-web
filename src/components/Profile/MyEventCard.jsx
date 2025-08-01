@@ -6,35 +6,40 @@ import {
   IoPeopleOutline,
 } from "react-icons/io5";
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
+import "../../styles/Profile.css"; // Assuming you have styles for this component
 
 const MyEventCard = ({ event, isOwner, onEdit, onDelete }) => {
   const navigate = useNavigate();
-
-  // Debug: Log event data to understand the timestamp format
-  console.log("Event data:", event);
-  console.log("Event date field:", event.date);
-  console.log("Event startDate field:", event.startDate);
-  console.log("Event startTime field:", event.startTime);
   const formatDate = (timestamp) => {
     if (!timestamp) return "Date TBD";
 
     try {
       // Handle different timestamp formats
+      let dateToFormat;
+
+      // Handle date range formats like "03/08/2025 - 06/08/2025" or "2025-09-13 - 2025-11-28"
+      if (typeof timestamp === "string" && timestamp.includes(" - ")) {
+        // Extract the start date from the range
+        dateToFormat = timestamp.split(" - ")[0].trim();
+      } else {
+        dateToFormat = timestamp;
+      }
+
       let date;
-      if (timestamp.toDate) {
+      if (dateToFormat.toDate) {
         // Firestore Timestamp
-        date = timestamp.toDate();
-      } else if (timestamp instanceof Date) {
-        date = timestamp;
-      } else if (typeof timestamp === "string") {
+        date = dateToFormat.toDate();
+      } else if (dateToFormat instanceof Date) {
+        date = dateToFormat;
+      } else if (typeof dateToFormat === "string") {
         // String date
-        date = new Date(timestamp);
-      } else if (typeof timestamp === "object" && timestamp.seconds) {
+        date = new Date(dateToFormat);
+      } else if (typeof dateToFormat === "object" && dateToFormat.seconds) {
         // Firestore timestamp object with seconds
-        date = new Date(timestamp.seconds * 1000);
+        date = new Date(dateToFormat.seconds * 1000);
       } else {
         // Number timestamp
-        date = new Date(timestamp);
+        date = new Date(dateToFormat);
       }
 
       // Check if date is valid
@@ -48,7 +53,7 @@ const MyEventCard = ({ event, isOwner, onEdit, onDelete }) => {
         year: "numeric",
       });
     } catch (error) {
-      console.error("Error formatting date:", error);
+      console.error("Error formatting date:", error, "Input:", timestamp);
       return "Date Error";
     }
   };
@@ -149,7 +154,7 @@ const MyEventCard = ({ event, isOwner, onEdit, onDelete }) => {
             </h5>
 
             {/* Event Details */}
-            <div className="event-details mb-3">
+            <div className="prof-event-details mb-3">
               <div className="detail-item d-flex align-items-center mb-2">
                 <IoCalendarOutline className="me-2 text-primary" />
                 <small className="text-muted">

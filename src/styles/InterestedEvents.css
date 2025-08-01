@@ -201,29 +201,6 @@
   margin-top: auto;
 }
 
-.interested-count {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  color: var(--primary-blue);
-  font-weight: 600;
-}
-
-.users-icon {
-  width: 18px;
-  height: 18px;
-  color: var(--primary-blue);
-  margin-right: 2px;
-  vertical-align: middle;
-}
-
-/* Interested count number styling */
-.interested-count span {
-  font-weight: 700;
-  color: var(--primary-blue);
-  margin-right: 2px;
-}
 .event-price {
   font-size: 12px;
   font-weight: 600;
