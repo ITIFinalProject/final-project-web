@@ -8,6 +8,7 @@ import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useSelector } from "react-redux";
 import { collection, addDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/config";
 import { useNavigate } from "react-router-dom";
 import { notificationService } from "../../services/notificationService";
@@ -32,14 +33,16 @@ const Preview = ({ eventData, onBack, latlng }) => {
 
   const { lat, lng } = latlng || [30.0444, 31.2357];
 
-const onPublish = async () => {
+  const onPublish = async () => {
     try {
       // First, add the event to Firestore
       const docRef = await addDoc(collection(db, "events"), {
         ...eventData,
+      });
+      await setDoc(doc(db, "events", docRef.id), {
+        ...eventData,
         id: docRef.id,
       });
-
       // Create the event data with the generated ID
       const eventWithId = {
         ...eventData,

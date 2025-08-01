@@ -15,6 +15,7 @@ function ChatList({ onSelect, onClose }) {
                 ...doc.data(),
             }));
             setEvents(all);
+            
         };
         fetchEvents();
     }, []);
