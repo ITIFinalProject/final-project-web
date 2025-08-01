@@ -121,7 +121,7 @@ const DateTimeSection = ({ event }) => {
             <div className="datetime-info">
               <IoTime />
               <span>
-                {formatTime(event?.startTime)}
+                {formatTime(event?.startTime || event?.time)}
                 {event?.endTime && ` - ${formatTime(event?.endTime)}`}
               </span>
             </div>
