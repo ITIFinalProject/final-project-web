@@ -20,10 +20,20 @@ const DateTimeSection = ({ event }) => {
           if (dateStr.seconds) {
             date = new Date(dateStr.seconds * 1000);
           } else {
-            // Handle DD-MM-YYYY format
+            // Handle different date formats
             if (dateStr.includes("-") && dateStr.split("-").length === 3) {
-              const [day, month, year] = dateStr.split("-");
-              date = new Date(year, month - 1, day); // month is 0-indexed
+              const parts = dateStr.split("-").map((num) => parseInt(num, 10));
+
+              // Check if it's DD-MM-YYYY (day > 12 or year < 1000) or YYYY-MM-DD format
+              if (parts[0] > 31 || parts[0] > 1900) {
+                // YYYY-MM-DD format (from web form)
+                const [year, month, day] = parts;
+                date = new Date(year, month - 1, day);
+              } else {
+                // DD-MM-YYYY format (from mobile app)
+                const [day, month, year] = parts;
+                date = new Date(year, month - 1, day);
+              }
             } else {
               date = new Date(dateStr);
             }
@@ -55,14 +65,24 @@ const DateTimeSection = ({ event }) => {
         // Firestore timestamp
         date = new Date(dateToFormat.seconds * 1000);
       } else {
-        // Handle DD-MM-YYYY format
+        // Handle different date formats
         if (
           typeof dateToFormat === "string" &&
           dateToFormat.includes("-") &&
           dateToFormat.split("-").length === 3
         ) {
-          const [day, month, year] = dateToFormat.split("-");
-          date = new Date(year, month - 1, day); // month is 0-indexed
+          const parts = dateToFormat.split("-").map((num) => parseInt(num, 10));
+
+          // Check if it's DD-MM-YYYY (day > 12 or year < 1000) or YYYY-MM-DD format
+          if (parts[0] > 31 || parts[0] > 1900) {
+            // YYYY-MM-DD format (from web form)
+            const [year, month, day] = parts;
+            date = new Date(year, month - 1, day);
+          } else {
+            // DD-MM-YYYY format (from mobile app)
+            const [day, month, year] = parts;
+            date = new Date(year, month - 1, day);
+          }
         } else {
           date = new Date(dateToFormat);
         }
