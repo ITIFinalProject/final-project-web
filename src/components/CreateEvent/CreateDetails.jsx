@@ -150,7 +150,7 @@ const CreateDetails = ({ onContinue, latlng }) => {
       date:
         formData.startDate == formData.endDate
           ? formData.startDate
-          : `${formData.startDate} - ${formData.endDate}`,
+          : `${formData.startDate} _ ${formData.endDate}`,
       time: `${formData.startTime} - ${formData.endTime} `,
       guests: formData.guests,
     };

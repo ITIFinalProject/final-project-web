@@ -73,9 +73,9 @@ const LongCard = ({ event }) => {
 
     // Handle date range formats like "03/08/2025 - 06/08/2025" or "2025-09-13 - 2025-11-28"
     let dateStr;
-    if (typeof dateString === "string" && dateString.includes(" - ")) {
+    if (typeof dateString === "string" && dateString.includes(" _ ")) {
       // Extract the start date from the range
-      dateStr = dateString.split(" - ")[0].trim();
+      dateStr = dateString.split(" _ ")[0].trim();
     } else {
       // For single dates or other formats
       dateStr = dateString;
