@@ -25,6 +25,22 @@ const DateTimeSection = ({ eventData, onInputChange }) => {
           />
         </div>
         <div className="edit-form-group">
+          <label htmlFor="endDate" className="edit-form-label">
+            End Date
+          </label>
+          <input
+            type="date"
+            id="endDate"
+            name="endDate"
+            value={eventData.endDate}
+            onChange={onInputChange}
+            className="edit-form-control"
+          />
+        </div>
+      </div>
+
+      <div className="edit-form-row">
+        <div className="edit-form-group">
           <label htmlFor="startTime" className="edit-form-label required">
             Start Time
           </label>

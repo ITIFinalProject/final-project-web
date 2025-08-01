@@ -38,12 +38,10 @@ const Preview = ({ eventData, onBack, latlng }) => {
       // First, add the event to Firestore
       const docRef = await addDoc(collection(db, "events"), {
         ...eventData,
-
       });
       await setDoc(doc(db, "events", docRef.id), {
         ...eventData,
         id: docRef.id,
-
       });
       // Create the event data with the generated ID
       const eventWithId = {
