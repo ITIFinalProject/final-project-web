@@ -3,22 +3,26 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/config";
 import { FaTimes } from "react-icons/fa";
 import { IoChatboxSharp } from "react-icons/io5";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchMyEvents } from "../../redux/slices/eventSlice";
+
+
 
 function ChatList({ onSelect, onClose }) {
-    const [events, setEvents] = useState([]);
+    const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.auth);
+
+    const { myEvents, myEventsLoading, myEventsError } = useSelector((state) => ({
+        myEvents: state.events.myEvents,
+        myEventsLoading: state.events.myEventsLoading,
+        myEventsError: state.events.myEventsError,
+    }));
 
     useEffect(() => {
-        const fetchEvents = async () => {
-            const snap = await getDocs(collection(db, "events"));
-            const all = snap.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
-            setEvents(all);
-            
-        };
-        fetchEvents();
-    }, []);
+        if (currentUser?.uid) {
+            dispatch(fetchMyEvents(currentUser?.uid));
+        }
+    }, [dispatch, currentUser?.uid]);
 
     return (
         <>
@@ -28,14 +32,22 @@ function ChatList({ onSelect, onClose }) {
                     <FaTimes />
                 </button>
             </div>
+
             <div className="chat-list">
-                {events.map((event) => (
+                {myEventsLoading && <p>Loading...</p>}
+                {myEventsError && <p className="error">{myEventsError}</p>}
+
+                {!myEventsLoading && !myEventsError && myEvents.length === 0 && (
+                    <p>No event chats available.</p>
+                )}
+
+                {myEvents.map((event) => (
                     <div
                         key={event.id}
                         className="chat-item"
                         onClick={() => onSelect(event.id)}
                     >
-                        <IoChatboxSharp/>&nbsp; {event.title}
+                        <IoChatboxSharp /> &nbsp; {event.title}
                     </div>
                 ))}
             </div>

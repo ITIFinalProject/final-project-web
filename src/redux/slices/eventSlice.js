@@ -1,80 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { collection, getDocs, doc } from "firebase/firestore";
-import { db } from "../../firebase/config"; // adjust path to your firebase config
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase/config";
 import { eventService } from "../../services/eventService";
 
-// // export const fetchEvents = createAsyncThunk("events/fetchEvents", async () => {
-// //   const querySnapshot = await getDocs(collection(db, "events"));
-// //   const events = querySnapshot.docs.map((doc) => ({
-// //     id: doc.id,
-// //     ...doc.data(),
-// //   }));
-// //   return events;
-// // });
-// // Async thunk to fetch events
 
-
-// // export const fetchEvents = createAsyncThunk(
-// //   "events/fetchEvents",
-// //   async (_, thunkAPI) => {
-// //     const state = thunkAPI.getState();
-// //     const currentUser = state.auth.userData; // or use currentUser if you store ID there
-// // console.log(currentUser);
-
-// //     const querySnapshot = await getDocs(collection(db, "events"));
-// //     const allEvents = querySnapshot.docs.map((doc) => ({
-// //       ...doc.data(),
-// //     }));
-
-// //     const filteredEvents = allEvents.filter((event) => {
-// //       return (
-// //         event.type === "Public" ||
-// //         (currentUser && event.hostId === currentUser.id) ||
-// //         (currentUser?.joinedEvents &&
-// //           currentUser.joinedEvents.some((e) => e.eventId === event.id))
-// //       );
-// //     });
-
-// //     return filteredEvents;
-// //   }
-// // );
-
-
-// export const fetchEvents = createAsyncThunk(
-//   "events/fetchEvents",
-//   async (_, thunkAPI) => {
-//     const state = thunkAPI.getState();
-//     const currentUser = state.auth.currentUser; // from Firebase auth
-
-//     const querySnapshot = await getDocs(collection(db, "events"));
-//     const allEvents = querySnapshot.docs.map((doc) => ({
-//       ...doc.data(),
-//       id: doc.id,
-//     }));
-
-//     let joinedEventIds = [];
-
-//     // If user is logged in, fetch their joinedEvents subcollection
-//     if (currentUser?.uid) {
-//       const joinedEventsSnapshot = await getDocs(
-//         collection(db, `users/${currentUser.uid}/joinedEvents`)
-//       );
-//       joinedEventIds = joinedEventsSnapshot.docs.map((doc) => doc.id);
-//     }
-// console.log(joinedEventIds);
-
-//     // Filter events
-//     const filteredEvents = allEvents.filter((event) => {
-//       return (
-//         event.type === "Public" ||
-//         event.hostId === currentUser?.uid ||
-//         joinedEventIds.includes(event.id)
-//       );
-//     });
-
-//     return filteredEvents;
-//   }
-// );
 export const fetchEvents = createAsyncThunk(
   "events/fetchEvents",
   async (currentUserId) => {
@@ -86,21 +15,48 @@ export const fetchEvents = createAsyncThunk(
     const joinedEventsData = await eventService.getUserJoinedEvents(
       currentUserId
     );
-    console.log(joinedEventsData);
+
+    // Extract eventIds from joined events array
+    const joinedEventIds = joinedEventsData.map(joinedEvent => joinedEvent.id);
 
     // Filter based on type and user participation
     const filteredEvents = allEvents.filter((event) => {
       return (
         event.type === "Public" ||
-        event.hostId === currentUserId
-        || event.id === joinedEventsData.eventId
+        event.hostId === currentUserId ||
+        joinedEventIds.includes(event.id)
       );
     });
 
     return filteredEvents;
   }
 );
+export const fetchMyEvents = createAsyncThunk(
+  "events/fetchMyEvents",
+  async (currentUserId) => {
+    const querySnapshot = await getDocs(collection(db, "events"));
+    const allEvents = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    const joinedEventsData = await eventService.getUserJoinedEvents(
+      currentUserId
+    );
 
+    // Extract eventIds from joined events array
+    const joinedEventIds = joinedEventsData.map(joinedEvent => joinedEvent.id);
+
+    // Filter based on type and user participation
+    const filteredEvents = allEvents.filter((event) => {
+      return (
+        event.hostId === currentUserId ||
+        joinedEventIds.includes(event.id)
+      );
+    });
+
+    return filteredEvents;
+  }
+);
 // Async thunk to fetch a single event by ID
 export const fetchEventById = createAsyncThunk(
   "events/fetchEventById",
@@ -114,10 +70,13 @@ const eventSlice = createSlice({
   name: "events",
   initialState: {
     data: [],
+    myEvents: [],
     currentEvent: null,
     loading: false,
+    myEventsLoading: false,
     currentEventLoading: false,
     error: null,
+    myEventsError: null,
     currentEventError: null,
   },
   reducers: {
@@ -140,6 +99,19 @@ const eventSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
+      .addCase(fetchMyEvents.pending, (state) => {
+        state.myEventsLoading = true;
+        state.myEventsError = null;
+      })
+      .addCase(fetchMyEvents.fulfilled, (state, action) => {
+        state.myEventsLoading = false;
+        state.myEvents = action.payload;
+      })
+      .addCase(fetchMyEvents.rejected, (state, action) => {
+        state.myEventsLoading = false;
+        state.myEventsError = action.error.message;
+      })
+
       .addCase(fetchEventById.pending, (state) => {
         state.currentEventLoading = true;
         state.currentEventError = null;
@@ -157,3 +129,4 @@ const eventSlice = createSlice({
 
 export const { clearCurrentEvent } = eventSlice.actions;
 export default eventSlice.reducer;
+

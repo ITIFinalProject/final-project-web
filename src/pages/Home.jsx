@@ -15,7 +15,7 @@ const Home = () => {
             <Trending />
             <Banner />
             <Calender />
-            <CountDown />
+            {/* <CountDown /> */}
             <CreateBanner />
         </section>
     )

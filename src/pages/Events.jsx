@@ -141,6 +141,7 @@ const Events = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const { data: events, loading, error } = useSelector((state) => state.events);
+  const { currentUser } = useSelector((state) => state.auth);
 
   // Filter and pagination state
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -148,9 +149,7 @@ const Events = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const eventsPerPage = 4;
   // const user = useSelector((state) => state.auth.currentUser);
-  const { currentUser, userData } = useSelector(
-    (state) => state.auth
-  );
+
   useEffect(() => {
     dispatch(fetchEvents(currentUser?.uid));
   }, [dispatch]);
