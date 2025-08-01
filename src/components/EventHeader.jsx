@@ -71,7 +71,7 @@ const EventHeader = () => {
             to="/"
             onClick={() => setIsNavOpen(false)}
           >
-            <IoCalendar /> Eventify
+            <img src="/logo-light.png" alt="Eventify" className="brand-logo" />
           </NavLink>
 
           <button
