@@ -10,6 +10,7 @@ import {
   where,
   orderBy,
   serverTimestamp,
+  increment,
 } from "firebase/firestore";
 import { db } from "../firebase/config";
 
@@ -253,6 +254,125 @@ export const eventService = {
     } catch (error) {
       console.error("Error fetching all events:", error);
       throw error;
+    }
+  },
+
+  // Join a public event
+  joinEvent: async (userId, eventId) => {
+    try {
+      console.log("User attempting to join event:", { userId, eventId });
+
+      // First, get the event to check capacity and type
+      const eventRef = doc(db, "events", eventId);
+      const eventSnapshot = await getDoc(eventRef);
+
+      if (!eventSnapshot.exists()) {
+        throw new Error("Event not found");
+      }
+
+      const eventData = eventSnapshot.data();
+
+      // Check if event is public
+      if (eventData.type !== "Public") {
+        throw new Error("This event is private and requires an invitation");
+      }
+
+      // Check if user is already joined
+      const joinedEventsRef = collection(db, "users", userId, "joinedEvents");
+      const existingQuery = query(
+        joinedEventsRef,
+        where("eventId", "==", eventId)
+      );
+      const existingSnapshot = await getDocs(existingQuery);
+
+      if (!existingSnapshot.empty) {
+        throw new Error("You have already joined this event");
+      }
+
+      // Check capacity
+      const capacity = eventData.capacity;
+      const currentAttendees = eventData.currentAttendees || 0;
+
+      if (capacity && currentAttendees >= capacity) {
+        throw new Error("Event is full. Capacity reached.");
+      }
+
+      // Add to user's joined events
+      const joinedEventData = {
+        eventId: eventId,
+        eventTitle: eventData.title || "Untitled Event",
+        eventDescription: eventData.description || "",
+        eventDate: eventData.date || "",
+        eventLocation: eventData.location || "",
+        hostName: eventData.hostName || "Unknown Host",
+        joinedAt: serverTimestamp(),
+      };
+
+      await addDoc(joinedEventsRef, joinedEventData);
+
+      // Update event's current attendees count
+      await updateDoc(eventRef, {
+        currentAttendees: increment(1),
+        updatedAt: serverTimestamp(),
+      });
+
+      console.log("Successfully joined event");
+      return { success: true, message: "Successfully joined the event!" };
+    } catch (error) {
+      console.error("Error joining event:", error);
+      throw error;
+    }
+  },
+
+  // Leave a joined event
+  leaveEvent: async (userId, eventId) => {
+    try {
+      console.log("User attempting to leave event:", { userId, eventId });
+
+      // Remove from user's joined events
+      const joinedEventsRef = collection(db, "users", userId, "joinedEvents");
+      const joinedQuery = query(
+        joinedEventsRef,
+        where("eventId", "==", eventId)
+      );
+      const joinedSnapshot = await getDocs(joinedQuery);
+
+      if (joinedSnapshot.empty) {
+        throw new Error("You haven't joined this event");
+      }
+
+      // Delete the joined event document
+      await deleteDoc(joinedSnapshot.docs[0].ref);
+
+      // Update event's current attendees count
+      const eventRef = doc(db, "events", eventId);
+      await updateDoc(eventRef, {
+        currentAttendees: increment(-1),
+        updatedAt: serverTimestamp(),
+      });
+
+      console.log("Successfully left event");
+      return { success: true, message: "Successfully left the event!" };
+    } catch (error) {
+      console.error("Error leaving event:", error);
+      throw error;
+    }
+  },
+
+  // Check if user has joined an event
+  isUserJoined: async (userId, eventId) => {
+    try {
+      const joinedEventsRef = collection(db, "users", userId, "joinedEvents");
+      const joinedQuery = query(
+        joinedEventsRef,
+        where("eventId", "==", eventId)
+      );
+      const joinedSnapshot = await getDocs(joinedQuery);
+
+      return !joinedSnapshot.empty;
+    } catch (error) {
+      console.error("Error checking if user joined event:", error);
+      return false;
     }
   },
 };

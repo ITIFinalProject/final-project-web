@@ -1,7 +1,15 @@
 import { IoLogoGooglePlaystore, IoLogoApple } from "react-icons/io5";
 import "../styles/Footer.css";
+import { Link } from "react-router-dom";
+// import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  // const categories = useSelector((state) => state.category.list);
+  const navigate = useNavigate();
+  const handleClick = (category) => {
+    navigate(`/events?category=${encodeURIComponent(category)}`);
+  };
   return (
     <footer className="event-footer">
       <div className="container">
@@ -11,22 +19,22 @@ const Footer = () => {
               <h6>Company Info</h6>
               <ul>
                 <li>
-                  <a href="#">About Us</a>
+                  <Link to="#">About Us</Link>
                 </li>
                 <li>
-                  <a href="#">Contact Us</a>
+                  <Link to="#">Contact Us</Link>
                 </li>
                 <li>
-                  <a href="#">Careers</a>
+                  <Link to="#">Careers</Link>
                 </li>
                 <li>
-                  <a href="#">Press</a>
+                  <Link to="#">Press</Link>
                 </li>
                 <li>
-                  <a href="#">Terms of Service</a>
+                  <Link to="#">Terms of Service</Link>
                 </li>
                 <li>
-                  <a href="#">Privacy Policy</a>
+                  <Link to="#">Privacy Policy</Link>
                 </li>
               </ul>
             </div>
@@ -36,16 +44,10 @@ const Footer = () => {
               <h6>Help</h6>
               <ul>
                 <li>
-                  <a href="#">Account Support</a>
+                  <Link to="#">Account Support</Link>
                 </li>
                 <li>
-                  <a href="#">Listing Events</a>
-                </li>
-                <li>
-                  <a href="#">Event Ticketing</a>
-                </li>
-                <li>
-                  <a href="#">Ticket Purchase Terms & Conditions</a>
+                  <Link to="#">Listing Events</Link>
                 </li>
               </ul>
             </div>
@@ -55,16 +57,58 @@ const Footer = () => {
               <h6>Categories</h6>
               <ul>
                 <li>
-                  <a href="#">Concerts & Gigs</a>
+                  <button
+                    type="button"
+                    className="category-link"
+                    onClick={() => handleClick("Entertainment")}
+                  >
+                    Entertainment
+                  </button>
                 </li>
                 <li>
-                  <a href="#">Festivals & Lifestyle</a>
+                  <button
+                    type="button"
+                    className="category-link"
+                    onClick={() => handleClick("Educational & Business")}
+                  >
+                    Educational & Business
+                  </button>
                 </li>
                 <li>
-                  <a href="#">Business & Networking</a>
+                  <button
+                    type="button"
+                    className="category-link"
+                    onClick={() => handleClick("Cultural & Arts")}
+                  >
+                    Cultural & Arts
+                  </button>
                 </li>
                 <li>
-                  <a href="#">Food & Drinks</a>
+                  <button
+                    type="button"
+                    className="category-link"
+                    onClick={() => handleClick("Sports & Fitness")}
+                  >
+                    Sports & Fitness
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    className="category-link"
+                    onClick={() => handleClick("Technology & Innovation")}
+                  >
+                    Technology & Innovation
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    className="category-link"
+                    onClick={() => handleClick("Travel & Adventure")}
+                  >
+                    Travel & Adventure
+                  </button>
                 </li>
               </ul>
             </div>
@@ -74,16 +118,16 @@ const Footer = () => {
               <h6>Follow Us</h6>
               <ul>
                 <li>
-                  <a href="#">Facebook</a>
+                  <Link to="#">Facebook</Link>
                 </li>
                 <li>
-                  <a href="#">Instagram</a>
+                  <Link to="#">Instagram</Link>
                 </li>
                 <li>
-                  <a href="#">Twitter</a>
+                  <Link to="#">Twitter</Link>
                 </li>
                 <li>
-                  <a href="#">Youtube</a>
+                  <Link to="#">Youtube</Link>
                 </li>
               </ul>
             </div>
@@ -91,7 +135,7 @@ const Footer = () => {
           <div className="col-lg-4 col-md-8 mb-4">
             <div className="footer-section">
               <h6>Download The App</h6>
-              <a href="#" className="app-download">
+              <Link to="#" className="app-download">
                 <div className="app-icon">
                   <IoLogoGooglePlaystore />
                 </div>
@@ -99,8 +143,8 @@ const Footer = () => {
                   <div className="small-text">Get it on</div>
                   <div className="main-text">Google Play</div>
                 </div>
-              </a>
-              <a href="#" className="app-download">
+              </Link>
+              <Link to="#" className="app-download">
                 <div className="app-icon">
                   <IoLogoApple />
                 </div>
@@ -108,7 +152,7 @@ const Footer = () => {
                   <div className="small-text">Download on the</div>
                   <div className="main-text">App Store</div>
                 </div>
-              </a>
+              </Link>
             </div>
           </div>
         </div>

@@ -37,6 +37,26 @@
   transform: translateX(3px);
 }
 
+/* Category buttons styled as links */
+.category-link {
+  background: none;
+  border: none;
+  color: var(--footer-text);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  text-align: left;
+  width: 100%;
+}
+
+.category-link:hover {
+  color: var(--primary-beige);
+  transform: translateX(3px);
+}
+
 .app-download {
   display: flex;
   align-items: center;
