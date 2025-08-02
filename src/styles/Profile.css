@@ -750,6 +750,34 @@
   text-decoration: none;
 }
 
+/* Outdated Event Styles */
+.my-event-card.outdated-event {
+  opacity: 0.7;
+  border-left: 4px solid var(--grayMedium);
+}
+
+.my-event-card.outdated-event .card-title {
+  color: var(--grayDark);
+}
+
+.my-event-card.outdated-event .text-muted {
+  color: var(--grayMedium) !important;
+}
+
+.event-btn-edit.disabled {
+  background-color: var(--grayLight);
+  border-color: var(--grayMedium);
+  color: var(--grayDark);
+  cursor: not-allowed;
+}
+
+.event-btn-edit.disabled:hover {
+  background-color: var(--grayLight);
+  color: var(--grayDark);
+  transform: none;
+  box-shadow: none;
+}
+
 .my-events-tab-button:hover {
   background-color: var(--glass-bg-hover);
 }

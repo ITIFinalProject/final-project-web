@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { fetchEvents } from "../../redux/slices/eventSlice";
+import defaultBanner from "../../assets/images/banner.png";
 
 const SimilarEvents = ({ currentEventId }) => {
   const dispatch = useDispatch();
@@ -71,10 +72,10 @@ const SimilarEvents = ({ currentEventId }) => {
               <div className="event-card">
                 <div className="other-event-image">
                   <img
-                    src={event.bannerUrl || event.image || "/no-event.jpg"}
+                    src={event.bannerUrl || event.image || defaultBanner}
                     alt={event.title}
                     onError={(e) => {
-                      e.target.src = "/no-event.jpg";
+                      e.target.src = defaultBanner;
                     }}
                   />
                   <div className="event-category">

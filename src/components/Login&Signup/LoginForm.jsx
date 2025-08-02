@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { IoLogoGoogle, IoLogoFacebook } from "react-icons/io5";
+import { IoLogoGoogle, IoLogoFacebook, IoEye, IoEyeOff } from "react-icons/io5";
 import {
   loginWithEmailAndPassword,
   signInWithGoogle,
@@ -15,6 +15,7 @@ const LoginForm = () => {
   const [loading, setLoading] = useState(false);
   const [resetEmailSent, setResetEmailSent] = useState(false);
   const [authError, setAuthError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const {
@@ -173,13 +174,23 @@ const LoginForm = () => {
           </span>
         )}
 
-        <input
-          type="password"
-          placeholder="Password"
-          className={`auth-input ${errors.password ? "error" : ""}`}
-          {...register("password")}
-          disabled={loading}
-        />
+        <div className="password-input-container">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            className={`auth-input ${errors.password ? "error" : ""}`}
+            {...register("password")}
+            disabled={loading}
+          />
+          <button
+            type="button"
+            className="password-toggle"
+            onClick={() => setShowPassword(!showPassword)}
+            disabled={loading}
+          >
+            {showPassword ? <IoEye /> : <IoEyeOff />}
+          </button>
+        </div>
         {errors.password && (
           <span
             className="error-text"

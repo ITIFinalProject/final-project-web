@@ -107,7 +107,25 @@ const DateTimeSection = ({ event }) => {
       if (timeString.includes("AM") || timeString.includes("PM")) {
         return timeString;
       }
-      // If it's a time in HH:MM format, convert to 12-hour format
+
+      // Handle time range format like "07:04 - 08:10"
+      if (timeString.includes(" - ")) {
+        const [startTime, endTime] = timeString
+          .split(" - ")
+          .map((time) => time.trim());
+
+        const formatSingleTime = (time) => {
+          const [hours, minutes] = time.split(":");
+          const hour = parseInt(hours);
+          const ampm = hour >= 12 ? "PM" : "AM";
+          const displayHour = hour % 12 || 12;
+          return `${displayHour}:${minutes} ${ampm}`;
+        };
+
+        return `${formatSingleTime(startTime)} - ${formatSingleTime(endTime)}`;
+      }
+
+      // If it's a single time in HH:MM format, convert to 12-hour format
       const [hours, minutes] = timeString.split(":");
       const hour = parseInt(hours);
       const ampm = hour >= 12 ? "PM" : "AM";
@@ -130,10 +148,7 @@ const DateTimeSection = ({ event }) => {
             </div>
             <div className="datetime-info">
               <IoTime />
-              <span>
-                {formatTime(event?.startTime || event?.time)}
-                {event?.endTime && ` - ${formatTime(event?.endTime)}`}
-              </span>
+              <span>{formatTime(event?.startTime || event?.time)}</span>
             </div>
           </div>
           <div className="col-lg-4">

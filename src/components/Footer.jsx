@@ -16,6 +16,17 @@ const Footer = () => {
         <div className="row">
           <div className="col-lg-2 col-md-4 mb-4">
             <div className="footer-section">
+              <Link to="/" className="footer-logo">
+                <img
+                  src="/logo-light.png"
+                  alt="Eventify"
+                  className="footer-brand-logo"
+                />
+              </Link>
+            </div>
+          </div>
+          <div className="col-lg-2 col-md-4 mb-4">
+            <div className="footer-section">
               <h6>Company Info</h6>
               <ul>
                 <li>
@@ -35,19 +46,6 @@ const Footer = () => {
                 </li>
                 <li>
                   <Link to="#">Privacy Policy</Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="col-lg-2 col-md-4 mb-4">
-            <div className="footer-section">
-              <h6>Help</h6>
-              <ul>
-                <li>
-                  <Link to="#">Account Support</Link>
-                </li>
-                <li>
-                  <Link to="#">Listing Events</Link>
                 </li>
               </ul>
             </div>

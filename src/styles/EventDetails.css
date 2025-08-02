@@ -1,5 +1,5 @@
 @import url(../index.css);
-.event-details-container{
+.event-details-container {
   width: 85%;
   margin: 80px auto;
 }
@@ -960,6 +960,26 @@ body {
   background: var(--error-bg, #f8d7da);
   color: var(--error-text, #721c24);
   border-color: var(--error-border, #f5c6cb);
+}
+
+.event-ended-message {
+  background: linear-gradient(135deg, var(--bg-white) 0%, var(--grey) 100%);
+  color: var(--text-secondary);
+  padding: 15px 20px;
+  border-radius: 12px;
+  font-size: 1rem;
+  text-align: center;
+  border: 1px solid var(--border-beige);
+  font-weight: 500;
+  box-shadow: var(--shadow-light);
+}
+
+.event-ended-message p {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 @keyframes fadeInOut {
