@@ -6,66 +6,50 @@ import { IoChatboxSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMyEvents } from "../../redux/slices/eventSlice";
 
-
-
 function ChatList({ onSelect, onClose }) {
-    const dispatch = useDispatch();
-    const { currentUser } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.auth);
 
-    const { myEvents, myEventsLoading, myEventsError } = useSelector((state) => ({
-        myEvents: state.events.myEvents,
-        myEventsLoading: state.events.myEventsLoading,
-        myEventsError: state.events.myEventsError,
-    }));
+  const { myEvents, myEventsLoading, myEventsError } = useSelector((state) => ({
+    myEvents: state.events.myEvents,
+    myEventsLoading: state.events.myEventsLoading,
+    myEventsError: state.events.myEventsError,
+  }));
 
-    useEffect(() => {
-        if (currentUser?.uid) {
-            dispatch(fetchMyEvents(currentUser?.uid));
-        }
-    }, [dispatch, currentUser?.uid]);
+  useEffect(() => {
+    if (currentUser?.uid) {
+      dispatch(fetchMyEvents(currentUser?.uid));
+    }
+  }, [dispatch, currentUser?.uid]);
 
-    return (
-        <>
-            <div className="chat-header">
-                <h5>Event Chats</h5>
-                <button onClick={onClose}>
-                    <FaTimes />
-                </button>
-            </div>
+  return (
+    <>
+      <div className="chat-header">
+        <h5>Event Chats</h5>
+        <button onClick={onClose}>
+          <FaTimes />
+        </button>
+      </div>
 
-            <div className="chat-list">
-                {myEventsLoading && <p>Loading...</p>}
-                {myEventsError && <p className="error">{myEventsError}</p>}
+      <div className="chat-list">
+        {myEventsLoading && <p>Loading...</p>}
+        {myEventsError && <p className="error">{myEventsError}</p>}
 
-                {!myEventsLoading && !myEventsError && myEvents.length === 0 && (
-                    <p>No event chats available.</p>
-                )}
+        {!myEventsLoading && !myEventsError && myEvents.length === 0 && (
+          <p>No event chats available.</p>
+        )}
 
-                {myEvents.map((event) => (
-                    <div
-                        key={event.id}
-                        className="chat-item"
-                        onClick={() => onSelect(event.id)}
-                    >
-                        <IoChatboxSharp /> &nbsp; {event.title}
-                    </div>
-                ))}
-            </div>
-        </>
-    );
+        {myEvents.map((event) => (
+          <div
+            key={event.id}
+            className="chat-item"
+            onClick={() => onSelect(event.id)}
+          >
+            <IoChatboxSharp /> &nbsp; {event.title}
+          </div>
+        ))}
+      </div>
+    </>
+  );
 }
 export default ChatList;
-
-
-
-
-
-
-
-
-
-
-
-
-
-

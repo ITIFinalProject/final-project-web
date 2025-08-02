@@ -35,7 +35,7 @@ function MainChat({ eventId, user, onBack }) {
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleSend();
     }
   };
@@ -49,7 +49,7 @@ function MainChat({ eventId, user, onBack }) {
   const formatTime = (timestamp) => {
     if (!timestamp) return "";
     const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
   return (
@@ -69,19 +69,17 @@ function MainChat({ eventId, user, onBack }) {
           return (
             <div
               key={msg.id}
-              className={`chat-bubble ${isOwnMessage ? 'own-message' : 'other-message'}`}
+              className={`chat-bubble ${
+                isOwnMessage ? "own-message" : "other-message"
+              }`}
             >
               {!isOwnMessage && (
                 <div className="sender-name">
-                  {msg.senderName || 'Anonymous'}
+                  {msg.senderName || "Anonymous"}
                 </div>
               )}
-              <div className="message-text">
-                {msg.message}
-              </div>
-              <div className="message-time">
-                {formatTime(msg.createdAt)}
-              </div>
+              <div className="message-text">{msg.message}</div>
+              <div className="message-time">{formatTime(msg.createdAt)}</div>
             </div>
           );
         })}
@@ -95,10 +93,7 @@ function MainChat({ eventId, user, onBack }) {
           onKeyPress={handleKeyPress}
           placeholder="Type your message..."
         />
-        <button
-          onClick={handleSend}
-          disabled={!input.trim()}
-        >
+        <button onClick={handleSend} disabled={!input.trim()}>
           <IoSendSharp />
         </button>
       </div>

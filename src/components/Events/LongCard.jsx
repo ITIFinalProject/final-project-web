@@ -6,6 +6,7 @@ import {
   addToInterested,
   removeFromInterested,
 } from "../../redux/slices/interestedSlice";
+import defaultBanner from "../../assets/images/banner.png";
 
 const LongCard = ({ event }) => {
   const dispatch = useDispatch();
@@ -157,7 +158,7 @@ const LongCard = ({ event }) => {
       <div className="long-card">
         <div className="image-section">
           <img
-            src={event.bannerUrl || event.image || "/no-event.jpg"}
+            src={event.bannerUrl || event.image || defaultBanner}
             alt={event.title}
           />
           <div className="date-badge">

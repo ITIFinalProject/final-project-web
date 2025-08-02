@@ -129,10 +129,7 @@
 }
 
 
-
-
-
- /* Photos.css */
+/* Photos.css */
 
 .photos-container {
   width: 85%;
@@ -267,8 +264,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Event Title Section */
@@ -452,15 +453,15 @@
   .photos-container {
     padding: 1rem;
   }
-  
+
   .main-title {
     font-size: 2rem;
   }
-  
+
   .event-title {
     font-size: 1.5rem;
   }
-  
+
   .memories-grid {
     column-count: 1;
   }
