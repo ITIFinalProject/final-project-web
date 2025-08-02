@@ -1,4 +1,4 @@
-/* .album-wrapper {
+.album-wrapper {
   width: 85%;
   margin: 70px auto;
   background: var(--bg-white-transparent);
@@ -127,17 +127,13 @@
   cursor: pointer;
   box-shadow: var(--shadow-light);
 }
- */
+
 
 /* Photos.css */
 
 .photos-container {
   width: 85%;
   margin: 80px auto;
-  /* min-height: 100vh; */
-  /* background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-beige) 100%); */
-  /* padding: 2rem; */
-  /* font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; */
 }
 
 .photos-wrapper {
@@ -344,6 +340,9 @@
 }
 
 .memory-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 0.75rem;
   background: linear-gradient(45deg, #f8fafc, #e2e8f0);
 }
@@ -358,7 +357,13 @@
   border-radius: 6px;
   display: inline-block;
 }
+.delete-memory-btn{
+  border: 0;
+}
 
+.delete-memory-btn svg{
+  color: var(--primary-blue);
+}
 /* Loading States */
 .memories-loading {
   grid-column: 1 / -1;
