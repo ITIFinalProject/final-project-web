@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchEventById, clearCurrentEvent } from "../redux/slices/eventSlice";
@@ -6,9 +6,9 @@ import HeroBanner from "../components/EventDetails/HeroBanner";
 import EventTitleSection from "../components/EventDetails/EventTitleSection";
 import DateTimeSection from "../components/EventDetails/DateTimeSection";
 import LocationSection from "../components/EventDetails/LocationSection";
-import HostSection from "../components/EventDetails/HostSection";
 import EventDescription from "../components/EventDetails/EventDescription";
 import TagsSection from "../components/EventDetails/TagsSection";
+import JoinEventButton from "../components/EventDetails/JoinEventButton";
 import SimilarEvents from "../components/EventDetails/SimilarEvents";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -18,6 +18,7 @@ const EventDetails = () => {
   const { eventId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [localEvent, setLocalEvent] = useState(null);
 
   const { currentEvent, currentEventLoading, currentEventError } = useSelector(
     (state) => state.events
@@ -33,6 +34,23 @@ const EventDetails = () => {
       dispatch(clearCurrentEvent());
     };
   }, [eventId, dispatch]);
+
+  // Update local event when current event changes
+  useEffect(() => {
+    if (currentEvent) {
+      setLocalEvent(currentEvent);
+    }
+  }, [currentEvent]);
+
+  const handleEventUpdate = (updatedEvent) => {
+    console.log("EventDetails - Updating event:", {
+      currentAttendees: updatedEvent.currentAttendees,
+      previousAttendees: localEvent?.currentAttendees,
+    });
+    setLocalEvent(updatedEvent);
+  };
+
+  const eventToDisplay = localEvent || currentEvent;
 
   if (currentEventLoading) {
     return (
@@ -64,7 +82,7 @@ const EventDetails = () => {
     );
   }
 
-  if (!currentEvent) {
+  if (!eventToDisplay) {
     return (
       <div className="container">
         <div className="alert alert-warning mt-4" role="alert">
@@ -83,13 +101,16 @@ const EventDetails = () => {
 
   return (
     <div className="container">
-      <HeroBanner event={currentEvent} />
-      <EventTitleSection event={currentEvent} />
-      <DateTimeSection event={currentEvent} />
-      <LocationSection event={currentEvent} />
-      {/* <HostSection event={currentEvent} /> */}
-      <EventDescription event={currentEvent} />
-      <TagsSection event={currentEvent} />
+      <HeroBanner event={eventToDisplay} />
+      <EventTitleSection event={eventToDisplay} />
+      <DateTimeSection event={eventToDisplay} />
+      <LocationSection event={eventToDisplay} />
+      <EventDescription event={eventToDisplay} />
+      <JoinEventButton
+        event={eventToDisplay}
+        onEventUpdate={handleEventUpdate}
+      />
+      <TagsSection event={eventToDisplay} />
       <SimilarEvents currentEventId={eventId} />
     </div>
   );
