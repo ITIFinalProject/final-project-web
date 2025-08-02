@@ -5,10 +5,10 @@ import {
   IoLocationOutline,
   IoPeopleOutline,
 } from "react-icons/io5";
-import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
+import { FaEdit, FaTrash, FaEye, FaSignOutAlt } from "react-icons/fa";
 import "../../styles/Profile.css"; // Assuming you have styles for this component
 
-const MyEventCard = ({ event, isOwner, onEdit, onDelete }) => {
+const MyEventCard = ({ event, isOwner, onEdit, onDelete, onLeave }) => {
   const navigate = useNavigate();
   const formatDate = (timestamp) => {
     if (!timestamp) return "Date TBD";
@@ -226,6 +226,16 @@ const MyEventCard = ({ event, isOwner, onEdit, onDelete }) => {
                     title="Delete Event"
                   >
                     <FaTrash />
+                  </button>
+                )}
+
+                {!isOwner && onLeave && (
+                  <button
+                    className="btn btn-outline-warning btn-sm"
+                    onClick={onLeave}
+                    title="Leave Event"
+                  >
+                    <FaSignOutAlt />
                   </button>
                 )}
               </div>
