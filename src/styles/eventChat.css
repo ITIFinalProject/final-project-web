@@ -1,12 +1,11 @@
-/* Floating Chat Panel */
-.floating-chat-panel {
+
+ .floating-chat-panel {
   position: fixed;
   bottom: 20px;
   left: 20px;
   z-index: 10000;
 }
 
-/* Collapsed state - small button */
 .floating-chat-panel.collapsed {
   width: 100px;
   height: 60px;
@@ -37,7 +36,7 @@
   box-shadow: var(--shadow-card);
   overflow: hidden;
   border: 1px solid var(--chatbot-border);
-}
+} 
 
 /* Chat List Styles */
 .open-chat-list {
@@ -358,5 +357,204 @@
   100% {
     transform: scale(1.4);
     opacity: 0;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Add these styles to your eventChat.css file */
+
+/* Unread message badges */
+.unread-badge,
+.unread-count-badge,
+.total-unread-badge {
+  background-color: #ff4444;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: 8px;
+  min-width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse 2s infinite;
+}
+
+.total-unread-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  margin: 0;
+}
+
+/* .togglePanel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+} */
+
+/* Unread message styling */
+.unread-message {
+  background-color: #f0f8ff !important;
+  border-left: 3px solid #007bff;
+  position: relative;
+}
+
+.unread-message .unread-indicator {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: #ff4444;
+  color: white;
+  font-size: 10px;
+  padding: 2px 4px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+/* Chat item with unread messages */
+.chat-item.has-unread {
+  background-color: #f8f9fa;
+  border-left: 3px solid #007bff;
+  font-weight: bold;
+}
+
+/* .chat-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+} */
+
+.chat-item:hover {
+  background-color: #f5f5f5;
+}
+
+/* Pulse animation for badges */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 68, 68, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 68, 68, 0);
+  }
+}
+
+/* Enhanced floating panel styles */
+/* .floating-chat-panel.collapsed {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: #007bff;
+  color: white;
+  border-radius: 25px;
+  padding: 15px 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.floating-chat-panel.collapsed:hover {
+  background: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+} */
+
+/* Notification sound styles (optional) */
+.notification-sound {
+  display: none;
+}
+
+/* Desktop notification permission button */
+.notification-permission-btn {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  margin: 5px;
+}
+
+.notification-permission-btn:hover {
+  background: #218838;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .floating-chat-panel.collapsed {
+    bottom: 10px;
+    right: 10px;
+    padding: 12px 16px;
+  }
+  
+  .unread-badge,
+  .unread-count-badge,
+  .total-unread-badge {
+    font-size: 10px;
+    min-width: 16px;
+    height: 16px;
+    padding: 1px 4px;
   }
 }

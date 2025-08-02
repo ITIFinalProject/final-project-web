@@ -704,3 +704,384 @@ export default Calendar;
 // }
 
 // export default Calendar;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import { useState, useEffect } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { fetchMyEvents } from "../../redux/slices/eventSlice";
+
+// function Calendar() {
+//   const dispatch = useDispatch();
+//   const { currentUser } = useSelector((state) => state.auth);
+
+//   const { myEvents, myEventsLoading, myEventsError } = useSelector((state) => ({
+//     myEvents: state.events.myEvents,
+//     myEventsLoading: state.events.myEventsLoading,
+//     myEventsError: state.events.myEventsError,
+//   }));
+
+//   useEffect(() => {
+//     if (currentUser?.uid) {
+//       dispatch(fetchMyEvents(currentUser?.uid));
+//     }
+//   }, [dispatch, currentUser?.uid]);
+  
+//   const today = new Date();
+//   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
+//   const [currentYear, setCurrentYear] = useState(today.getFullYear());
+//   const [countdown, setCountdown] = useState({
+//     days: 0,
+//     hours: 0,
+//     minutes: 0,
+//     seconds: 0
+//   });
+
+//   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+//   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+//   const startDay = new Date(currentYear, currentMonth, 1).getDay();
+
+//   // Transform events data to work with calendar
+//   const events = myEvents.map(event => ({
+//     title: event.title,
+//     date: event.date, // Assuming event.date is in YYYY-MM-DD format
+//     id: event.id,
+//     category: event.category,
+//     location: event.location,
+//     time: event.time
+//   }));
+
+//   // Parse date range (e.g., "2025-08-14 - 2025-08-16") to get start date
+//   const parseEventDate = (dateString) => {
+//     if (!dateString) return null;
+//     // Handle date ranges by taking the start date
+//     const startDate = dateString.split(' _ ')[0];
+//     return startDate;
+//   };
+
+//   // Get the nearest upcoming event
+//   const getNearestEvent = () => {
+//     const now = new Date();
+//     const upcomingEvents = events
+//       .filter(event => {
+//         const eventDate = parseEventDate(event.date);
+//         if (!eventDate) return false;
+        
+//         // Create event datetime
+//         let eventDateTime = new Date(eventDate);
+        
+//         // If event has time, parse and add it
+//         if (event.time) {
+//           const [hours, minutes] = event.time.split(':').map(Number);
+//           eventDateTime.setHours(hours, minutes, 0, 0);
+//         } else {
+//           // If no time specified, assume start of day
+//           eventDateTime.setHours(0, 0, 0, 0);
+//         }
+        
+//         return eventDateTime > now;
+//       })
+//       .sort((a, b) => {
+//         const dateA = new Date(parseEventDate(a.date));
+//         const dateB = new Date(parseEventDate(b.date));
+        
+//         // Add time if available
+//         if (a.time) {
+//           const [hours, minutes] = a.time.split(':').map(Number);
+//           dateA.setHours(hours, minutes, 0, 0);
+//         }
+//         if (b.time) {
+//           const [hours, minutes] = b.time.split(':').map(Number);
+//           dateB.setHours(hours, minutes, 0, 0);
+//         }
+        
+//         return dateA - dateB;
+//       });
+
+//     return upcomingEvents.length > 0 ? upcomingEvents[0] : null;
+//   };
+
+//   // Calculate countdown
+//   const calculateCountdown = (targetEvent) => {
+//     if (!targetEvent) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    
+//     const eventDate = parseEventDate(targetEvent.date);
+//     if (!eventDate) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    
+//     let targetDateTime = new Date(eventDate);
+    
+//     // Add time if available
+//     if (targetEvent.time) {
+//       const [hours, minutes] = targetEvent.time.split(':').map(Number);
+//       targetDateTime.setHours(hours, minutes, 0, 0);
+//     } else {
+//       targetDateTime.setHours(0, 0, 0, 0);
+//     }
+    
+//     const now = new Date();
+//     const difference = targetDateTime - now;
+    
+//     if (difference <= 0) {
+//       return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+//     }
+    
+//     const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+//     const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+//     const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+//     const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+    
+//     return { days, hours, minutes, seconds };
+//   };
+
+//   // Update countdown every second
+//   useEffect(() => {
+//     const nearestEvent = getNearestEvent();
+//     if (!nearestEvent) return;
+
+//     const updateCountdown = () => {
+//       const newCountdown = calculateCountdown(nearestEvent);
+//       setCountdown(newCountdown);
+//     };
+
+//     // Update immediately
+//     updateCountdown();
+
+//     // Set up interval to update every second
+//     const interval = setInterval(updateCountdown, 1000);
+
+//     return () => clearInterval(interval);
+//   }, [events]); // Re-run when events change
+
+//   const handlePrevMonth = () => {
+//     if (currentMonth === 0) {
+//       setCurrentMonth(11);
+//       setCurrentYear(currentYear - 1);
+//     } else {
+//       setCurrentMonth(currentMonth - 1);
+//     }
+//   };
+
+//   const handleNextMonth = () => {
+//     if (currentMonth === 11) {
+//       setCurrentMonth(0);
+//       setCurrentYear(currentYear + 1);
+//     } else {
+//       setCurrentMonth(currentMonth + 1);
+//     }
+//   };
+
+//   const formatDate = (y, m, d) => `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+
+//   const generateCalendar = () => {
+//     const days = [];
+//     for (let i = 0; i < startDay; i++) {
+//       days.push(<div className="calendar-day empty" key={`empty-${i}`}></div>);
+//     }
+//     for (let d = 1; d <= daysInMonth; d++) {
+//       const fullDate = formatDate(currentYear, currentMonth, d);
+//       const isToday =
+//         currentYear === today.getFullYear() &&
+//         currentMonth === today.getMonth() &&
+//         d === today.getDate();
+      
+//       // Check if any event starts on this date
+//       const hasEvent = events.some((e) => {
+//         const eventStartDate = parseEventDate(e.date);
+//         return eventStartDate === fullDate;
+//       });
+
+//       days.push(
+//         <div
+//           key={d}
+//           className={`calendar-day ${isToday ? 'today' : ''} ${hasEvent ? 'has-event' : ''}`}
+//         >
+//           {d}
+//           {hasEvent && (
+//             <div className="event-indicator">
+//               {events
+//                 .filter(e => parseEventDate(e.date) === fullDate)
+//                 .slice(0, 2) // Show max 2 events per day
+//                 .map((event, idx) => (
+//                   <div key={idx} className="event-dot" title={event.title}></div>
+//                 ))
+//               }
+//             </div>
+//           )}
+//         </div>
+//       );
+//     }
+//     return days;
+//   };
+
+//   const sortedEvents = [...events].sort(
+//     (a, b) => new Date(parseEventDate(a.date)) - new Date(parseEventDate(b.date))
+//   );
+//   const pastEvents = sortedEvents.filter((e) => new Date(parseEventDate(e.date)) < today).slice(-2);
+//   const upcomingEvents = sortedEvents.filter((e) => new Date(parseEventDate(e.date)) >= today).slice(0, 2);
+
+//   // Get nearest event for countdown display
+//   const nearestEvent = getNearestEvent();
+
+//   if (myEventsLoading) {
+//     return (
+//       <div className="calendar-wrapper">
+//         <div className="loading-state">
+//           <p>Loading your events...</p>
+//         </div>
+//       </div>
+//     );
+//   }
+
+//   if (myEventsError) {
+//     return (
+//       <div className="calendar-wrapper">
+//         <div className="error-state">
+//           <p>Error loading events: {myEventsError}</p>
+//           <button onClick={() => dispatch(fetchMyEvents(currentUser?.uid))}>
+//             Retry
+//           </button>
+//         </div>
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div className="calendar-wrapper">
+//       <div className="calendar-container">
+//         <div className="calendar-header">
+//           <button onClick={handlePrevMonth}>❮</button>
+//           <h2>{new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long', year: 'numeric' })}</h2>
+//           <button onClick={handleNextMonth}>❯</button>
+//         </div>
+//         <div className="calendar-grid">
+//           {daysOfWeek.map((day) => (
+//             <div className="calendar-day-name" key={day}>{day}</div>
+//           ))}
+//           {generateCalendar()}
+//         </div>
+//       </div>
+
+//       <div className="event-timeline">
+//         <h3>🗓️ My Events</h3>
+
+//         <div className="timeline-section">
+//           <div className="timeline-label">
+//             <span className="dot past-dot"></span> Recent
+//           </div>
+//           {pastEvents.length > 0 ? (
+//             pastEvents.map((e, i) => (
+//               <div key={i} className="event-item past">
+//                 <span className="date">{parseEventDate(e.date)}</span>
+//                 <span className="title">{e.title}</span>
+//                 {e.time && <span className="time">{e.time}</span>}
+//               </div>
+//             ))
+//           ) : (
+//             <p className="empty-msg">No recent events</p>
+//           )}
+//         </div>
+
+//         <div className="timeline-section">
+//           <div className="timeline-label">
+//             <span className="dot upcoming-dot"></span> Upcoming
+//           </div>
+//           {upcomingEvents.length > 0 ? (
+//             upcomingEvents.map((e, i) => (
+//               <div key={i} className="event-item upcoming">
+//                 <span className="date">{parseEventDate(e.date)}</span>
+//                 <span className="title">{e.title}</span>
+//                 {e.time && <span className="time">{e.time}</span>}
+//                 {e.location && <span className="location">📍 {e.location}</span>}
+//               </div>
+//             ))
+//           ) : (
+//             <p className="empty-msg">No upcoming events</p>
+//           )}
+//         </div>
+//       </div>
+
+//       {/* Countdown Section */}
+//       <div className="countdown-section">
+//         <h3>⏰ Next Event Countdown</h3>
+//         {nearestEvent ? (
+//           <div className="countdown-container">
+//             <div className="countdown-event-info">
+//               <h4 className="countdown-event-title">{nearestEvent.title}</h4>
+//               <p className="countdown-event-details">
+//                 📅 {parseEventDate(nearestEvent.date)}
+//                 {nearestEvent.time && <span> at {nearestEvent.time}</span>}
+//                 {nearestEvent.location && <span> • 📍 {nearestEvent.location}</span>}
+//               </p>
+//             </div>
+            
+//             <div className="countdown-timer">
+//               <div className="countdown-item">
+//                 <span className="countdown-value">{countdown.days}</span>
+//                 <span className="countdown-label">Days</span>
+//               </div>
+//               <div className="countdown-separator">:</div>
+//               <div className="countdown-item">
+//                 <span className="countdown-value">{String(countdown.hours).padStart(2, '0')}</span>
+//                 <span className="countdown-label">Hours</span>
+//               </div>
+//               <div className="countdown-separator">:</div>
+//               <div className="countdown-item">
+//                 <span className="countdown-value">{String(countdown.minutes).padStart(2, '0')}</span>
+//                 <span className="countdown-label">Minutes</span>
+//               </div>
+//               <div className="countdown-separator">:</div>
+//               <div className="countdown-item">
+//                 <span className="countdown-value">{String(countdown.seconds).padStart(2, '0')}</span>
+//                 <span className="countdown-label">Seconds</span>
+//               </div>
+//             </div>
+
+//             {countdown.days === 0 && countdown.hours === 0 && countdown.minutes === 0 && countdown.seconds === 0 && (
+//               <div className="countdown-ended">
+//                 🎉 Event is starting now!
+//               </div>
+//             )}
+//           </div>
+//         ) : (
+//           <div className="no-upcoming-events">
+//             <p>📭 No upcoming events to count down to</p>
+//             <small>Add an event to see the countdown timer</small>
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default Calendar;
