@@ -21,8 +21,13 @@ const EditEvent = () => {
     imageUploading,
     error,
     eventData,
+    guestSearch,
+    filteredGuests,
     handleInputChange,
     handleImageUpload,
+    handleGuestSearch,
+    handleAddGuest,
+    handleRemoveGuest,
     handleSubmit,
   } = useEditEvent(eventId, currentUser);
 
@@ -57,6 +62,11 @@ const EditEvent = () => {
           <EventDetailsSection
             eventData={eventData}
             onInputChange={handleInputChange}
+            guestSearch={guestSearch}
+            filteredGuests={filteredGuests}
+            onGuestSearch={handleGuestSearch}
+            onAddGuest={handleAddGuest}
+            onRemoveGuest={handleRemoveGuest}
           />
 
           <DateTimeSection

@@ -1,12 +1,18 @@
 import { useState, useEffect } from "react";
 import { eventService } from "../services/eventService";
 import { uploadEventImage } from "../services/eventImageService";
+import { notificationService } from "../services/notificationService";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase/config";
 
 export const useEditEvent = (eventId, currentUser) => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [imageUploading, setImageUploading] = useState(false);
   const [error, setError] = useState(null);
+  const [allUsers, setAllUsers] = useState([]);
+  const [guestSearch, setGuestSearch] = useState("");
+  const [filteredGuests, setFilteredGuests] = useState([]);
   const [eventData, setEventData] = useState({
     title: "",
     description: "",
@@ -19,7 +25,26 @@ export const useEditEvent = (eventId, currentUser) => {
     bannerUrl: "",
     category: "",
     capacity: "",
+    guests: [],
   });
+
+  // Fetch all users for guest invitations
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "users"));
+        const users = querySnapshot.docs
+          .map((doc) => ({ id: doc.id, ...doc.data() }))
+          .filter((u) => u.id !== currentUser?.uid); // exclude self
+        setAllUsers(users);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+    if (currentUser) {
+      fetchUsers();
+    }
+  }, [currentUser]);
 
   useEffect(() => {
     const fetchEventData = async () => {
@@ -70,6 +95,7 @@ export const useEditEvent = (eventId, currentUser) => {
           bannerUrl: event.bannerUrl || "",
           category: event.category || "",
           type: event.type || "",
+          guests: event.guests || [],
         });
       } catch (err) {
         console.error("Error fetching event:", err);
@@ -117,6 +143,37 @@ export const useEditEvent = (eventId, currentUser) => {
     }
   };
 
+  const handleGuestSearch = (e) => {
+    const input = e.target.value.toLowerCase();
+    setGuestSearch(input);
+    const filtered = allUsers.filter((u) =>
+      u.name?.toLowerCase().includes(input)
+    );
+    setFilteredGuests(filtered);
+  };
+
+  const handleAddGuest = (guest) => {
+    if (!eventData.guests?.find((g) => g.id === guest.id)) {
+      if ((eventData.guests?.length || 0) < eventData.capacity) {
+        setEventData((prev) => ({
+          ...prev,
+          guests: [...(prev.guests || []), guest],
+        }));
+        setGuestSearch("");
+        setFilteredGuests([]);
+      } else {
+        alert("You've reached the maximum capacity for guests.");
+      }
+    }
+  };
+
+  const handleRemoveGuest = (id) => {
+    setEventData((prev) => ({
+      ...prev,
+      guests: prev.guests.filter((g) => g.id !== id),
+    }));
+  };
+
   const handleSubmit = async (navigate) => {
     try {
       setSaving(true);
@@ -137,6 +194,8 @@ export const useEditEvent = (eventId, currentUser) => {
             : eventData.startDate,
         // Combine separate time fields into Firebase format
         time: `${eventData.startTime} - ${eventData.endTime}`,
+        // Include guests for private events
+        guests: eventData.type === "Private" ? eventData.guests : [],
       };
 
       // Only include fields that are not empty/null
@@ -151,6 +210,28 @@ export const useEditEvent = (eventId, currentUser) => {
       });
 
       await eventService.updateEvent(eventId, updatedData);
+
+      // If it's a private event with guests, create invitations for new guests
+      if (
+        updatedData.type === "Private" &&
+        updatedData.guests &&
+        updatedData.guests.length > 0
+      ) {
+        try {
+          const eventWithId = {
+            id: eventId,
+            ...updatedData,
+            hostId: currentUser.uid,
+            hostName: currentUser.displayName,
+          };
+          await notificationService.createEventInvitations(eventWithId);
+          console.log("Invitations sent successfully");
+        } catch (invitationError) {
+          console.error("Error sending invitations:", invitationError);
+          // Don't fail the whole process if invitations fail
+        }
+      }
+
       alert("Event updated successfully!");
       navigate("/profile", { state: { activeSection: "my-events" } });
     } catch (err) {
@@ -167,8 +248,14 @@ export const useEditEvent = (eventId, currentUser) => {
     imageUploading,
     error,
     eventData,
+    allUsers,
+    guestSearch,
+    filteredGuests,
     handleInputChange,
     handleImageUpload,
+    handleGuestSearch,
+    handleAddGuest,
+    handleRemoveGuest,
     handleSubmit,
   };
 };
