@@ -13,6 +13,7 @@ import { useAuth } from "../redux/hooks";
 import { logOut } from "../services/authService";
 // import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/Header.css";
+import { reload } from "firebase/auth";
 
 const EventHeader = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -59,7 +60,8 @@ const EventHeader = () => {
     await logOut();
     setIsProfileDropdownOpen(false);
     setIsNavOpen(false);
-    navigate("/");
+    navigate("/login");
+    window.location.reload();
   };
 
   return (
@@ -187,15 +189,13 @@ const EventHeader = () => {
                         {userData?.name || currentUser?.displayName || "User"}
                       </span>
                       <IoChevronDown
-                        className={`dropdown-arrow ${
-                          isProfileDropdownOpen ? "open" : ""
-                        }`}
+                        className={`dropdown-arrow ${isProfileDropdownOpen ? "open" : ""
+                          }`}
                       />
                     </button>
                     <div
-                      className={`dropdown-menu-custom ${
-                        isProfileDropdownOpen ? "show" : ""
-                      }`}
+                      className={`dropdown-menu-custom ${isProfileDropdownOpen ? "show" : ""
+                        }`}
                     >
                       <NavLink to="/Profile" className="dropdown-item-custom">
                         <IoPersonCircle className="dropdown-icon" />
