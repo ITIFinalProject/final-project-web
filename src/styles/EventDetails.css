@@ -1,7 +1,10 @@
 @import url(../index.css);
-
+.event-details-container{
+  width: 85%;
+  margin: 80px auto;
+}
 body {
-  background: var(--primary-light) !important;
+  background: var(--mariam) !important;
   color: var(--text-primary);
 }
 

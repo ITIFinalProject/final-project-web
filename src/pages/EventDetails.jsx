@@ -100,7 +100,7 @@ const EventDetails = () => {
   }
 
   return (
-    <div className="container">
+    <div className="container event-details-container">
       <HeroBanner event={eventToDisplay} />
       <EventTitleSection event={eventToDisplay} />
       <DateTimeSection event={eventToDisplay} />
