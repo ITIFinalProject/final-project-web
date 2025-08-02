@@ -34,8 +34,8 @@ const Hero = () => {
           <div className="search-results">
             {filtered.length > 0 ? (
               filtered.map((event) => (
-                <Link to={`/event/${event.id}`}>
-                  <div key={event.id}>
+                <Link to={`/event/${event.id}`} key={event.id}>
+                  <div>
                     <img src={event.bannerUrl} alt="" />
                     <strong>{event.title}</strong> – {event.date}
                   </div>

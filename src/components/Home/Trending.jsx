@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import { useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -6,21 +6,25 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import EventCard from "../EventCard";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchEvents } from "../../redux/slices/eventSlice"; 
+import { fetchEvents, fetchMyEvents } from "../../redux/slices/eventSlice";
 
 
 const Trending = () => {
   const dispatch = useDispatch();
-  const { data: events, loading } = useSelector((state) => state.events);
+  const { data: events, loading, error } = useSelector((state) => state.events);
   const { currentUser } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (!events.length && currentUser?.uid) {
-      dispatch(fetchEvents(currentUser.uid));
-    }
-  }, [dispatch, currentUser, events.length]);
+    dispatch(fetchEvents(currentUser?.uid));
+  }, [dispatch]);
+
+
 
   const trendingEvents = events.slice(0, 6);
+
+
+
+
   return (
     <section className="trending-events">
       <h2>Trending Events</h2>
@@ -43,11 +47,20 @@ const Trending = () => {
           clickable: true,
         }}
       >
-        {trendingEvents.map((event) => (
-          <SwiperSlide key={event.id}>
-            <EventCard event={event} />
-          </SwiperSlide>
-        ))}
+        {
+          loading ?
+            // <section className='trending-events'>
+            <div className="loading-container">
+              <div className="spinner"></div>
+              <p>Loading events...</p>
+            </div>
+            // </section>
+            :
+            trendingEvents.map((event) => (
+              <SwiperSlide key={event.id}>
+                <EventCard event={event} />
+              </SwiperSlide>
+            ))}
       </Swiper>
 
       {/* Custom controls OUTSIDE the swiper */}
