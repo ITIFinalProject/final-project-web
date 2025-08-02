@@ -277,7 +277,7 @@
 }
 
 .results-count {
-  color: var(--grayLight);
+  color: var(--grayDark);
   font-size: 0.875rem;
   margin: 0;
 }
@@ -622,11 +622,6 @@
   -webkit-text-fill-color: transparent;
 }
 
-.results-count {
-  color: var(--grayLight);
-  font-size: 0.875rem;
-  margin: 0;
-}
 
 /* Events Grid */
 .all-events {
