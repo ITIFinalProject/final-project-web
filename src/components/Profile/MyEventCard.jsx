@@ -5,10 +5,11 @@ import {
   IoLocationOutline,
   IoPeopleOutline,
 } from "react-icons/io5";
-import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
+import { FaEdit, FaTrash, FaEye, FaSignOutAlt } from "react-icons/fa";
 import "../../styles/Profile.css"; // Assuming you have styles for this component
+import defaultBanner from "../../assets/images/banner.png";
 
-const MyEventCard = ({ event, isOwner, onEdit, onDelete }) => {
+const MyEventCard = ({ event, isOwner, onEdit, onDelete, onLeave }) => {
   const navigate = useNavigate();
   const formatDate = (timestamp) => {
     if (!timestamp) return "Date TBD";
@@ -129,10 +130,10 @@ const MyEventCard = ({ event, isOwner, onEdit, onDelete }) => {
     <div className="card my-event-card">
       <div className="row g-0">
         {/* Event Image */}
-        <div className="col-md-3">
+        <div className="col-md-4">
           <div className="event-image-container position-relative">
             <img
-              src={event.bannerUrl || "/no-event.jpg"}
+              src={event.bannerUrl || defaultBanner}
               alt={event.title}
               className="img-fluid rounded-start"
               style={{ height: "100%", width: "100%" }}
@@ -146,7 +147,7 @@ const MyEventCard = ({ event, isOwner, onEdit, onDelete }) => {
         </div>
 
         {/* Event Content */}
-        <div className="col-md-9">
+        <div className="col-md-8">
           <div className="card-body d-flex flex-column h-100">
             {/* Event Title */}
             <h5 className="card-title text-truncate" title={event.title}>
@@ -226,6 +227,16 @@ const MyEventCard = ({ event, isOwner, onEdit, onDelete }) => {
                     title="Delete Event"
                   >
                     <FaTrash />
+                  </button>
+                )}
+
+                {!isOwner && onLeave && (
+                  <button
+                    className="btn btn-outline-warning btn-sm"
+                    onClick={onLeave}
+                    title="Leave Event"
+                  >
+                    <FaSignOutAlt />
                   </button>
                 )}
               </div>

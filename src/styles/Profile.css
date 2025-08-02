@@ -799,6 +799,17 @@
   border-color: #dc3545 !important;
 }
 
+.btn-outline-warning {
+  border: 1px solid var(--text-secondary) !important;
+  color: var(--text-secondary) !important;
+  background-color: transparent !important;
+}
+.btn-outline-warning:hover {
+  background-color: var(--text-secondary) !important;
+  color: var(--light) !important;
+  border-color: var(--border-beige) !important;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .my-events-page {

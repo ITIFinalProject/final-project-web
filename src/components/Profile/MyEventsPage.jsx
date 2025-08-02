@@ -91,6 +91,31 @@ const MyEventsPage = () => {
     navigate(`/edit-event/${eventId}`);
   };
 
+  const handleLeaveEvent = async (eventId) => {
+    if (
+      window.confirm(
+        "Are you sure you want to leave this event? You won't receive updates about this event anymore."
+      )
+    ) {
+      try {
+        await eventService.leaveEvent(currentUser.uid, eventId);
+        setJoinedEvents((prev) => {
+          const newEvents = prev.filter((event) => event.id !== eventId);
+          // Adjust pagination if needed
+          const totalPages = Math.ceil(newEvents.length / eventsPerPage);
+          if (joinedEventsPage > totalPages && totalPages > 0) {
+            setJoinedEventsPage(totalPages);
+          }
+          return newEvents;
+        });
+        alert("You have successfully left the event!");
+      } catch (err) {
+        console.error("Error leaving event:", err);
+        alert("Failed to leave event: " + err.message);
+      }
+    }
+  };
+
   // Pagination logic
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -294,6 +319,7 @@ const MyEventsPage = () => {
                         key={event.id}
                         event={event}
                         isOwner={false}
+                        onLeave={() => handleLeaveEvent(event.id)}
                       />
                     ))}
                   </div>
