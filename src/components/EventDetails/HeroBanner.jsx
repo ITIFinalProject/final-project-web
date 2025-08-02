@@ -1,5 +1,6 @@
 import { IoChevronBack } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import defaultBanner from "../../assets/images/banner.png";
 
 const HeroBanner = ({ event }) => {
   const navigate = useNavigate();
@@ -12,13 +13,17 @@ const HeroBanner = ({ event }) => {
     <div className="hero-banner">
       {event?.bannerUrl || event?.image ? (
         <img
-          src={event.bannerUrl || event.image || "/no-event.jpg"}
+          src={event.bannerUrl || event.image}
           alt={event.title || "Event Banner"}
           className="hero-banner-image"
         />
       ) : (
         <div className="placeholder-banner d-flex align-items-center justify-content-center">
-          <h2 className="text-muted">Event Banner</h2>
+          <img
+            src={defaultBanner}
+            alt={event.title || "Event Banner"}
+            className="hero-banner-image"
+          />
         </div>
       )}
       <button className="det-back-btn" onClick={handleBackClick}>

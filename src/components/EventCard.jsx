@@ -6,6 +6,7 @@ import {
   addToInterested,
   removeFromInterested,
 } from "../redux/slices/interestedSlice";
+import defaultBanner from "../assets/images/banner.png";
 import "../styles/InterestedEvents.css"; // Import the CSS file
 
 // EventCard Component (would be in src/components/EventCard.jsx)
@@ -149,7 +150,7 @@ const EventCard = ({ event }) => {
       <div className="event-card">
         <div className="event-image-container">
           <img
-            src={event.image || event.bannerUrl || "/no-event.jpg"}
+            src={event.image || event.bannerUrl || defaultBanner}
             alt={event.title}
             className="event-image"
           />
