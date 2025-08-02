@@ -1,7 +1,18 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { IoInformationCircleOutline } from "react-icons/io5";
 
-const EventDetailsSection = ({ eventData, onInputChange }) => {
+const EventDetailsSection = ({
+  eventData,
+  onInputChange,
+  guestSearch,
+  filteredGuests,
+  onGuestSearch,
+  onAddGuest,
+  onRemoveGuest,
+}) => {
+  const categories = useSelector((state) => state.category.list);
+
   return (
     <div className="edit-form-section">
       <h3 className="edit-section-title">
@@ -86,14 +97,11 @@ const EventDetailsSection = ({ eventData, onInputChange }) => {
             className="edit-form-control"
           >
             <option value="">Select a category</option>
-            <option value="entertainment">Entertainment</option>
-            <option value="educational-business">Educational & Business</option>
-            <option value="cultural-arts">Cultural & Arts</option>
-            <option value="sports-fitness">Sports & Fitness</option>
-            <option value="technology-innovation">
-              Technology & Innovation
-            </option>
-            <option value="travel-adventure">Travel & Adventure</option>
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -114,6 +122,44 @@ const EventDetailsSection = ({ eventData, onInputChange }) => {
           </select>
         </div>
       </div>
+
+      {eventData.type === "Private" && (
+        <div className="edit-form-group">
+          <label className="edit-form-label">
+            Invite Guests (up to {eventData.capacity || "unlimited"})
+          </label>
+          <input
+            type="text"
+            placeholder="Search users..."
+            value={guestSearch}
+            onChange={onGuestSearch}
+            className="edit-form-control"
+          />
+          {filteredGuests.length > 0 && (
+            <ul className="guest-suggestions">
+              {filteredGuests.map((user) => (
+                <li key={user.id} onClick={() => onAddGuest(user)}>
+                  {user.name} ({user.email})
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className="selected-guests">
+            {eventData.guests?.map((guest) => (
+              <div key={guest.id} className="guest-chip">
+                {guest.name}
+                <button
+                  type="button"
+                  onClick={() => onRemoveGuest(guest.id)}
+                  className="remove-guest-btn"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
