@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { IoLogoGoogle, IoLogoFacebook } from "react-icons/io5";
+import { IoLogoGoogle, IoLogoFacebook, IoEye, IoEyeOff } from "react-icons/io5";
 import {
   signUpWithEmailAndPassword,
   signInWithGoogle,
@@ -13,6 +13,8 @@ import { signUpSchema } from "../../schemas";
 const SignUpForm = () => {
   const [loading, setLoading] = useState(false);
   const [authError, setAuthError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
 
   const {
@@ -157,13 +159,23 @@ const SignUpForm = () => {
           </span>
         )}
 
-        <input
-          type="password"
-          placeholder="Password"
-          className={`auth-input ${errors.password ? "error" : ""}`}
-          {...register("password")}
-          disabled={loading}
-        />
+        <div className="password-input-container">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            className={`auth-input ${errors.password ? "error" : ""}`}
+            {...register("password")}
+            disabled={loading}
+          />
+          <button
+            type="button"
+            className="password-toggle"
+            onClick={() => setShowPassword(!showPassword)}
+            disabled={loading}
+          >
+            {showPassword ? <IoEye /> : <IoEyeOff />}
+          </button>
+        </div>
         {errors.password && (
           <span
             className="error-text"
@@ -173,13 +185,23 @@ const SignUpForm = () => {
           </span>
         )}
 
-        <input
-          type="password"
-          placeholder="Confirm Password"
-          className={`auth-input ${errors.confirmPassword ? "error" : ""}`}
-          {...register("confirmPassword")}
-          disabled={loading}
-        />
+        <div className="password-input-container">
+          <input
+            type={showConfirmPassword ? "text" : "password"}
+            placeholder="Confirm Password"
+            className={`auth-input ${errors.confirmPassword ? "error" : ""}`}
+            {...register("confirmPassword")}
+            disabled={loading}
+          />
+          <button
+            type="button"
+            className="password-toggle"
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            disabled={loading}
+          >
+            {showConfirmPassword ? <IoEye /> : <IoEyeOff />}
+          </button>
+        </div>
         {errors.confirmPassword && (
           <span
             className="error-text"

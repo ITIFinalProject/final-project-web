@@ -87,7 +87,66 @@ const MyEventsPage = () => {
     }
   };
 
+  // Check if an event is outdated (past)
+  const isEventOutdated = (event) => {
+    if (!event) return false;
+
+    try {
+      let eventDate;
+      const dateToCheck = event.startDate || event.date;
+
+      if (!dateToCheck) return false;
+
+      // Handle different timestamp formats
+      if (typeof dateToCheck === "string" && dateToCheck.includes(" _ ")) {
+        // Extract the start date from the range
+        eventDate = dateToCheck.split(" _ ")[0].trim();
+      } else {
+        eventDate = dateToCheck;
+      }
+
+      let date;
+      if (eventDate.toDate) {
+        // Firestore Timestamp
+        date = eventDate.toDate();
+      } else if (eventDate instanceof Date) {
+        date = eventDate;
+      } else if (typeof eventDate === "string") {
+        // String date
+        date = new Date(eventDate);
+      } else if (typeof eventDate === "object" && eventDate.seconds) {
+        // Firestore timestamp object with seconds
+        date = new Date(eventDate.seconds * 1000);
+      } else {
+        // Number timestamp
+        date = new Date(eventDate);
+      }
+
+      // Check if date is valid
+      if (isNaN(date.getTime())) {
+        return false;
+      }
+
+      // Compare with current date (only date, not time)
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      date.setHours(0, 0, 0, 0);
+
+      return date < today;
+    } catch (error) {
+      console.error("Error checking if event is outdated:", error);
+      return false;
+    }
+  };
+
   const handleEditEvent = (eventId) => {
+    const event = createdEvents.find((e) => e.id === eventId);
+    if (isEventOutdated(event)) {
+      alert(
+        "Cannot edit outdated events. Only current and future events can be edited."
+      );
+      return;
+    }
     navigate(`/edit-event/${eventId}`);
   };
 
@@ -286,6 +345,7 @@ const MyEventsPage = () => {
                         key={event.id}
                         event={event}
                         isOwner={true}
+                        isOutdated={isEventOutdated(event)}
                         onEdit={() => handleEditEvent(event.id)}
                         onDelete={() => handleDeleteEvent(event.id)}
                       />

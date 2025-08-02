@@ -39,6 +39,86 @@ const JoinEventButton = ({ event, onEventUpdate }) => {
     }
   }, [currentUser, event?.id]);
 
+  // Function to check if event is upcoming or current day
+  const isEventUpcoming = () => {
+    if (!event?.date && !event?.startDate) return false;
+
+    try {
+      const dateString = event?.startDate || event?.date;
+      let eventDate;
+
+      // Handle date range formats like "31-07-2025 _ 02-08-2025"
+      if (typeof dateString === "string" && dateString.includes(" _ ")) {
+        const startDate = dateString.split(" _ ")[0].trim();
+        eventDate = new Date(startDate);
+      } else if (dateString?.seconds) {
+        // Firestore timestamp
+        eventDate = new Date(dateString.seconds * 1000);
+      } else if (typeof dateString === "string" && dateString.includes("-")) {
+        // Handle different date formats (YYYY-MM-DD or DD-MM-YYYY)
+        const parts = dateString.split("-").map((num) => parseInt(num, 10));
+        if (parts[0] > 31 || parts[0] > 1900) {
+          // YYYY-MM-DD format
+          const [year, month, day] = parts;
+          eventDate = new Date(year, month - 1, day);
+        } else {
+          // DD-MM-YYYY format
+          const [day, month, year] = parts;
+          eventDate = new Date(year, month - 1, day);
+        }
+      } else {
+        eventDate = new Date(dateString);
+      }
+
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const eventDateOnly = new Date(
+        eventDate.getFullYear(),
+        eventDate.getMonth(),
+        eventDate.getDate()
+      );
+
+      // If we have time information and it's today, check the time
+      if (eventDateOnly.getTime() === today.getTime()) {
+        if (event?.time || event?.startTime) {
+          const timeString = event?.startTime || event?.time;
+          if (timeString && typeof timeString === "string") {
+            const timeOnly = timeString.includes(" - ")
+              ? timeString.split(" - ")[0]
+              : timeString;
+            const [hours, minutes] = timeOnly
+              .split(":")
+              .map((num) => parseInt(num, 10));
+            if (!isNaN(hours) && !isNaN(minutes)) {
+              eventDate.setHours(hours, minutes, 0, 0);
+              return eventDate > now; // For today, check if time has passed
+            }
+          }
+        }
+        return true; // If it's today and no specific time, allow joining
+      }
+
+      // For future dates, always allow joining
+      return eventDateOnly >= today;
+    } catch (error) {
+      console.error("Error checking if event is upcoming:", error);
+      return false; // Default to false if we can't determine
+    }
+  };
+
+  const eventIsUpcoming = isEventUpcoming();
+  const capacity = event?.capacity;
+  const currentAttendees = localAttendees;
+
+  // Debug logging for event timing
+  console.log("JoinEventButton Event Timing Debug:", {
+    eventId: event?.id,
+    eventDate: event?.startDate || event?.date,
+    eventTime: event?.startTime || event?.time,
+    isUpcoming: eventIsUpcoming,
+    currentDate: new Date().toISOString(),
+  });
+
   // Don't show button if user is not logged in, event is not public, or user is the host
   if (
     !currentUser ||
@@ -48,8 +128,47 @@ const JoinEventButton = ({ event, onEventUpdate }) => {
     return null;
   }
 
-  const capacity = event?.capacity;
-  const currentAttendees = localAttendees;
+  // If event is outdated, show a message instead
+  if (!eventIsUpcoming) {
+    return (
+      <div className="join-event-section">
+        <div className="container">
+          <div className="join-event-card">
+            <div className="event-capacity-info">
+              <div className="capacity-stats">
+                <IoPeople className="capacity-icon" />
+                <span className="capacity-text">
+                  {currentAttendees} {capacity ? `/ ${capacity}` : ""} attendees
+                </span>
+              </div>
+              {capacity && (
+                <div className="capacity-bar">
+                  <div
+                    className="capacity-fill"
+                    style={{
+                      width: `${Math.min(
+                        (currentAttendees / capacity) * 100,
+                        100
+                      )}%`,
+                    }}
+                    title={`${currentAttendees} of ${capacity} attendees (${Math.round(
+                      (currentAttendees / capacity) * 100
+                    )}%)`}
+                  ></div>
+                </div>
+              )}
+            </div>
+            <div className="join-button-container">
+              <div className="event-ended-message">
+                <p>🕰️ This event has ended</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const isCapacityFull = capacity && currentAttendees >= capacity;
 
   // Debug logging

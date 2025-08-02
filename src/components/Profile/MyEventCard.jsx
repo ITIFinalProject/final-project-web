@@ -9,7 +9,14 @@ import { FaEdit, FaTrash, FaEye, FaSignOutAlt } from "react-icons/fa";
 import "../../styles/Profile.css"; // Assuming you have styles for this component
 import defaultBanner from "../../assets/images/banner.png";
 
-const MyEventCard = ({ event, isOwner, onEdit, onDelete, onLeave }) => {
+const MyEventCard = ({
+  event,
+  isOwner,
+  isOutdated,
+  onEdit,
+  onDelete,
+  onLeave,
+}) => {
   const navigate = useNavigate();
   const formatDate = (timestamp) => {
     if (!timestamp) return "Date TBD";
@@ -127,7 +134,7 @@ const MyEventCard = ({ event, isOwner, onEdit, onDelete, onLeave }) => {
   };
 
   return (
-    <div className="card my-event-card">
+    <div className={`card my-event-card ${isOutdated ? "outdated-event" : ""}`}>
       <div className="row g-0">
         {/* Event Image */}
         <div className="col-md-4">
@@ -139,8 +146,12 @@ const MyEventCard = ({ event, isOwner, onEdit, onDelete, onLeave }) => {
               style={{ height: "100%", width: "100%" }}
             />
             {isOwner && (
-              <div className="event-badge  position-absolute top-0 end-0 m-2 badge ">
-                Host
+              <div
+                className={`event-badge position-absolute top-0 end-0 m-2 badge ${
+                  isOutdated ? "bg-secondary" : ""
+                }`}
+              >
+                {isOutdated ? "Past Event" : "Host"}
               </div>
             )}
           </div>
@@ -212,9 +223,16 @@ const MyEventCard = ({ event, isOwner, onEdit, onDelete, onLeave }) => {
 
                 {isOwner && onEdit && (
                   <button
-                    className="event-btn-edit"
-                    onClick={onEdit}
-                    title="Edit Event"
+                    className={`event-btn-edit ${isOutdated ? "disabled" : ""}`}
+                    onClick={isOutdated ? undefined : onEdit}
+                    title={
+                      isOutdated ? "Cannot edit past events" : "Edit Event"
+                    }
+                    disabled={isOutdated}
+                    style={{
+                      opacity: isOutdated ? 0.5 : 1,
+                      cursor: isOutdated ? "not-allowed" : "pointer",
+                    }}
                   >
                     <FaEdit />
                   </button>
