@@ -3,11 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { IoLogoGoogle, IoLogoFacebook, IoEye, IoEyeOff } from "react-icons/io5";
+import { useDispatch } from "react-redux";
 import {
   signUpWithEmailAndPassword,
   signInWithGoogle,
   signInWithFacebook,
+  getUserData,
 } from "../../services/authService";
+import { setAuthState } from "../../redux/slices/authSlice";
 import { signUpSchema } from "../../schemas";
 
 const SignUpForm = () => {
@@ -16,6 +19,7 @@ const SignUpForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -31,7 +35,7 @@ const SignUpForm = () => {
     setAuthError("");
 
     try {
-      const { error } = await signUpWithEmailAndPassword(
+      const { user, error } = await signUpWithEmailAndPassword(
         data.email,
         data.password,
         {
@@ -44,7 +48,30 @@ const SignUpForm = () => {
 
       if (error) {
         setAuthError(error);
-      } else {
+      } else if (user) {
+        // Immediately fetch and set user data in Redux after successful signup
+        try {
+          console.log("Fetching user data after signup for UID:", user.uid);
+          const { userData: firestoreData } = await getUserData(user.uid);
+          console.log("Fetched user data:", firestoreData);
+
+          if (firestoreData) {
+            dispatch(
+              setAuthState({
+                currentUser: user,
+                userData: firestoreData,
+                loading: false,
+              })
+            );
+            console.log("Redux state updated successfully after signup");
+          } else {
+            console.warn(
+              "No user data found in Firestore after signup - auth listener will handle this"
+            );
+          }
+        } catch (fetchError) {
+          console.error("Error fetching user data after signup:", fetchError);
+        }
         navigate("/");
       }
     } catch {
@@ -59,11 +86,29 @@ const SignUpForm = () => {
     setAuthError("");
 
     try {
-      const { error } = await signInWithGoogle();
+      const { user, error } = await signInWithGoogle();
 
       if (error) {
         setAuthError(error);
-      } else {
+      } else if (user) {
+        // Immediately fetch and set user data in Redux after successful signin
+        try {
+          const { userData: firestoreData } = await getUserData(user.uid);
+          if (firestoreData) {
+            dispatch(
+              setAuthState({
+                currentUser: user,
+                userData: firestoreData,
+                loading: false,
+              })
+            );
+          }
+        } catch (fetchError) {
+          console.error(
+            "Error fetching user data after Google signin:",
+            fetchError
+          );
+        }
         navigate("/");
       }
     } catch {
@@ -78,11 +123,29 @@ const SignUpForm = () => {
     setAuthError("");
 
     try {
-      const { error } = await signInWithFacebook();
+      const { user, error } = await signInWithFacebook();
 
       if (error) {
         setAuthError(error);
-      } else {
+      } else if (user) {
+        // Immediately fetch and set user data in Redux after successful signin
+        try {
+          const { userData: firestoreData } = await getUserData(user.uid);
+          if (firestoreData) {
+            dispatch(
+              setAuthState({
+                currentUser: user,
+                userData: firestoreData,
+                loading: false,
+              })
+            );
+          }
+        } catch (fetchError) {
+          console.error(
+            "Error fetching user data after Facebook signin:",
+            fetchError
+          );
+        }
         navigate("/");
       }
     } catch {

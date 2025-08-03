@@ -49,6 +49,9 @@ export const signUpWithEmailAndPassword = async (email, password, userData) => {
       updatedAt: new Date().toISOString(),
     });
 
+    // Add a small delay to ensure Firestore write is complete
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
     return { user, error: null };
   } catch (error) {
     console.error("Error signing up:", error);
@@ -90,6 +93,9 @@ export const signInWithGoogle = async () => {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       });
+
+      // Add a small delay to ensure Firestore write is complete for new users
+      await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
     return { user, error: null };
@@ -118,6 +124,9 @@ export const signInWithFacebook = async () => {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       });
+
+      // Add a small delay to ensure Firestore write is complete for new users
+      await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
     return { user, error: null };
