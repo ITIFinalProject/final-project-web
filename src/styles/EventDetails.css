@@ -585,17 +585,18 @@ body {
 .other-event-image {
   position: relative;
   height: 200px;
+  width: 100%;
   overflow: hidden;
 }
 
-.event-image img {
+.other-event-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s ease;
 }
 
-.event-card:hover .event-image img {
+.event-card:hover .other-event-image img {
   transform: scale(1.05);
 }
 
