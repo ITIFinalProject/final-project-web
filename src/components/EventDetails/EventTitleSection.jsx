@@ -119,19 +119,16 @@ const EventTitleSection = ({ event }) => {
                   <IoStar />
                 )}
               </button>
-              {/* Only show report button if user is not the event host and event is not outdated */}
-              {currentUser &&
-                currentUser.uid !== event?.hostId &&
-                event?.date &&
-                new Date(event.date) >= new Date().setHours(0, 0, 0, 0) && (
-                  <button
-                    className="det-action-btn"
-                    onClick={handleReport}
-                    title="Report event"
-                  >
-                    <IoFlag />
-                  </button>
-                )}
+              {/* Only show report button if user is logged in, user is not the event host and event is not outdated */}
+              {currentUser && currentUser.uid !== event?.hostId && (
+                <button
+                  className="det-action-btn"
+                  onClick={handleReport}
+                  title="Report event"
+                >
+                  <IoFlag />
+                </button>
+              )}
             </div>
           </div>
         </div>

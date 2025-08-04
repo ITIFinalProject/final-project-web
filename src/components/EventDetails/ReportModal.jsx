@@ -110,11 +110,11 @@ const ReportModal = ({ isOpen, onClose, event }) => {
     return (
       <div className="report-modal-overlay" onClick={handleClose}>
         <div
-          className="report-modal-content success"
+          className="report-modal-content modal-success"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="success-message">
-            <IoWarning className="success-icon" />
+          <div className="modal-success-message">
+            <IoWarning className="modal-success-icon" />
             <h3>Report Submitted Successfully</h3>
             <p>
               Thank you for your report. We'll review it and take appropriate
@@ -132,10 +132,10 @@ const ReportModal = ({ isOpen, onClose, event }) => {
         className="report-modal-content"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="report-modal-header">
+        <div className="modal-header">
           <h2>Report Event</h2>
           <button
-            className="close-btn"
+            className="report-modal-close-btn"
             onClick={handleClose}
             disabled={isSubmitting}
           >
@@ -143,20 +143,20 @@ const ReportModal = ({ isOpen, onClose, event }) => {
           </button>
         </div>
 
-        <div className="report-modal-body">
-          <div className="event-info">
+        <div className="modal-body">
+          <div className="modal-event-info">
             <h4>Reporting: {event?.title}</h4>
-            <p className="text-muted">
+            <p className="modal-text-muted">
               Please help us understand why you're reporting this event
             </p>
           </div>
 
           <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label className="form-label">Reason for reporting *</label>
-              <div className="reasons-grid">
+            <div className="modal-form-group">
+              <label className="modal-form-label">Reason for reporting *</label>
+              <div className="modal-reasons-grid">
                 {REPORT_REASONS.map((reason) => (
-                  <div key={reason.id} className="reason-card">
+                  <div key={reason.id} className="modal-reason-card">
                     <input
                       type="radio"
                       id={reason.id}
@@ -167,8 +167,8 @@ const ReportModal = ({ isOpen, onClose, event }) => {
                       disabled={isSubmitting}
                     />
                     <label htmlFor={reason.id}>
-                      <div className="reason-title">{reason.label}</div>
-                      <div className="reason-description">
+                      <div className="modal-reason-title">{reason.label}</div>
+                      <div className="modal-reason-description">
                         {reason.description}
                       </div>
                     </label>
@@ -178,14 +178,14 @@ const ReportModal = ({ isOpen, onClose, event }) => {
             </div>
 
             {selectedReason === "other" && (
-              <div className="form-group">
-                <label htmlFor="customReason" className="form-label">
+              <div className="modal-form-group">
+                <label htmlFor="customReason" className="modal-form-label">
                   Please specify the reason *
                 </label>
                 <input
                   type="text"
                   id="customReason"
-                  className="form-control"
+                  className="modal-form-control"
                   value={customReason}
                   onChange={(e) => setCustomReason(e.target.value)}
                   placeholder="Enter your reason..."
@@ -195,13 +195,13 @@ const ReportModal = ({ isOpen, onClose, event }) => {
               </div>
             )}
 
-            <div className="form-group">
-              <label htmlFor="description" className="form-label">
+            <div className="modal-form-group">
+              <label htmlFor="description" className="modal-form-label">
                 Additional details (optional)
               </label>
               <textarea
                 id="description"
-                className="form-control"
+                className="modal-form-control"
                 rows="4"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -211,11 +211,11 @@ const ReportModal = ({ isOpen, onClose, event }) => {
               />
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Evidence (optional)</label>
-              <div className="image-upload-section">
+            <div className="modal-form-group">
+              <label className="modal-form-label">Evidence (optional)</label>
+              <div className="modal-image-upload-section">
                 {!imagePreview ? (
-                  <label className="image-upload-btn">
+                  <label className="modal-image-upload-btn">
                     <IoImageOutline />
                     <span>Upload screenshot or image evidence</span>
                     <input
@@ -227,11 +227,11 @@ const ReportModal = ({ isOpen, onClose, event }) => {
                     />
                   </label>
                 ) : (
-                  <div className="image-preview">
+                  <div className="modal-image-preview">
                     <img src={imagePreview} alt="Evidence preview" />
                     <button
                       type="button"
-                      className="remove-image-btn"
+                      className="modal-remove-image-btn"
                       onClick={removeImage}
                       disabled={isSubmitting}
                     >
@@ -239,16 +239,16 @@ const ReportModal = ({ isOpen, onClose, event }) => {
                     </button>
                   </div>
                 )}
-                <small className="text-muted">
+                <small className="modal-text-muted">
                   Max file size: 5MB. Supported formats: JPEG, PNG, WebP, GIF
                 </small>
               </div>
             </div>
 
-            <div className="form-actions">
+            <div className="modal-form-actions">
               <button
                 type="button"
-                className="btn btn-secondary"
+                className="modal-btn modal-btn-secondary"
                 onClick={handleClose}
                 disabled={isSubmitting}
               >
@@ -256,12 +256,12 @@ const ReportModal = ({ isOpen, onClose, event }) => {
               </button>
               <button
                 type="submit"
-                className="btn btn-danger"
+                className="modal-btn modal-btn-danger"
                 disabled={isSubmitting || !selectedReason}
               >
                 {isSubmitting ? (
                   <>
-                    <div className="spinner-border spinner-border-sm me-2" />
+                    <div className="modal-spinner-border modal-spinner-border-sm modal-me-2" />
                     Submitting...
                   </>
                 ) : (

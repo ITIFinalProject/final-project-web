@@ -44,6 +44,7 @@ export const signUpWithEmailAndPassword = async (email, password, userData) => {
       phone: userData.phone || "",
       address: userData.address || "",
       imagePath: "", // Default empty profile image
+      status: "active", // Default status for new users
       // ممكن نشبل دول عادي ..
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -67,6 +68,21 @@ export const loginWithEmailAndPassword = async (email, password) => {
       email,
       password
     );
+
+    // Check user status in Firestore
+    const userDoc = await getDoc(doc(db, "users", userCredential.user.uid));
+    if (userDoc.exists()) {
+      const userData = userDoc.data();
+      if (userData.status === "disabled") {
+        // Sign out the user immediately if disabled
+        await signOut(auth);
+        return {
+          user: null,
+          error: "Your account has been disabled. Please contact support.",
+        };
+      }
+    }
+
     return { user: userCredential.user, error: null };
   } catch (error) {
     console.error("Error signing in:", error);
@@ -90,12 +106,24 @@ export const signInWithGoogle = async () => {
         phone: "",
         address: "",
         imagePath: user.photoURL || "", // Use Google profile image if available
+        status: "active", // Default status for new users
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       });
 
       // Add a small delay to ensure Firestore write is complete for new users
       await new Promise((resolve) => setTimeout(resolve, 100));
+    } else {
+      // Check if existing user is disabled
+      const userData = userDoc.data();
+      if (userData.status === "disabled") {
+        // Sign out the user immediately if disabled
+        await signOut(auth);
+        return {
+          user: null,
+          error: "Your account has been disabled. Please contact support.",
+        };
+      }
     }
 
     return { user, error: null };
@@ -121,12 +149,24 @@ export const signInWithFacebook = async () => {
         phone: "",
         address: "",
         imagePath: user.photoURL || "", // Use Facebook profile image if available
+        status: "active", // Default status for new users
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       });
 
       // Add a small delay to ensure Firestore write is complete for new users
       await new Promise((resolve) => setTimeout(resolve, 100));
+    } else {
+      // Check if existing user is disabled
+      const userData = userDoc.data();
+      if (userData.status === "disabled") {
+        // Sign out the user immediately if disabled
+        await signOut(auth);
+        return {
+          user: null,
+          error: "Your account has been disabled. Please contact support.",
+        };
+      }
     }
 
     return { user, error: null };
@@ -230,5 +270,25 @@ export const updateUserProfileImage = async (uid, imagePath) => {
   } catch (error) {
     console.error("Error updating profile image:", error);
     return { error: error.message };
+  }
+};
+
+// Check if user account is active
+export const checkUserStatus = async (uid) => {
+  try {
+    const userDoc = await getDoc(doc(db, "users", uid));
+    if (userDoc.exists()) {
+      const userData = userDoc.data();
+      return {
+        isActive: userData.status === "active",
+        status: userData.status || "active", // Default to active if status field doesn't exist
+        error: null,
+      };
+    } else {
+      return { isActive: false, status: null, error: "User not found" };
+    }
+  } catch (error) {
+    console.error("Error checking user status:", error);
+    return { isActive: false, status: null, error: error.message };
   }
 };
