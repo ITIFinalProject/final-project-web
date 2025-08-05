@@ -11,11 +11,40 @@ export const listenToAuthState = createAsyncThunk(
       const unsubscribe = onAuthStateChanged(auth, async (user) => {
         if (user) {
           try {
-            const { userData: firestoreData } = await getUserData(user.uid);
+            console.log("Auth state changed - user logged in:", user.uid);
+            // Retry logic for fetching user data with a small delay
+            let userData = null;
+            let retries = 3;
+
+            while (retries > 0 && !userData) {
+              console.log(
+                `Attempting to fetch user data (attempt ${4 - retries})`
+              );
+              const { userData: firestoreData } = await getUserData(user.uid);
+              if (firestoreData) {
+                userData = firestoreData;
+                console.log("User data fetched successfully:", userData);
+                break;
+              }
+
+              retries--;
+              if (retries > 0) {
+                console.log(
+                  `User data not found, retrying in 500ms... (${retries} attempts left)`
+                );
+                // Wait 500ms before retrying
+                await new Promise((resolve) => setTimeout(resolve, 500));
+              }
+            }
+
+            if (!userData) {
+              console.warn("Failed to fetch user data after all retries");
+            }
+
             dispatch(
               setAuthState({
                 currentUser: user,
-                userData: firestoreData,
+                userData: userData,
                 loading: false,
               })
             );
@@ -30,6 +59,7 @@ export const listenToAuthState = createAsyncThunk(
             );
           }
         } else {
+          console.log("Auth state changed - user logged out");
           dispatch(
             setAuthState({
               currentUser: null,

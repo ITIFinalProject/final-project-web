@@ -214,6 +214,7 @@ const CreateDetails = ({ onContinue, latlng }) => {
               name="capacity"
               value={formData.capacity}
               onChange={handleChange}
+              min="1"
             />
             {errors.capacity && <p className="error-msg">{errors.capacity}</p>}
           </div>

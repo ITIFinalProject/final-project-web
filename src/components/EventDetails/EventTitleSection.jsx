@@ -1,4 +1,4 @@
-import { IoStar, IoShareSocial } from "react-icons/io5";
+import { IoStar, IoFlag } from "react-icons/io5";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import {
@@ -6,10 +6,12 @@ import {
   removeInterestedEvent,
   isEventInterested,
 } from "../../services/interestedEventsService";
+import ReportModal from "./ReportModal";
 
 const EventTitleSection = ({ event }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const { currentUser } = useSelector((state) => state.auth);
 
   // Check if event is already bookmarked when component mounts
@@ -65,6 +67,14 @@ const EventTitleSection = ({ event }) => {
     }
   };
 
+  const handleReport = () => {
+    if (!currentUser) {
+      alert("Please log in to report events!");
+      return;
+    }
+    setIsReportModalOpen(true);
+  };
+
   // const handleShare = () => {
   //   if (navigator.share) {
   //     navigator.share({
@@ -109,17 +119,27 @@ const EventTitleSection = ({ event }) => {
                   <IoStar />
                 )}
               </button>
-              <button
-                className="det-action-btn"
-                // onClick={handleShare}
-                title="Share event"
-              >
-                <IoShareSocial />
-              </button>
+              {/* Only show report button if user is logged in, user is not the event host and event is not outdated */}
+              {currentUser && currentUser.uid !== event?.hostId && (
+                <button
+                  className="det-action-btn"
+                  onClick={handleReport}
+                  title="Report event"
+                >
+                  <IoFlag />
+                </button>
+              )}
             </div>
           </div>
         </div>
       </div>
+
+      {/* Report Modal */}
+      <ReportModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        event={event}
+      />
     </div>
   );
 };

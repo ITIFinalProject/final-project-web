@@ -119,13 +119,58 @@ const JoinEventButton = ({ event, onEventUpdate }) => {
     currentDate: new Date().toISOString(),
   });
 
-  // Don't show button if user is not logged in, event is not public, or user is the host
-  if (
-    !currentUser ||
-    event?.type !== "Public" ||
-    event?.hostId === currentUser?.uid
-  ) {
+  // Don't show button if event is not public
+  if (event?.type !== "Public") {
     return null;
+  }
+
+  // Don't show button if user is logged in and is the host
+  if (currentUser && event?.hostId === currentUser?.uid) {
+    return null;
+  }
+
+  // If user is not logged in, show login prompt
+  if (!currentUser) {
+    return (
+      <div className="join-event-section">
+        <div className="container">
+          <div className="join-event-card">
+            <div className="event-capacity-info">
+              <div className="capacity-stats">
+                <IoPeople className="capacity-icon" />
+                <span className="capacity-text">
+                  {localAttendees} {capacity ? `/ ${capacity}` : ""} attendees
+                </span>
+              </div>
+              {capacity && (
+                <div className="capacity-bar">
+                  <div
+                    className="capacity-fill"
+                    style={{
+                      width: `${Math.min(
+                        (localAttendees / capacity) * 100,
+                        100
+                      )}%`,
+                    }}
+                    title={`${localAttendees} of ${capacity} attendees (${Math.round(
+                      (localAttendees / capacity) * 100
+                    )}%)`}
+                  ></div>
+                </div>
+              )}
+            </div>
+            <div className="join-button-container">
+              <button
+                className="join-event-btn login-required"
+                onClick={() => (window.location.href = "/login")}
+              >
+                Login to Join Event
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   // If event is outdated, show a message instead
