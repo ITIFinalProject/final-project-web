@@ -12,6 +12,107 @@ import {
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { auth, db } from "../firebase/config";
 
+// Helper function to check if a ban has expired
+const isBanExpired = (bannedAt) => {
+  if (!bannedAt) return false; // If no ban date, consider ban as still active
+
+  const banDate = new Date(bannedAt);
+  const now = new Date();
+  const thirtyDaysInMs = 30 * 24 * 60 * 60 * 1000; // 30 days in milliseconds
+
+  return now - banDate > thirtyDaysInMs;
+};
+
+// Helper function to format date for ban messages
+const formatBanExpiryDate = (bannedAt) => {
+  try {
+    console.log("Formatting ban expiry for:", bannedAt);
+    const banDate = new Date(bannedAt);
+    console.log("Ban date:", banDate);
+    const expiryDate = new Date(banDate.getTime() + 30 * 24 * 60 * 60 * 1000);
+    console.log("Expiry date:", expiryDate);
+
+    // Check if date is valid
+    if (isNaN(expiryDate.getTime())) {
+      console.log("Invalid date detected, using fallback");
+      return "30 days from now";
+    }
+
+    const formattedDate = expiryDate.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+    console.log("Formatted date:", formattedDate);
+    return formattedDate;
+  } catch (error) {
+    console.error("Error formatting ban expiry date:", error);
+    return "30 days from now";
+  }
+};
+
+// Helper function to check user status and handle bans
+const checkAndHandleUserStatus = async (userData, uid) => {
+  const { status, bannedAt } = userData;
+
+  if (status === "disabled") {
+    await signOut(auth);
+    return {
+      allowed: false,
+      error: "Your account has been disabled. Please contact support.",
+    };
+  }
+
+  if (status === "banned") {
+    // If user is banned but no bannedAt timestamp, set it now (for legacy banned users)
+    if (!bannedAt) {
+      const newBannedAt = new Date().toISOString();
+      await setDoc(
+        doc(db, "users", uid),
+        {
+          bannedAt: newBannedAt,
+          updatedAt: new Date().toISOString(),
+        },
+        { merge: true }
+      );
+      // Block access - ban just started
+      await signOut(auth);
+      return {
+        allowed: false,
+        error: `Your account has been banned until ${formatBanExpiryDate(
+          newBannedAt
+        )}. Please contact support if you believe this is an error.`,
+      };
+    }
+
+    // Check if ban has expired
+    if (isBanExpired(bannedAt)) {
+      // Ban has expired, reactivate the user
+      await setDoc(
+        doc(db, "users", uid),
+        {
+          status: "active",
+          bannedAt: null,
+          updatedAt: new Date().toISOString(),
+        },
+        { merge: true }
+      );
+      return { allowed: true, error: null };
+    } else {
+      // Ban is still active
+      await signOut(auth);
+      return {
+        allowed: false,
+        error: `Your account has been banned until ${formatBanExpiryDate(
+          bannedAt
+        )}. Please contact support if you believe this is an error.`,
+      };
+    }
+  }
+
+  return { allowed: true, error: null };
+};
+
 // Google Auth Provider
 const googleProvider = new GoogleAuthProvider();
 
@@ -73,12 +174,15 @@ export const loginWithEmailAndPassword = async (email, password) => {
     const userDoc = await getDoc(doc(db, "users", userCredential.user.uid));
     if (userDoc.exists()) {
       const userData = userDoc.data();
-      if (userData.status === "disabled") {
-        // Sign out the user immediately if disabled
-        await signOut(auth);
+      const statusCheck = await checkAndHandleUserStatus(
+        userData,
+        userCredential.user.uid
+      );
+
+      if (!statusCheck.allowed) {
         return {
           user: null,
-          error: "Your account has been disabled. Please contact support.",
+          error: statusCheck.error,
         };
       }
     }
@@ -114,14 +218,14 @@ export const signInWithGoogle = async () => {
       // Add a small delay to ensure Firestore write is complete for new users
       await new Promise((resolve) => setTimeout(resolve, 100));
     } else {
-      // Check if existing user is disabled
+      // Check if existing user status (disabled/banned)
       const userData = userDoc.data();
-      if (userData.status === "disabled") {
-        // Sign out the user immediately if disabled
-        await signOut(auth);
+      const statusCheck = await checkAndHandleUserStatus(userData, user.uid);
+
+      if (!statusCheck.allowed) {
         return {
           user: null,
-          error: "Your account has been disabled. Please contact support.",
+          error: statusCheck.error,
         };
       }
     }
@@ -157,14 +261,14 @@ export const signInWithFacebook = async () => {
       // Add a small delay to ensure Firestore write is complete for new users
       await new Promise((resolve) => setTimeout(resolve, 100));
     } else {
-      // Check if existing user is disabled
+      // Check if existing user status (disabled/banned)
       const userData = userDoc.data();
-      if (userData.status === "disabled") {
-        // Sign out the user immediately if disabled
-        await signOut(auth);
+      const statusCheck = await checkAndHandleUserStatus(userData, user.uid);
+
+      if (!statusCheck.allowed) {
         return {
           user: null,
-          error: "Your account has been disabled. Please contact support.",
+          error: statusCheck.error,
         };
       }
     }
@@ -279,9 +383,48 @@ export const checkUserStatus = async (uid) => {
     const userDoc = await getDoc(doc(db, "users", uid));
     if (userDoc.exists()) {
       const userData = userDoc.data();
+      let currentStatus = userData.status || "active";
+      let bannedAtTimestamp = userData.bannedAt;
+
+      // If user is banned but no bannedAt timestamp, set it now (for legacy banned users)
+      if (currentStatus === "banned" && !bannedAtTimestamp) {
+        bannedAtTimestamp = new Date().toISOString();
+        await setDoc(
+          doc(db, "users", uid),
+          {
+            bannedAt: bannedAtTimestamp,
+            updatedAt: new Date().toISOString(),
+          },
+          { merge: true }
+        );
+      }
+
+      // If user is banned, check if ban has expired
+      if (currentStatus === "banned" && isBanExpired(bannedAtTimestamp)) {
+        // Ban has expired, reactivate the user
+        await setDoc(
+          doc(db, "users", uid),
+          {
+            status: "active",
+            bannedAt: null,
+            updatedAt: new Date().toISOString(),
+          },
+          { merge: true }
+        );
+        currentStatus = "active";
+        bannedAtTimestamp = null;
+      }
+
       return {
-        isActive: userData.status === "active",
-        status: userData.status || "active", // Default to active if status field doesn't exist
+        isActive: currentStatus === "active",
+        status: currentStatus,
+        bannedAt: bannedAtTimestamp,
+        banExpiryDate:
+          currentStatus === "banned" && bannedAtTimestamp
+            ? new Date(
+                new Date(bannedAtTimestamp).getTime() + 30 * 24 * 60 * 60 * 1000
+              )
+            : null,
         error: null,
       };
     } else {
@@ -290,5 +433,30 @@ export const checkUserStatus = async (uid) => {
   } catch (error) {
     console.error("Error checking user status:", error);
     return { isActive: false, status: null, error: error.message };
+  }
+};
+
+// Update user status (for admin use - this function can be used by admin dashboard)
+export const updateUserStatus = async (uid, status) => {
+  try {
+    const updateData = {
+      status,
+      updatedAt: new Date().toISOString(),
+    };
+
+    // If setting to banned, add the ban timestamp
+    if (status === "banned") {
+      updateData.bannedAt = new Date().toISOString();
+    } else if (status === "active") {
+      // If reactivating, clear ban timestamp
+      updateData.bannedAt = null;
+    }
+
+    await setDoc(doc(db, "users", uid), updateData, { merge: true });
+
+    return { error: null };
+  } catch (error) {
+    console.error("Error updating user status:", error);
+    return { error: error.message };
   }
 };
