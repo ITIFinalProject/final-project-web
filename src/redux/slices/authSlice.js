@@ -1,7 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase/config";
-import { getUserData } from "../../services/authService";
+import {
+  getUserData,
+  logOut,
+  checkUserStatus,
+} from "../../services/authService";
+// Add this import at the top of authSlice.js
 
 // Async thunk for listening to auth state changes
 export const listenToAuthState = createAsyncThunk(
@@ -12,7 +17,33 @@ export const listenToAuthState = createAsyncThunk(
         if (user) {
           try {
             console.log("Auth state changed - user logged in:", user.uid);
-            // Retry logic for fetching user data with a small delay
+
+            // First check user status before proceeding
+            const { isActive, status, error } = await checkUserStatus(user.uid);
+
+            if (!isActive) {
+              console.log(`User is ${status}, logging out...`);
+              await logOut();
+
+              // Dispatch an action to store the status error
+              dispatch(
+                setAuthState({
+                  currentUser: null,
+                  userData: null,
+                  loading: false,
+
+                  statusError:
+                    error ||
+                    (status === "disabled"
+                      ? "Your account has been disabled for violation of the rules."
+                      : "Your account has been temporarily banned for violation of the rules. The ban will be lifted in 30 days."),
+                })
+              );
+
+              return; // Exit early
+            }
+
+            // Rest of your existing code for fetching user data...
             let userData = null;
             let retries = 3;
 
@@ -32,7 +63,6 @@ export const listenToAuthState = createAsyncThunk(
                 console.log(
                   `User data not found, retrying in 500ms... (${retries} attempts left)`
                 );
-                // Wait 500ms before retrying
                 await new Promise((resolve) => setTimeout(resolve, 500));
               }
             }
@@ -46,6 +76,7 @@ export const listenToAuthState = createAsyncThunk(
                 currentUser: user,
                 userData: userData,
                 loading: false,
+                statusError: null,
               })
             );
           } catch (error) {
@@ -55,6 +86,7 @@ export const listenToAuthState = createAsyncThunk(
                 currentUser: user,
                 userData: null,
                 loading: false,
+                statusError: error.message,
               })
             );
           }
@@ -65,12 +97,12 @@ export const listenToAuthState = createAsyncThunk(
               currentUser: null,
               userData: null,
               loading: false,
+              statusError: null,
             })
           );
         }
       });
 
-      // Store the unsubscribe function for cleanup
       resolve(unsubscribe);
     });
   }
@@ -81,6 +113,7 @@ const initialState = {
   userData: null,
   loading: true,
   error: null,
+  statusError: null,
 };
 
 const authSlice = createSlice({
@@ -88,11 +121,12 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setAuthState: (state, action) => {
-      const { currentUser, userData, loading } = action.payload;
+      const { currentUser, userData, loading, statusError } = action.payload;
       state.currentUser = currentUser;
       state.userData = userData;
       state.loading = loading;
       state.error = null;
+      state.statusError = statusError || null;
     },
     setLoading: (state, action) => {
       state.loading = action.payload;

@@ -59,7 +59,7 @@ const checkAndHandleUserStatus = async (userData, uid) => {
     await signOut(auth);
     return {
       allowed: false,
-      error: "Your account has been disabled. Please contact support.",
+      // error: "Your account has been disabled. Please contact support.",
     };
   }
 
@@ -103,9 +103,9 @@ const checkAndHandleUserStatus = async (userData, uid) => {
       await signOut(auth);
       return {
         allowed: false,
-        error: `Your account has been banned until ${formatBanExpiryDate(
-          bannedAt
-        )}. Please contact support if you believe this is an error.`,
+        // error: `Your account has been banned until ${formatBanExpiryDate(
+        //   bannedAt
+        // )}. Please contact support if you believe this is an error.`,
       };
     }
   }
@@ -437,26 +437,26 @@ export const checkUserStatus = async (uid) => {
 };
 
 // Update user status (for admin use - this function can be used by admin dashboard)
-export const updateUserStatus = async (uid, status) => {
-  try {
-    const updateData = {
-      status,
-      updatedAt: new Date().toISOString(),
-    };
+// export const updateUserStatus = async (uid, status) => {
+//   try {
+//     const updateData = {
+//       status,
+//       updatedAt: new Date().toISOString(),
+//     };
 
-    // If setting to banned, add the ban timestamp
-    if (status === "banned") {
-      updateData.bannedAt = new Date().toISOString();
-    } else if (status === "active") {
-      // If reactivating, clear ban timestamp
-      updateData.bannedAt = null;
-    }
+//     // If setting to banned, add the ban timestamp
+//     if (status === "banned") {
+//       updateData.bannedAt = new Date().toISOString();
+//     } else if (status === "active") {
+//       // If reactivating, clear ban timestamp
+//       updateData.bannedAt = null;
+//     }
 
-    await setDoc(doc(db, "users", uid), updateData, { merge: true });
+//     await setDoc(doc(db, "users", uid), updateData, { merge: true });
 
-    return { error: null };
-  } catch (error) {
-    console.error("Error updating user status:", error);
-    return { error: error.message };
-  }
-};
+//     return { error: null };
+//   } catch (error) {
+//     console.error("Error updating user status:", error);
+//     return { error: error.message };
+//   }
+// };
