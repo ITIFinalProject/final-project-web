@@ -18,6 +18,7 @@ import EditEvent from "./pages/EditEvent";
 import AuthInitializer from "./components/AuthInitializer";
 import ProtectedRoute from "./components/ProtectedRoute";
 import FloatingChatPanel from "./components/EventChat/FloatingChatPanel";
+import Policies from "./pages/Policies";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/Events" element={<Events />} />
             <Route path="/event/:eventId" element={<EventDetails />} />
+            <Route path="/Policies" element={<Policies />} />
             <Route path="/login" element={<Login />} />
             <Route path="/SignUp" element={<SignUp />} />
             <Route

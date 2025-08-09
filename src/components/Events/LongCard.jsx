@@ -191,6 +191,9 @@ const LongCard = ({ event }) => {
               <span>Max: {event.capacity} attendees</span>
             </div>
           )}
+          <div className="card-type">
+            <p>{event.type}</p>
+          </div>
         </div>
       </div>
     </Link>

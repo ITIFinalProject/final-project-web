@@ -42,7 +42,7 @@ const Footer = () => {
                   <Link to="#">Press</Link>
                 </li>
                 <li>
-                  <Link to="#">Terms of Service</Link>
+                  <Link to="/Policies">Terms of Service</Link>
                 </li>
                 <li>
                   <Link to="#">Privacy Policy</Link>
