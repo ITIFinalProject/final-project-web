@@ -220,7 +220,17 @@
   transform: scale(1.02);
   transition: all 0.3s ease;
 }
-
+.card-type{
+  background-color: var(--primary-dark);
+  color: var(--primary-light);
+  padding: 5px 20px;
+  border-radius: 10px;
+  margin-top: 5px;
+  display: inline-block;
+}
+.card-type p{
+  margin: 0;
+}
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .page-header {

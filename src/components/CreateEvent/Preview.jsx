@@ -12,10 +12,13 @@ import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/config";
 import { useNavigate } from "react-router-dom";
 import { notificationService } from "../../services/notificationService";
+import { useState } from "react";
+
 const Preview = ({ eventData, onBack, latlng }) => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.currentUser);
-
+  // const [showModal, setShowModal] = useState(false);
+  const [agreed, setAgreed] = useState(false);
   const {
     title,
     location,
@@ -35,6 +38,11 @@ const Preview = ({ eventData, onBack, latlng }) => {
 
   const onPublish = async () => {
     try {
+      if (!agreed) {
+        alert("⚠️ The policy must be approved before the event can be published.");
+        //  setShowModal(true);
+        return;
+      }
       // First, add the event to Firestore
       const docRef = await addDoc(collection(db, "events"), {
         ...eventData,
@@ -74,7 +82,10 @@ const Preview = ({ eventData, onBack, latlng }) => {
   };
 
   return (
+    // <>
     <div className="preview-container">
+      {/* MODAL */}
+      
       <div className="preview-header">
         <h2 className="preview-title">{title}</h2>
         <p className="preview-sub">{location || "Location not set"}</p>
@@ -172,6 +183,20 @@ const Preview = ({ eventData, onBack, latlng }) => {
             <p>{description || "No description provided."}</p>
           </div>
         </div>
+        <div className="warn">
+          <p>
+            ⚠️ If the event violates our policy, it will be removed without
+            notice.
+          </p>
+          <label>
+            <input
+              type="checkbox"
+              checked={agreed}
+              onChange={(e) => setAgreed(e.target.checked)}
+            />{" "}
+            I agree to the policy.
+          </label>
+        </div>
       </div>
 
       <div className="preview-actions">
@@ -183,6 +208,51 @@ const Preview = ({ eventData, onBack, latlng }) => {
         </button>
       </div>
     </div>
+    //  {showModal && (
+    //     <div
+    //       style={{
+    //         position: "fixed",
+    //         top: 0,
+    //         left: 0,
+    //         width: "100vw",
+    //         height: "100vh",
+    //         background: "rgba(0,0,0,0.5)",
+    //         display: "flex",
+    //         alignItems: "center",
+    //         justifyContent: "center",
+    //         zIndex: 9999,
+    //       }}
+    //     >
+    //       <div
+    //         style={{
+    //           background: "white",
+    //           padding: "20px",
+    //           borderRadius: "8px",
+    //           width: "300px",
+    //           textAlign: "center",
+    //         }}
+    //       >
+    //         <h3 style={{ color: "red" }}>⚠️ Policy Agreement Required</h3>
+    //         <p style={{ margin: "10px 0" }}>
+    //           You must agree to the policy before publishing the event.
+    //         </p>
+    //         <button
+    //           style={{
+    //             background: "red",
+    //             color: "white",
+    //             padding: "8px 15px",
+    //             border: "none",
+    //             borderRadius: "5px",
+    //             cursor: "pointer",
+    //           }}
+    //           onClick={() => setShowModal(false)}
+    //         >
+    //           OK
+    //         </button>
+    //       </div>
+    //     </div>
+    //   )}
+    //   </> 
   );
 };
 

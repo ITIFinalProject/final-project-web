@@ -183,6 +183,9 @@ const EventCard = ({ event }) => {
               Max: {event.capacity} attendees
             </small>
           </div>
+          {/* <div className="card-type">
+            <p>{event.type}</p>
+          </div> */}
         </div>
       </div>
     </Link>
